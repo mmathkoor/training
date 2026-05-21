@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>التميز في خدمة العملاء - تدريب موظفي فروع بنك الكريمي الإسلامي</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #802629;
+            --secondary: #9c9164;
+            --dark: #5b646a;
+            --light-accent: #cdc47f;
+            --muted-accent: #7a7d81;
+            --gold: #d4af37;
+        }
+        
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            -webkit-font-smoothing: antialiased !important;
+            -moz-osx-font-smoothing: grayscale !important;
+            text-rendering: optimizeLegibility !important;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: radial-gradient(circle at 50% 50%, #f0f4f8 0%, #cbd5e1 100%);
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        h1, h2, h3, h4, h5, .font-cairo {
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .slide h1, .slide h2, .slide h3, .slide h4, .slide p, .slide span, .slide i, .slide li, .slide div {
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            filter: blur(0px);
+        }
+        
+        #presentation-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            perspective: 2500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .slide {
+            position: absolute;
+            width: 1400px;
+            height: 850px;
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 80px;
+            transition: transform 1.2s cubic-bezier(0.64, 0.04, 0.35, 1), opacity 0.8s ease-in-out, visibility 1s;
+            opacity: 0;
+            visibility: hidden;
+            transform: translate3d(800px, 0, -1000px) rotateY(-20deg);
+            transform-style: flat;
+        }
+        
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate3d(0, 0, 0) rotateY(0deg) scale(1);
+            z-index: 10;
+            box-shadow: 0 50px 120px rgba(91, 100, 106, 0.15);
+        }
+        
+        .slide.prev {
+            opacity: 0;
+            visibility: hidden;
+            transform: translate3d(-800px, 0, -1000px) rotateY(20deg);
+            z-index: 0;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateZ(0); }
+            50% { transform: translateY(-12px) translateZ(0); }
+        }
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1) translateZ(0); }
+            50% { transform: scale(1.1) translateZ(0); filter: brightness(1.2); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px) translateZ(0); }
+            to { opacity: 1; transform: translateY(0) translateZ(0); }
+        }
+        
+        .active .anim-float { animation: float 4s ease-in-out infinite; }
+        .active .anim-pulse { animation: pulse-icon 3s ease-in-out infinite; }
+        .active .fade-in { animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        
+        .controls-wrapper {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 25px; z-index: 1000;
+            background: rgba(255,255,255,0.9); padding: 12px 30px; border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .btn-nav {
+            width: 50px; height: 50px; border-radius: 50%; background: var(--dark); color: white;
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+            border: none; cursor: pointer; transition: 0.3s;
+        }
+        .btn-nav:hover { background: var(--primary); transform: scale(1.1); }
+        
+        .progress-bar {
+            position: fixed; top: 0; left: 0; width: 100%; height: 6px;
+            background: rgba(0,0,0,0.05); z-index: 1000;
+        }
+        .progress-fill {
+            height: 100%; background: var(--primary);
+            width: 0%; transition: width 0.8s ease;
+        }
+        
+        .title-line { width: 60px; height: 5px; background: var(--primary); border-radius: 5px; margin: 0 auto 20px auto; }
+        .hover-card { transition: transform 0.3s, box-shadow 0.3s; }
+        .hover-card:hover { transform: translateY(-8px) translateZ(0); box-shadow: 0 20px 40px rgba(0,0,0,0.08); z-index: 20; }
+        
+        .gold-text { color: var(--gold); }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    <div class="controls-wrapper">
+        <button class="btn-nav" onclick="nextSlide()" title="التالي"><i class="fas fa-chevron-right"></i></button>
+        <button class="btn-nav" onclick="prevSlide()" title="السابق"><i class="fas fa-chevron-left"></i></button>
+    </div>
+    
+    <div id="presentation-container">
+        
+        <!-- ========== الشريحة 1: الغلاف (نفس التصميم الأصلي) ========== -->
+        <div class="slide">
+            <div class="text-center w-full">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTxIhDB302tFWezCQwkWsaUd6V0v0dKMpBIA&s" alt="شعار البنك" class="h-36 mx-auto mb-10 rounded-2xl shadow-md anim-float fade-in">
+                <h1 class="text-[80px] font-black text-[#802629] mb-4 font-cairo fade-in delay-100">التميز في خدمة العملاء</h1>
+                <p class="text-4xl text-[#9c9164] font-bold mb-10 fade-in delay-200">وتجربة العميل المصرفية</p>
+                <div class="w-48 h-1.5 bg-gradient-to-r from-[#802629] to-[#9c9164] mx-auto rounded-full mb-10 fade-in delay-300"></div>
+                <p class="text-[#5b646a] text-2xl font-medium bg-[#f8fafc] inline-block px-10 py-4 rounded-full border border-gray-100 fade-in delay-400 shadow-sm">برنامج تدريبي لموظفي الفروع</p>
+                <p class="text-[#7a7d81] text-xl mt-4 fade-in delay-500">بنك الكريمي الإسلامي - قسم التسويق</p>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 2: افتتاحية مؤثرة ========== -->
+        <div class="slide bg-gradient-to-br from-white to-gray-50">
+            <div class="max-w-4xl mx-auto text-center">
+                <i class="fas fa-quote-right text-8xl text-[#d4af37] mb-8 anim-float fade-in"></i>
+                <p class="text-5xl font-bold text-[#2d3748] leading-relaxed fade-in delay-100">"العميل قد ينسى تفاصيل المعاملة…<br>لكنه لن ينسى أبداً كيف شعر أثناء الخدمة"</p>
+                <div class="w-40 h-1 bg-gradient-to-r from-[#802629] to-[#d4af37] mx-auto my-12 rounded-full fade-in delay-200"></div>
+                <p class="text-3xl text-[#d4af37] font-bold fade-in delay-300">Customer Experience Matters</p>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 3: أهداف الورشة ========== -->
+        <div class="slide">
+            <div class="w-full max-w-6xl mx-auto">
+                <div class="title-line mx-0 mr-auto ml-0 fade-in"></div>
+                <h2 class="text-5xl font-black text-[#802629] mb-12 fade-in delay-100">🎯 أهداف الورشة</h2>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="flex items-center gap-4 bg-gray-50 p-5 rounded-2xl border-r-4 border-[#d4af37] hover-card fade-in delay-200"><i class="fas fa-star-of-life text-3xl text-[#d4af37]"></i><span class="text-xl font-bold">تعزيز ثقافة الخدمة الاحترافية</span></div>
+                    <div class="flex items-center gap-4 bg-gray-50 p-5 rounded-2xl border-r-4 border-[#d4af37] hover-card fade-in delay-300"><i class="fas fa-chart-line text-3xl text-[#802629]"></i><span class="text-xl font-bold">تحسين تجربة العميل داخل الفروع</span></div>
+                    <div class="flex items-center gap-4 bg-gray-50 p-5 rounded-2xl border-r-4 border-[#d4af37] hover-card fade-in delay-400"><i class="fas fa-shield-alt text-3xl text-[#d4af37]"></i><span class="text-xl font-bold">رفع مستوى الثقة والامتثال</span></div>
+                    <div class="flex items-center gap-4 bg-gray-50 p-5 rounded-2xl border-r-4 border-[#d4af37] hover-card fade-in delay-500"><i class="fas fa-comments text-3xl text-[#802629]"></i><span class="text-xl font-bold">تطوير مهارات التواصل والتعامل</span></div>
+                    <div class="flex items-center gap-4 bg-gray-50 p-5 rounded-2xl border-r-4 border-[#d4af37] hover-card fade-in delay-100 col-span-2"><i class="fas fa-chart-simple text-3xl text-[#d4af37]"></i><span class="text-xl font-bold">رفع جودة الأداء وتقليل الشكاوى</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 4: لماذا خدمة العملاء هي الأساس؟ (مطورة) ========== -->
+        <div class="slide">
+            <div class="w-full max-w-6xl mx-auto">
+                <div class="title-line mx-0 mr-auto ml-0 fade-in"></div>
+                <h2 class="text-5xl font-black text-[#802629] mb-12 fade-in delay-100">لماذا خدمة العملاء هي الأساس؟</h2>
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="bg-[#f8fafc] p-8 rounded-3xl border border-gray-100 flex items-start gap-6 hover-card fade-in delay-200">
+                        <div class="bg-[#802629]/10 text-[#802629] p-5 rounded-full text-4xl anim-pulse"><i class="fas fa-heart"></i></div>
+                        <div><h3 class="text-2xl font-bold text-[#5b646a] mb-3">بناء الولاء والانتماء</h3><p class="text-[#7a7d81] text-lg">العميل الراضي لا يغادر بنكنا أبداً، بل يصبح مسوقاً مجانياً.</p></div>
+                    </div>
+                    <div class="bg-[#f8fafc] p-8 rounded-3xl border border-gray-100 flex items-start gap-6 hover-card fade-in delay-300">
+                        <div class="bg-[#9c9164]/10 text-[#9c9164] p-5 rounded-full text-4xl anim-pulse"><i class="fas fa-shield-alt"></i></div>
+                        <div><h3 class="text-2xl font-bold text-[#5b646a] mb-3">حماية السمعة المؤسسية</h3><p class="text-[#7a7d81] text-lg">أنت لست مجرد موظف، أنت الواجهة التي تعكس احترافية البنك.</p></div>
+                    </div>
+                    <div class="bg-[#f8fafc] p-8 rounded-3xl border border-gray-100 flex items-start gap-6 hover-card fade-in delay-400">
+                        <div class="bg-[#cdc47f]/30 text-[#9c9164] p-5 rounded-full text-4xl anim-pulse"><i class="fas fa-chart-line"></i></div>
+                        <div><h3 class="text-2xl font-bold text-[#5b646a] mb-3">تنمية المبيعات</h3><p class="text-[#7a7d81] text-lg">الخدمة الممتازة تفتح باب الثقة لعرض المنتجات البنكية.</p></div>
+                    </div>
+                    <div class="bg-[#f8fafc] p-8 rounded-3xl border border-gray-100 flex items-start gap-6 hover-card fade-in delay-400">
+                        <div class="bg-[#5b646a]/10 text-[#5b646a] p-5 rounded-full text-4xl anim-pulse"><i class="fas fa-users-cog"></i></div>
+                        <div><h3 class="text-2xl font-bold text-[#5b646a] mb-3">احتواء الشكاوى مبكراً</h3><p class="text-[#7a7d81] text-lg">التعامل الراقي يمتص غضب العميل ويحل المشكلة قبل أن تتفاقم.</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 5: ثقافة الخدمة في بنك الكريمي الإسلامي (جديدة) ========== -->
+        <div class="slide">
+            <div class="w-full text-center max-w-7xl mx-auto">
+                <div class="title-line fade-in"></div>
+                <h2 class="text-5xl font-black text-[#802629] mb-8 fade-in delay-100">ثقافة الخدمة في بنك الكريمي الإسلامي</h2>
+                <div class="flex flex-wrap justify-center gap-5">
+                    <div class="bg-[#802629] text-white px-8 py-4 rounded-full text-xl font-bold shadow-md hover-card fade-in delay-200"><i class="fas fa-handshake ml-2"></i> الثقة</div>
+                    <div class="bg-[#d4af37] text-[#2d3748] px-8 py-4 rounded-full text-xl font-bold shadow-md hover-card fade-in delay-300"><i class="fas fa-bolt ml-2"></i> السرعة</div>
+                    <div class="bg-[#5b646a] text-white px-8 py-4 rounded-full text-xl font-bold shadow-md hover-card fade-in delay-400"><i class="fas fa-lock ml-2"></i> الأمانة</div>
+                    <div class="bg-[#802629] text-white px-8 py-4 rounded-full text-xl font-bold shadow-md hover-card fade-in delay-500"><i class="fas fa-smile ml-2"></i> الاحترام</div>
+                    <div class="bg-[#d4af37] text-[#2d3748] px-8 py-4 rounded-full text-xl font-bold shadow-md hover-card fade-in delay-100"><i class="fas fa-chart-line ml-2"></i> الشفافية</div>
+                    <div class="bg-[#5b646a] text-white px-8 py-4 rounded-full text-xl font-bold shadow-md hover-card fade-in delay-200"><i class="fas fa-hands-helping ml-2"></i> المسؤولية</div>
+                    <div class="bg-[#802629] text-white px-8 py-4 rounded-full text-xl font-bold shadow-md hover-card fade-in delay-300"><i class="fas fa-hand-holding-heart ml-2"></i> الشراكة</div>
+                </div>
+                <p class="mt-10 text-xl font-bold text-[#d4af37] fade-in delay-400">كل موظف يمثل صورة البنك بالكامل</p>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 6: قاعدة الثواني السبع الأولى ========== -->
+        <div class="slide">
+            <div class="text-center w-full max-w-5xl mx-auto">
+                <i class="fas fa-stopwatch text-8xl text-[#802629] mb-8 anim-float fade-in drop-shadow-md"></i>
+                <h2 class="text-6xl font-black text-[#802629] mb-6 fade-in delay-100">قاعدة الثواني السبع الأولى</h2>
+                <p class="text-3xl text-[#7a7d81] font-medium mb-16 fade-in delay-200">يتخذ العميل قراره اللاشعوري عن جودة الخدمة في أول 7 ثوانٍ فقط!</p>
+                <div class="flex justify-center gap-12">
+                    <div class="bg-[#f8fafc] w-1/2 p-10 rounded-3xl border-t-[8px] border-[#9c9164] text-center hover-card fade-in delay-300 shadow-sm">
+                        <i class="fas fa-smile-beam text-7xl text-[#9c9164] mb-6"></i>
+                        <h3 class="text-3xl font-bold text-[#5b646a] mb-4">الابتسامة الصادقة</h3>
+                        <p class="text-xl text-[#7a7d81] leading-relaxed">تكسر الجليد وتوصل رسالة للعميل بأنه مرحب به.</p>
+                    </div>
+                    <div class="bg-[#f8fafc] w-1/2 p-10 rounded-3xl border-t-[8px] border-[#5b646a] text-center hover-card fade-in delay-400 shadow-sm">
+                        <i class="fas fa-eye text-7xl text-[#5b646a] mb-6"></i>
+                        <h3 class="text-3xl font-bold text-[#5b646a] mb-4">التواصل البصري</h3>
+                        <p class="text-xl text-[#7a7d81] leading-relaxed">النظر في عيني العميل يمنحه شعوراً بالأهمية والثقة.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 7: أسرار التأثير في التواصل ========== -->
+        <div class="slide bg-[#f8fafc]">
+            <div class="text-center w-full max-w-6xl mx-auto">
+                <div class="title-line fade-in"></div>
+                <h2 class="text-5xl font-black text-[#802629] mb-6 fade-in delay-100">أسرار التأثير في التواصل</h2>
+                <p class="text-[#7a7d81] text-2xl mb-16 fade-in delay-200">دراسة توضح العناصر التي يصدقها العميل عند التعامل المباشر معك</p>
+                <div class="flex justify-center items-end gap-16">
+                    <div class="w-64 fade-in delay-200 hover-card">
+                        <h3 class="text-[90px] font-black text-[#7a7d81] leading-none mb-4">7%</h3>
+                        <div class="bg-[#7a7d81] h-20 rounded-t-[30px] flex items-center justify-center text-white anim-pulse"><i class="fas fa-comment-dots text-4xl"></i></div>
+                        <div class="bg-white p-6 rounded-b-[30px] shadow-sm"><h4 class="font-bold text-2xl text-[#5b646a]">الكلمات</h4></div>
+                    </div>
+                    <i class="fas fa-plus text-4xl text-gray-300 mb-16 fade-in delay-300"></i>
+                    <div class="w-64 fade-in delay-300 hover-card">
+                        <h3 class="text-[90px] font-black text-[#9c9164] leading-none mb-4">38%</h3>
+                        <div class="bg-gradient-to-t from-[#9c9164] to-[#b8af82] h-40 rounded-t-[30px] flex items-center justify-center text-white anim-pulse"><i class="fas fa-microphone-alt text-5xl"></i></div>
+                        <div class="bg-white p-6 rounded-b-[30px] shadow-sm"><h4 class="font-bold text-2xl text-[#5b646a]">نبرة الصوت</h4></div>
+                    </div>
+                    <i class="fas fa-plus text-4xl text-gray-300 mb-16 fade-in delay-400"></i>
+                    <div class="w-64 fade-in delay-400 hover-card">
+                        <h3 class="text-[90px] font-black text-[#802629] leading-none mb-4">55%</h3>
+                        <div class="bg-gradient-to-t from-[#802629] to-[#a6393d] h-60 rounded-t-[30px] flex items-center justify-center text-white anim-pulse"><i class="fas fa-user-tie text-6xl"></i></div>
+                        <div class="bg-white p-6 rounded-b-[30px] shadow-sm"><h4 class="font-bold text-2xl text-[#5b646a]">لغة الجسد</h4></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 8: الركائز الخمس للتميز داخل الفرع ========== -->
+        <div class="slide">
+            <div class="w-full text-center max-w-7xl mx-auto">
+                <h2 class="text-6xl font-black text-[#802629] mb-24 fade-in">الركائز الخمس للتميز داخل الفرع</h2>
+                <div class="flex justify-between items-stretch gap-6 relative px-4">
+                    <div class="absolute top-12 right-10 left-10 h-1.5 bg-gray-200 -z-10 rounded-full fade-in"></div>
+                    <div class="w-1/5 fade-in delay-100 hover-card">
+                        <div class="w-24 h-24 mx-auto bg-[#802629] text-white rounded-full flex items-center justify-center text-4xl mb-6 shadow-lg border-4 border-white anim-float"><i class="fas fa-door-open"></i></div>
+                        <div class="bg-[#f8fafc] rounded-2xl border-t-4 border-[#802629] p-6 shadow-sm">
+                            <h4 class="font-black text-xl text-[#802629] mb-2">1. الترحيب</h4>
+                            <p class="text-sm text-[#7a7d81]">ابتسامة وتحية صادقة</p>
+                        </div>
+                    </div>
+                    <div class="w-1/5 fade-in delay-200 hover-card">
+                        <div class="w-24 h-24 mx-auto bg-[#9c9164] text-white rounded-full flex items-center justify-center text-4xl mb-6 shadow-lg border-4 border-white anim-float"><i class="fas fa-ear-listen"></i></div>
+                        <div class="bg-[#f8fafc] rounded-2xl border-t-4 border-[#9c9164] p-6 shadow-sm">
+                            <h4 class="font-black text-xl text-[#9c9164] mb-2">2. الاستماع</h4>
+                            <p class="text-sm text-[#7a7d81]">إصغاء وتواصل بصري</p>
+                        </div>
+                    </div>
+                    <div class="w-1/5 fade-in delay-300 hover-card">
+                        <div class="w-24 h-24 mx-auto bg-[#5b646a] text-white rounded-full flex items-center justify-center text-4xl mb-6 shadow-lg border-4 border-white anim-float"><i class="fas fa-magnifying-glass"></i></div>
+                        <div class="bg-[#f8fafc] rounded-2xl border-t-4 border-[#5b646a] p-6 shadow-sm">
+                            <h4 class="font-black text-xl text-[#5b646a] mb-2">3. الفهم</h4>
+                            <p class="text-sm text-[#7a7d81]">طرح الأسئلة للتأكد</p>
+                        </div>
+                    </div>
+                    <div class="w-1/5 fade-in delay-400 hover-card">
+                        <div class="w-24 h-24 mx-auto bg-[#7a7d81] text-white rounded-full flex items-center justify-center text-4xl mb-6 shadow-lg border-4 border-white anim-float"><i class="fas fa-bolt"></i></div>
+                        <div class="bg-[#f8fafc] rounded-2xl border-t-4 border-[#7a7d81] p-6 shadow-sm">
+                            <h4 class="font-black text-xl text-[#7a7d81] mb-2">4. الإنجاز</h4>
+                            <p class="text-sm text-[#7a7d81]">السرعة والدقة بالعمل</p>
+                        </div>
+                    </div>
+                    <div class="w-1/5 fade-in delay-400 hover-card">
+                        <div class="w-24 h-24 mx-auto bg-[#cdc47f] text-[#802629] rounded-full flex items-center justify-center text-4xl mb-6 shadow-lg border-4 border-white anim-float"><i class="fas fa-handshake"></i></div>
+                        <div class="bg-[#f8fafc] rounded-2xl border-t-4 border-[#cdc47f] p-6 shadow-sm">
+                            <h4 class="font-black text-xl text-[#9c9164] mb-2">5. التوديع</h4>
+                            <p class="text-sm text-[#7a7d81]">شكر وعرض مساعدة</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 9: إدارة وقت الانتظار (جديدة) ========== -->
+        <div class="slide bg-[#f8fafc]">
+            <div class="w-full max-w-6xl mx-auto">
+                <div class="title-line fade-in"></div>
+                <h2 class="text-5xl font-black text-[#802629] mb-12 fade-in delay-100">⏳ إدارة وقت الانتظار</h2>
+                <div class="flex gap-8">
+                    <div class="w-1/2 bg-white p-8 rounded-3xl shadow-md fade-in delay-200">
+                        <h3 class="text-2xl font-bold text-[#802629] mb-4">العميل يتقبل الانتظار عندما:</h3>
+                        <ul class="space-y-3 text-lg">
+                            <li class="flex items-center gap-3"><i class="fas fa-check-circle text-green-600 text-xl"></i> يفهم السبب</li>
+                            <li class="flex items-center gap-3"><i class="fas fa-check-circle text-green-600 text-xl"></i> يشعر بالاهتمام</li>
+                            <li class="flex items-center gap-3"><i class="fas fa-check-circle text-green-600 text-xl"></i> يرى تنظيماً داخل الفرع</li>
+                        </ul>
+                    </div>
+                    <div class="w-1/2 bg-white p-8 rounded-3xl shadow-md fade-in delay-300">
+                        <h3 class="text-2xl font-bold text-[#802629] mb-4">وسائل التحسين</h3>
+                        <ul class="space-y-3 text-lg">
+                            <li class="flex items-center gap-3"><i class="fas fa-check-circle text-green-600 text-xl"></i> تنظيم الطوابير</li>
+                            <li class="flex items-center gap-3"><i class="fas fa-check-circle text-green-600 text-xl"></i> التوجيه السريع</li>
+                            <li class="flex items-center gap-3"><i class="fas fa-check-circle text-green-600 text-xl"></i> تشجيع القنوات الرقمية</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="mt-8 text-center text-[#d4af37] font-bold text-xl fade-in delay-400">📊 مؤشر الأداء: متوسط وقت الانتظار</p>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 10: المظهر الاحترافي وبيئة العمل ========== -->
+        <div class="slide">
+            <div class="w-full max-w-6xl mx-auto">
+                <div class="title-line mx-0 mr-auto ml-0 fade-in"></div>
+                <h2 class="text-5xl font-black text-[#802629] mb-12 fade-in delay-100">المظهر الاحترافي وبيئة العمل</h2>
+                <div class="flex gap-12 items-center">
+                    <div class="w-1/2 space-y-8">
+                        <div class="bg-[#f8fafc] rounded-3xl p-6 flex items-center gap-6 border border-gray-100 shadow-sm hover-card fade-in delay-200">
+                            <i class="fas fa-user-tie text-6xl text-[#802629] p-4 bg-white rounded-2xl shadow-sm"></i>
+                            <div><h3 class="text-2xl font-bold text-[#5b646a] mb-2">الزي الرسمي والمظهر</h3><p class="text-lg text-[#7a7d81]">الالتزام بالزي المعتمد للبنك يعكس موثوقية المؤسسة.</p></div>
+                        </div>
+                        <div class="bg-[#f8fafc] rounded-3xl p-6 flex items-center gap-6 border border-gray-100 shadow-sm hover-card fade-in delay-300">
+                            <i class="fas fa-desktop text-6xl text-[#9c9164] p-4 bg-white rounded-2xl shadow-sm"></i>
+                            <div><h3 class="text-2xl font-bold text-[#5b646a] mb-2">سياسة المكتب النظيف</h3><p class="text-lg text-[#7a7d81]">إخفاء الملفات الحساسة وعدم ترك متعلقات مشتتة.</p></div>
+                        </div>
+                    </div>
+                    <div class="w-1/2 fade-in delay-400">
+                        <div class="bg-gradient-to-br from-[#5b646a] to-[#3a4146] text-white p-12 rounded-[40px] shadow-xl relative overflow-hidden border-4 border-[#cdc47f]/20 hover-card">
+                            <i class="fas fa-quote-right text-[120px] text-[#cdc47f] absolute top-4 left-4 opacity-10"></i>
+                            <h3 class="text-3xl font-bold mb-6 text-[#cdc47f] relative z-10">قاعدة ذهبية:</h3>
+                            <p class="text-3xl leading-relaxed font-light relative z-10">"مكتبك المنظم وملابسك الأنيقة تخبر العميل قبل أن تتحدث أن أمواله في أيدٍ موثوقة ومنظمة."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 11: أنماط العملاء ========== -->
+        <div class="slide">
+            <div class="w-full max-w-6xl mx-auto">
+                <div class="title-line fade-in"></div>
+                <h2 class="text-5xl font-black text-center text-[#802629] mb-16 fade-in delay-100">كيفية التعامل مع أنماط العملاء</h2>
+                <div class="grid grid-cols-2 gap-10">
+                    <div class="bg-white rounded-[20px] border border-gray-100 shadow-lg p-8 border-t-[6px] border-t-[#802629] hover-card fade-in delay-100">
+                        <div class="flex justify-between items-center mb-4"><h3 class="text-3xl font-bold text-[#802629]">العميل المتطلب أو المندفع</h3><i class="fas fa-fire text-3xl text-[#802629] anim-pulse"></i></div>
+                        <p class="text-[#7a7d81] text-xl leading-relaxed">حافظ على نبرة هادئة، استمع جيداً، لا تجادله شخصياً، وقدم حلولاً عملية تركز على الإنجاز الفوري.</p>
+                    </div>
+                    <div class="bg-white rounded-[20px] border border-gray-100 shadow-lg p-8 border-t-[6px] border-t-[#5b646a] hover-card fade-in delay-200">
+                        <div class="flex justify-between items-center mb-4"><h3 class="text-3xl font-bold text-[#5b646a]">العميل الثرثار</h3><i class="fas fa-comments text-3xl text-[#5b646a] anim-pulse"></i></div>
+                        <p class="text-[#7a7d81] text-xl leading-relaxed">استمع له بلباقة، ثم استخدم أسئلة مغلقة (نعم أو لا) لإعادته بذكاء إلى مسار المعاملة.</p>
+                    </div>
+                    <div class="bg-white rounded-[20px] border border-gray-100 shadow-lg p-8 border-t-[6px] border-t-[#9c9164] hover-card fade-in delay-300">
+                        <div class="flex justify-between items-center mb-4"><h3 class="text-3xl font-bold text-[#9c9164]">العميل المتعجل</h3><i class="fas fa-stopwatch text-3xl text-[#9c9164] anim-pulse"></i></div>
+                        <p class="text-[#7a7d81] text-xl leading-relaxed">تجنب الشروحات الطويلة غير الضرورية، واكب إيقاعه السريع، وركز على الدقة وسرعة إنهاء إجراءاته.</p>
+                    </div>
+                    <div class="bg-white rounded-[20px] border border-gray-100 shadow-lg p-8 border-t-[6px] border-t-[#7a7d81] hover-card fade-in delay-400">
+                        <div class="flex justify-between items-center mb-4"><h3 class="text-3xl font-bold text-[#7a7d81]">العميل المتردد</h3><i class="fas fa-question-circle text-3xl text-[#7a7d81] anim-pulse"></i></div>
+                        <p class="text-[#7a7d81] text-xl leading-relaxed">ابنِ جسر الثقة معه، اشرح له ببساطة، قلل الخيارات أمامه إلى خيارين فقط، وشجعه على اتخاذ القرار.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 12: خطوات احتواء العميل الغاضب ========== -->
+        <div class="slide !bg-[#5b646a] !border-none">
+            <div class="w-full max-w-4xl mx-auto py-4">
+                <div class="text-center mb-10 fade-in">
+                    <div class="w-16 h-16 bg-[#cdc47f] rounded-full mx-auto flex items-center justify-center mb-4 shadow-lg anim-float"><i class="fas fa-exclamation text-3xl text-[#5b646a]"></i></div>
+                    <h2 class="text-4xl font-black text-white mb-2 font-cairo tracking-wide">خطوات احتواء العميل الغاضب</h2>
+                    <p class="text-xl text-[#cdc47f] font-light">طريقة احترافية لتحويل الغضب إلى رضا وثقة</p>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <div class="bg-white/10 p-5 px-8 rounded-2xl flex items-center justify-between border border-white/10 hover-card fade-in delay-100">
+                        <div class="text-right w-4/5"><h3 class="text-2xl font-bold text-white mb-1">الاستماع الكامل</h3><p class="text-lg text-gray-300">دع العميل يفرغ شحنته بالكلام دون أية مقاطعة.</p></div>
+                        <div class="text-6xl font-black text-[#cdc47f] font-cairo">1</div>
+                    </div>
+                    <div class="bg-white/10 p-5 px-8 rounded-2xl flex items-center justify-between border border-white/10 hover-card fade-in delay-200">
+                        <div class="text-right w-4/5"><h3 class="text-2xl font-bold text-white mb-1">إظهار التفهم والتعاطف</h3><p class="text-lg text-gray-300">"أنا أتفهم تماماً سبب ضيقك من هذا التأخير"</p></div>
+                        <div class="text-6xl font-black text-[#cdc47f] font-cairo">2</div>
+                    </div>
+                    <div class="bg-white/10 p-5 px-8 rounded-2xl flex items-center justify-between border border-white/10 hover-card fade-in delay-300">
+                        <div class="text-right w-4/5"><h3 class="text-2xl font-bold text-white mb-1">الاعتذار الصادق</h3><p class="text-lg text-gray-300">قدم اعتذاراً نيابة عن البنك حتى لو لم تكن المخطئ</p></div>
+                        <div class="text-6xl font-black text-[#cdc47f] font-cairo">3</div>
+                    </div>
+                    <div class="bg-white/10 p-5 px-8 rounded-2xl flex items-center justify-between border border-white/10 hover-card fade-in delay-400">
+                        <div class="text-right w-4/5"><h3 class="text-2xl font-bold text-white mb-1">المبادرة بالحل</h3><p class="text-lg text-gray-300">"دعني أقوم بحل هذه المشكلة لك الآن"، وتابع معه حتى إتمام الأمر</p></div>
+                        <div class="text-6xl font-black text-[#cdc47f] font-cairo">4</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 13: التعاطف المالي ========== -->
+        <div class="slide !bg-[#5b646a] !border-none">
+            <div class="w-full text-center max-w-5xl mx-auto">
+                <div class="fade-in mb-10">
+                    <i class="fas fa-hand-holding-heart text-[80px] text-[#cdc47f] mb-6 anim-float drop-shadow-md"></i>
+                    <h2 class="text-5xl font-black text-white mb-4 font-cairo tracking-wide">التعاطف المالي</h2>
+                    <p class="text-2xl text-[#cdc47f] leading-relaxed max-w-4xl mx-auto font-light">الأموال تمثل للعملاء (الأمان، المستقبل، الاستقرار). العميل الذي يسأل عن رصيده بقلق، قد يكون يمر بأزمة صامتة.</p>
+                </div>
+                <div class="bg-white/5 p-10 rounded-[20px] border border-white/20 border-r-[6px] border-r-[#cdc47f] border-l-[6px] border-l-[#cdc47f] fade-in delay-200 text-right shadow-lg">
+                    <ul class="space-y-8 text-2xl text-white font-light">
+                        <li class="flex items-center gap-5 hover:translate-x-[-10px] transition-transform"><i class="fas fa-check text-[#cdc47f] text-3xl"></i> لا تتعامل مع المعاملات كأرقام فقط، تعامل معها كحياة أشخاص.</li>
+                        <li class="flex items-center gap-5 hover:translate-x-[-10px] transition-transform"><i class="fas fa-check text-[#cdc47f] text-3xl"></i> تجنب استخدام نبرة متعالية عند رفض طلب العميل، بل وضح الأسباب بلباقة.</li>
+                        <li class="flex items-center gap-5 hover:translate-x-[-10px] transition-transform"><i class="fas fa-check text-[#cdc47f] text-3xl"></i> طمئن العميل الخائف من استخدام التقنيات الحديثة وساعده خطوة بخطوة.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 14: إدارة المواقف الصعبة (مطورة) ========== -->
+        <div class="slide bg-[#f8fafc]">
+            <div class="w-full max-w-5xl mx-auto">
+                <div class="title-line bg-[#802629] fade-in"></div>
+                <h2 class="text-5xl font-black text-[#802629] mb-12 fade-in delay-100">إدارة المواقف الصعبة في الفرع</h2>
+                <div class="space-y-8">
+                    <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-8 border-r-8 border-r-[#9c9164] hover-card fade-in delay-200">
+                        <i class="fas fa-server text-6xl text-[#9c9164] p-5 bg-slate-50 rounded-2xl anim-float"></i>
+                        <div><h3 class="text-3xl font-bold text-[#5b646a] mb-3">عند تعطل النظام الآلي</h3><p class="text-xl text-[#7a7d81]">لا تتجاهل العملاء. قف، اعتذر بشفافية، وقدر لهم وقتهم، واعرض إنجاز المعاملات ورقياً إن أمكن.</p></div>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-8 border-r-8 border-r-[#802629] hover-card fade-in delay-300">
+                        <i class="fas fa-people-arrows text-6xl text-[#802629] p-5 bg-slate-50 rounded-2xl anim-float"></i>
+                        <div><h3 class="text-3xl font-bold text-[#5b646a] mb-3">الازدحام الشديد وقت الذروة</h3><p class="text-xl text-[#7a7d81]">تواصل بالعين مع المنتظرين، أسرع في وتيرة عملك، واشكرهم على صبرهم.</p></div>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-8 border-r-8 border-r-[#d4af37] hover-card fade-in delay-400">
+                        <i class="fas fa-user-lock text-6xl text-[#d4af37] p-5 bg-slate-50 rounded-2xl anim-float"></i>
+                        <div><h3 class="text-3xl font-bold text-[#5b646a] mb-3">عميل يرفض تحديث البيانات</h3><p class="text-xl text-[#7a7d81]">اشرح بأسلوب مهني أن الإجراء لحماية حسابه وامتثالاً لمتطلبات البنك المركزي.</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 15: السرية المصرفية (مطورة) ========== -->
+        <div class="slide">
+            <div class="text-center w-full max-w-5xl mx-auto">
+                <i class="fas fa-user-lock text-[90px] text-[#802629] mb-8 anim-float fade-in drop-shadow-md"></i>
+                <h2 class="text-6xl font-black text-[#802629] mb-4 fade-in delay-100">الأمانة والسرية المصرفية</h2>
+                <p class="text-2xl text-[#7a7d81] font-medium mb-12 fade-in delay-200">ثقة العميل في حماية بياناته هي رأس مال البنك</p>
+                <div class="flex gap-10 text-right">
+                    <div class="w-1/2 bg-[#f8fafc] p-8 rounded-3xl border border-gray-100 border-t-[8px] border-t-[#9c9164] hover-card fade-in delay-300 shadow-sm">
+                        <i class="fas fa-id-card text-5xl text-[#9c9164] mb-6"></i>
+                        <h3 class="text-2xl font-bold text-[#5b646a] mb-3">التحقق الصارم من الهوية</h3>
+                        <p class="text-lg text-[#7a7d81]">عدم إفشاء أي معلومة لغير صاحب الحساب شخصياً، حتى لو كان من أقاربه المباشرين.</p>
+                    </div>
+                    <div class="w-1/2 bg-[#f8fafc] p-8 rounded-3xl border border-gray-100 border-t-[8px] border-t-[#5b646a] hover-card fade-in delay-400 shadow-sm">
+                        <i class="fas fa-volume-down text-5xl text-[#5b646a] mb-6"></i>
+                        <h3 class="text-2xl font-bold text-[#5b646a] mb-3">همس الأرقام</h3>
+                        <p class="text-lg text-[#7a7d81]">يُمنع نطق الأرصدة أو تفاصيل الرواتب بصوت مسموع في صالة الفرع لحماية خصوصية العميل.</p>
+                    </div>
+                </div>
+                <div class="mt-6 bg-[#802629]/10 p-4 rounded-xl text-right">
+                    <p class="text-md text-[#802629]"><i class="fas fa-gavel ml-2"></i> <strong>مسؤولية قانونية:</strong> إفشاء بيانات العميل يعرضك للمساءلة والعقوبات النظامية وفقاً لأنظمة البنك المركزي.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 16: التسويق الذكي (البيع المتقاطع) ========== -->
+        <div class="slide">
+            <div class="w-full max-w-5xl mx-auto">
+                <h2 class="text-6xl font-black text-[#802629] mb-4 fade-in text-center font-cairo">التسويق الذكي</h2>
+                <p class="text-2xl text-[#7a7d81] mb-12 text-center fade-in delay-100 font-light">من الخدمة الممتازة إلى (نصيحة بنكية)</p>
+                <div class="bg-white p-12 border border-gray-100 rounded-3xl shadow-xl relative overflow-hidden fade-in delay-200">
+                    <i class="fas fa-bullseye absolute -left-10 -bottom-10 text-[250px] text-[#9c9164] opacity-5 anim-pulse"></i>
+                    <div class="space-y-10 text-2xl text-[#5b646a] relative z-10 font-medium">
+                        <p class="flex items-start gap-5 leading-relaxed hover-card p-2"><i class="fas fa-angle-left text-[#802629] mt-2 text-3xl"></i> عند قيام العميل بسداد فواتيره نقداً بشكل متكرر، اشرح له استخدام <strong>التطبيق البنكي</strong> لتوفير وقته.</p>
+                        <p class="flex items-start gap-5 leading-relaxed hover-card p-2"><i class="fas fa-angle-left text-[#802629] mt-2 text-3xl"></i> عند ملاحظة رصيد ضخم غير مستثمر، انصحه بفتح <strong>حساب توفير أو وديعة</strong> ليعود عليه بعوائد مربحة.</p>
+                        <p class="flex items-start gap-5 leading-relaxed hover-card p-2"><i class="fas fa-angle-left text-[#802629] mt-2 text-3xl"></i> هذا يسمى <strong>"البيع المتقاطع"</strong>، ويحدث بسلاسة حين يشعر العميل أنك مستشاره المالي.</p>
+                    </div>
+                </div>
+                <p class="mt-6 text-center text-[#d4af37] font-bold text-xl fade-in delay-300">📊 مؤشر الأداء: نسبة البيع المتقاطع</p>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 17: مؤشرات الأداء الرئيسية KPI (جديدة) ========== -->
+        <div class="slide bg-[#f8fafc]">
+            <div class="w-full text-center max-w-6xl mx-auto">
+                <div class="title-line fade-in mx-auto"></div>
+                <h2 class="text-5xl font-black text-[#802629] mb-12 fade-in delay-100">📊 مؤشرات الأداء الرئيسية KPIs</h2>
+                <p class="text-xl text-[#7a7d81] mb-12 fade-in delay-200">ما لا يمكن قياسه... لا يمكن تطويره</p>
+                <div class="grid grid-cols-3 gap-8">
+                    <div class="bg-white rounded-[20px] border border-gray-100 shadow-sm p-6 hover-card fade-in delay-300"><i class="fas fa-smile text-5xl text-[#d4af37] mb-4"></i><h3 class="text-xl font-bold text-[#5b646a]">رضا العملاء</h3></div>
+                    <div class="bg-white rounded-[20px] border border-gray-100 shadow-sm p-6 hover-card fade-in delay-400"><i class="fas fa-hourglass-half text-5xl text-[#d4af37] mb-4"></i><h3 class="text-xl font-bold text-[#5b646a]">متوسط وقت الانتظار</h3></div>
+                    <div class="bg-white rounded-[20px] border border-gray-100 shadow-sm p-6 hover-card fade-in delay-500"><i class="fas fa-frown text-5xl text-[#d4af37] mb-4"></i><h3 class="text-xl font-bold text-[#5b646a]">عدد الشكاوى</h3></div>
+                    <div class="bg-white rounded-[20px] border border-gray-100 shadow-sm p-6 hover-card fade-in delay-100"><i class="fas fa-chart-line text-5xl text-[#d4af37] mb-4"></i><h3 class="text-xl font-bold text-[#5b646a]">نسبة البيع المتقاطع</h3></div>
+                    <div class="bg-white rounded-[20px] border border-gray-100 shadow-sm p-6 hover-card fade-in delay-200"><i class="fas fa-mobile-alt text-5xl text-[#d4af37] mb-4"></i><h3 class="text-xl font-bold text-[#5b646a]">استخدام الخدمات الرقمية</h3></div>
+                    <div class="bg-white rounded-[20px] border border-gray-100 shadow-sm p-6 hover-card fade-in delay-300"><i class="fas fa-check-double text-5xl text-[#d4af37] mb-4"></i><h3 class="text-xl font-bold text-[#5b646a]">حل الشكاوى من أول اتصال</h3></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 18: التوازن بين الخدمة والامتثال (جديدة) ========== -->
+        <div class="slide">
+            <div class="max-w-5xl mx-auto text-center">
+                <i class="fas fa-balance-scale text-8xl text-[#d4af37] mb-8 anim-float fade-in"></i>
+                <h2 class="text-5xl font-black text-[#802629] mb-6 fade-in delay-100">التوازن بين الخدمة والامتثال</h2>
+                <p class="text-xl text-[#7a7d81] mb-12 fade-in delay-200">الامتثال لا يهدف لتعقيد الخدمة... بل يهدف إلى حماية العميل والموظف والبنك</p>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-[#f8fafc] p-6 rounded-2xl border-r-4 border-[#d4af37] text-right fade-in delay-300"><i class="fas fa-shield-alt text-3xl text-[#d4af37] ml-3"></i> حماية العميل من الاحتيال</div>
+                    <div class="bg-[#f8fafc] p-6 rounded-2xl border-r-4 border-[#d4af37] text-right fade-in delay-400"><i class="fas fa-user-tie text-3xl text-[#d4af37] ml-3"></i> حماية الموظف من المساءلة</div>
+                    <div class="bg-[#f8fafc] p-6 rounded-2xl border-r-4 border-[#d4af37] text-right fade-in delay-500"><i class="fas fa-building text-3xl text-[#d4af37] ml-3"></i> حماية البنك من الغرامات</div>
+                    <div class="bg-[#f8fafc] p-6 rounded-2xl border-r-4 border-[#d4af37] text-right fade-in delay-100"><i class="fas fa-chart-line text-3xl text-[#d4af37] ml-3"></i> مكافحة غسل الأموال والاحتيال</div>
+                </div>
+                <p class="mt-8 text-xl text-[#d4af37] font-bold fade-in delay-200">الخدمة السريعة لا تعني تجاوز الضوابط</p>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 19: سيناريوهات Role Play (جديدة) ========== -->
+        <div class="slide bg-[#f8fafc]">
+            <div class="w-full max-w-6xl mx-auto text-center">
+                <i class="fas fa-theater-masks text-8xl text-[#d4af37] mb-8 anim-float fade-in"></i>
+                <h2 class="text-5xl font-black text-[#802629] mb-6 fade-in delay-100">🎭 حالات عملية من الفروع</h2>
+                <p class="text-xl text-[#7a7d81] mb-10 fade-in delay-200">تدريب عملي بالمحاكاة</p>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-md text-right border-r-4 border-[#d4af37] hover-card fade-in delay-300"><i class="fas fa-exchange-alt text-[#802629] ml-2"></i> عميل غاضب بسبب تأخر حوالة خارجية</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md text-right border-r-4 border-[#d4af37] hover-card fade-in delay-400"><i class="fas fa-file-alt text-[#802629] ml-2"></i> عميل يرفض تحديث البيانات بحجة "ما يحتاج"</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md text-right border-r-4 border-[#d4af37] hover-card fade-in delay-500"><i class="fas fa-users text-[#802629] ml-2"></i> عميل يحاول تجاوز الدور بحجة أنه "مستعجل"</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md text-right border-r-4 border-[#d4af37] hover-card fade-in delay-100"><i class="fas fa-server text-[#802629] ml-2"></i> تعطل النظام وقت الذروة والزحام شديد</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md text-right border-r-4 border-[#d4af37] hover-card fade-in delay-200"><i class="fas fa-user-graduate text-[#802629] ml-2"></i> عميل كبير سن لا يفهم التطبيق ويخاف منه</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md text-right border-r-4 border-[#d4af37] hover-card fade-in delay-300"><i class="fas fa-crown text-[#802629] ml-2"></i> عميل VIP غاضب يهدد بسحب حساباته</div>
+                </div>
+                <p class="mt-10 text-xl text-[#d4af37] font-bold fade-in delay-400">كيف ستتعامل مع هذه المواقف باحترافية؟</p>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 20: الميل الإضافي والخاتمة ========== -->
+        <div class="slide !bg-[#802629] !border-none">
+            <div class="w-full max-w-5xl mx-auto text-center text-white">
+                <i class="fas fa-road text-[80px] text-[#cdc47f] mb-6 anim-float fade-in drop-shadow-md"></i>
+                <h2 class="text-[60px] font-black mb-4 fade-in delay-100 font-cairo tracking-wide">مفهوم "الميل الإضافي"</h2>
+                <p class="text-xl text-[#cdc47f] mb-12 fade-in delay-200 font-light">الفرق بين الخدمة العادية والخدمة المبهرة</p>
+                <div class="text-3xl leading-loose font-light fade-in delay-300">
+                    <p class="mb-6">"أن تعطي العميل ما طلبه.. فهذه وظيفتك الأساسية."</p>
+                    <p class="mb-10 text-2xl">"أما أن تستبق احتياجه، وترشده لخدمة توفر عليه الجهد مستقبلاً،<br>فهذا هو الميل الإضافي."</p>
+                    <div class="inline-block border border-white/20 bg-white/5 rounded-[20px] px-10 py-4 hover:bg-white/10 transition-colors shadow-lg">
+                        <p class="font-bold text-[#cdc47f] text-2xl"><i class="fas fa-quote-right ml-3"></i> لا تكتفِ بالمرضي، اسعَ دائماً للمبهر! <i class="fas fa-quote-left mr-3"></i></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== الشريحة 21: الخاتمة النهائية ========== -->
+        <div class="slide bg-white">
+            <div class="text-center w-full max-w-4xl mx-auto">
+                <div class="w-48 h-48 bg-[#f8fafc] rounded-full shadow-lg flex items-center justify-center mb-10 border-[8px] border-[#9c9164] mx-auto anim-pulse fade-in">
+                    <i class="fas fa-medal text-[90px] text-[#cdc47f]"></i>
+                </div>
+                <h2 class="text-7xl font-black text-[#802629] mb-6 font-cairo fade-in delay-100">أنتم واجهة البنك وسفراؤه</h2>
+                <p class="text-3xl text-[#5b646a] mb-10 leading-relaxed fade-in delay-200">كل تعامل مع أي عميل هو فرصة ذهبية لنصنع فارقاً حقيقياً ونبني ثقة لا تهتز.</p>
+                <div class="w-48 h-1 bg-gradient-to-r from-[#802629] to-[#9c9164] mx-auto rounded-full my-6"></div>
+                <p class="text-3xl text-[#d4af37] font-bold mb-6 fade-in delay-300">شكراً لجهودكم وتميزكم</p>
+                <p class="text-xl text-[#7a7d81] fade-in delay-400">🤝 معاً نصنع تجربة مصرفية أفضل</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTxIhDB302tFWezCQwkWsaUd6V0v0dKMpBIA&s" alt="شعار البنك" class="h-20 mx-auto mt-6 rounded-xl shadow-md border border-gray-100 fade-in delay-500">
+            </div>
+        </div>
+        
+    </div>
+    
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+        let currentSlide = 0;
+        
+        function updateSlides() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev', 'next');
+                void slide.offsetWidth;
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else if (index < currentSlide) {
+                    slide.classList.add('prev');
+                } else {
+                    slide.classList.add('next');
+                }
+            });
+            const progress = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = progress + '%';
+        }
+        
+        function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateSlides(); } }
+        function prevSlide() { if (currentSlide > 0) { currentSlide--; updateSlides(); } }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowDown' || e.key === ' ') { nextSlide(); }
+            else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { prevSlide(); }
+        });
+        
+        document.addEventListener('click', function(event) {
+            if(event.target.closest('.btn-nav')) return;
+            const clickX = event.clientX;
+            const screenWidth = window.innerWidth;
+            if (clickX < screenWidth * 0.3) { nextSlide(); } 
+            else if (clickX > screenWidth * 0.7) { prevSlide(); }
+        });
+        
+        updateSlides();
+    </script>
+</body>
+</html>
