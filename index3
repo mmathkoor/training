@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>الاعتمادات المستندية | مادة تدريبية تفاعلية</title>
+    <!-- Font Awesome 6 (Free Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Tajawal (حديث ونظيف) -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(145deg, #2a1a1f 0%, #1f1418 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        /* الحاوية الرئيسية - حجم ورقة A4 أفقي (landscape) */
+        .training-container {
+            width: 100%;
+            max-width: 1200px;  /* عرض مناسب مقارب لـ A4 عرضي */
+            height: auto;
+            background: #fefaf5;
+            border-radius: 32px;
+            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(212, 175, 55, 0.2);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        /* منطقة عرض الشريحة */
+        .slide-area {
+            background: #ffffff;
+            min-height: 620px;
+            position: relative;
+            padding: 2rem 2.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* تذييل الشرائح مع أزرار التنقل */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2dcd5;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: #800020; /* عنابي غامق */
+            border: none;
+            color: #f9e7c2;
+            font-size: 1.2rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 60px;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.25s ease;
+            font-family: 'Tajawal', sans-serif;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn i {
+            font-size: 1.1rem;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #a1283c;
+            transform: scale(0.97);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn:disabled {
+            background: #b3946e;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            background: #2b2b2b10;
+            backdrop-filter: blur(4px);
+            background: #f1ede8;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #4a2a2a;
+            font-size: 0.9rem;
+        }
+
+        /* محتوى الشريحة ديناميكي */
+        .slide-content {
+            flex: 1;
+            animation: fadeSlideUp 0.45s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* العناوين والنصوص الذهبية والعنابية */
+        h1, h2, h3 {
+            color: #4e2c2a;
+        }
+
+        .gold-text {
+            color: #b8860b;
+            font-weight: 700;
+        }
+
+        .title-main {
+            font-size: 2.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #800020, #b45f2b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            border-right: 6px solid #d4af37;
+            padding-right: 1.3rem;
+        }
+
+        .subhead {
+            color: #5e4646;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1.6rem;
+            margin: 1.8rem 0;
+        }
+
+        .info-card {
+            background: #fefbf6;
+            border-radius: 28px;
+            padding: 1.3rem 1rem;
+            box-shadow: 0 12px 24px -12px rgba(0,0,0,0.08);
+            border: 1px solid #f1e5d4;
+            transition: all 0.2s ease;
+        }
+
+        .info-card i {
+            font-size: 2.1rem;
+            color: #800020;
+            background: #fff0e0;
+            padding: 0.6rem;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        .info-card h4 {
+            font-size: 1.3rem;
+            color: #b47c2e;
+            margin: 0.7rem 0;
+        }
+
+        .info-card p {
+            color: #3f2e2a;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-list li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 500;
+        }
+
+        .step-number {
+            background: #800020;
+            color: #ffefcf;
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+
+        .badge-gold {
+            background: #d4af37;
+            color: #2c1a12;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        hr {
+            margin: 1rem 0;
+            border: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #d4af37, #800020, #d4af37);
+        }
+
+        /* تنسيق عام للنصوص */
+        p, li {
+            line-height: 1.6;
+            color: #2d2a27;
+        }
+
+        .footer-icon {
+            color: #800020;
+            margin-left: 0.3rem;
+        }
+
+        /* تخصيص شريط التقدم */
+        .progress-dots {
+            display: flex;
+            gap: 0.6rem;
+            justify-content: center;
+            margin-top: 0.3rem;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #d9cfbf;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .dot.active {
+            background: #d4af37;
+            width: 24px;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 760px) {
+            .slide-area {
+                padding: 1.2rem;
+            }
+            .title-main {
+                font-size: 1.8rem;
+            }
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="training-container">
+    <div class="slide-area" id="slideArea">
+        <!-- المحتوى سيتم حقنه بواسطة JS -->
+        <div class="slide-content" id="dynamicContent"></div>
+
+        <div class="slide-footer">
+            <div class="nav-buttons">
+                <button class="nav-btn" id="prevSlideBtn"><i class="fas fa-chevron-right"></i> السابق</button>
+                <button class="nav-btn" id="nextSlideBtn">التالي <i class="fas fa-chevron-left"></i></button>
+            </div>
+            <div class="slide-counter" id="slideCounter">شريحة 1 / 15</div>
+        </div>
+        <div class="progress-dots" id="progressDots"></div>
+    </div>
+</div>
+
+<script>
+    // ===================== مادة تدريبية: الاعتمادات المستندية =====================
+    // عدد الشرائح لا يتجاوز 15 | لكل شريحة: عنوان، محتوى (نصوص، أيقونات، قوائم)
+    // سهل التعديل: كل كائن يمثل شريحة كاملة، يمكنك إضافة أو حذف أو تعديل المحتوى بكل بساطة.
+    
+    const slidesData = [
+        {   // 1
+            title: "📄 الاعتمادات المستندية",
+            subtitle: "أساسيات تمويل التجارة الدولية",
+            content: `
+                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:1.5rem; margin-top:1.2rem;">
+                    <div style="flex:1; min-width:200px;">
+                        <i class="fas fa-file-invoice-dollar" style="font-size:3.5rem; color:#800020;"></i>
+                        <p style="margin-top:1rem;">تُعد الاعتمادات المستندية (Letter of Credit) الأداة الأكثر أماناً لضمان حقوق كل من البائع والمشتري في التجارة الخارجية. بنك الوسيط يتحمل مسؤولية الدفع مقابل المستندات المطابقة.</p>
+                        <div class="badge-gold" style="margin-top:1rem;">✓ ضمان المخاطر ✓ تمويل مرن</div>
+                    </div>
+                    <div style="flex:1; background:#faf5eb; border-radius:28px; padding:1.2rem;">
+                        <i class="fas fa-globe-asia" style="color:#b8860b;"></i>
+                        <h3>أهمية الاعتماد المستندي</h3>
+                        <p>يحمي المصدر من عدم الدفع، ويضمن للمستورد وصول البضائع طبقاً للشروط، مع رقابة بنكية دقيقة.</p>
+                    </div>
+                </div>
+                <hr>
+                <p><i class="fas fa-chalkboard-user gold-text"></i> <strong>مكونات أساسية:</strong> المشتري (المستورد)، البائع (المصدر)، البنك المصدر، البنك المسدد.</p>
+            `
+        },
+        {   // 2
+            title: "⚙️ أطراف الاعتماد المستندي",
+            subtitle: "من هم اللاعبون الرئيسيون؟",
+            content: `
+                <div class="card-grid">
+                    <div class="info-card"><i class="fas fa-user-tie"></i><h4>المستورد</h4><p>طالب فتح الاعتماد (Applicant) يطلب من بنكه فتح L/C لصالح البائع.</p></div>
+                    <div class="info-card"><i class="fas fa-chart-line"></i><h4>المصدر</h4><p>المستفيد (Beneficiary) يقوم بشحن البضائع وتقديم المستندات المطابقة.</p></div>
+                    <div class="info-card"><i class="fas fa-university"></i><h4>البنك المصدر</h4><p>يفتح الاعتماد نيابة عن المستورد، ويصدر تعهداً بالدفع مقابل مستندات مطابقة.</p></div>
+                    <div class="info-card"><i class="fas fa-handshake"></i><h4>البنك المراسل</h4><p>يُعلم المستفيد بالاعتماد ويتحقق من المستندات (بنك الإشعار أو البنك المسدد).</p></div>
+                </div>
+            `
+        },
+        {   // 3
+            title: "📑 أنواع الاعتمادات المستندية",
+            subtitle: "تنوع حسب احتياجات الصفقة",
+            content: `
+                <ul class="step-list">
+                    <li><span class="step-number">1</span> <strong>الاعتماد غير القابل للإلغاء</strong> – لا يمكن تعديله أو إلغاؤه دون موافقة جميع الأطراف.</li>
+                    <li><span class="step-number">2</span> <strong>الاعتماد المؤكد</strong> – يضيف بنك آخر تأكيداً للدفع (أمان إضافي للمصدر).</li>
+                    <li><span class="step-number">3</span> <strong>الاعتماد المتجدد</strong> – يستخدم للشحنات الدورية (Revolving LC).</li>
+                    <li><span class="step-number">4</span> <strong>الاعتماد المستندي الظهري</strong> – قابل للتحويل لموردين جدد (Transferable LC).</li>
+                </ul>
+                <div class="badge-gold" style="margin-top:1rem;"><i class="fas fa-lightbulb"></i> ملاحظة: 90% من الاعتمادات التجارية هي "غير قابلة للإلغاء"</div>
+            `
+        },
+        {   // 4
+            title: "📌 مراحل تنفيذ الاعتماد المستندي",
+            subtitle: "من الاتفاق حتى التسوية",
+            content: `
+                <div style="display:flex; flex-direction:column; gap:0.8rem;">
+                    <div><i class="fas fa-check-circle gold-text"></i> ❶ اتفاق تجاري بين البائع والمشتري على شروط الدفع عبر L/C</div>
+                    <div><i class="fas fa-check-circle gold-text"></i> ❷ يطلب المستورد فتح اعتماد من بنكه، يحدد المستندات المطلوبة.</div>
+                    <div><i class="fas fa-check-circle gold-text"></i> ❸ البنك المصدر يصدر الاعتماد ويرسله للبنك المراسل.</div>
+                    <div><i class="fas fa-check-circle gold-text"></i> ❹ البنك المراسل يُعلم المصدر، ثم يشحن البضائع.</div>
+                    <div><i class="fas fa-check-circle gold-text"></i> ❺ المصدر يقدم المستندات للبنك المراسل، ثم ترسل للبنك المصدر.</div>
+                    <div><i class="fas fa-check-circle gold-text"></i> ❻ البنك المصدر يفحص المستندات ويصرف القيمة للمصدر، ثم يحاسب المستورد.</div>
+                </div>
+                <hr>
+                <p><i class="fas fa-clock"></i> المتوسط الزمني من 5 إلى 15 يوم عمل حسب تعقيد المستندات.</p>
+            `
+        },
+        {   // 5
+            title: "📎 المستندات الأساسية",
+            subtitle: "قلب الاعتماد المستندي",
+            content: `
+                <div class="card-grid">
+                    <div class="info-card"><i class="fas fa-file-invoice"></i><h4>الفاتورة التجارية</h4><p>تفاصيل البضاعة، القيمة، الشروط.</p></div>
+                    <div class="info-card"><i class="fas fa-ship"></i><h4>بوليصة الشحن</h4><p>إثبات شحن البضاعة وإفراج الناقل.</p></div>
+                    <div class="info-card"><i class="fas fa-list-ul"></i><h4>قائمة التعبئة</h4><p>تفاصيل الطرود والأوزان.</p></div>
+                    <div class="info-card"><i class="fas fa-passport"></i><h4>شهادة المنشأ</h4><p>بلد منشأ البضاعة (مطلوبة بالعديد من LC).</p></div>
+                </div>
+                <p class="gold-text"><i class="fas fa-exclamation-triangle"></i> أي تناقض بسيط يعتبر "عدم مطابقة" وقد يرفض البنك الدفع!</p>
+            `
+        },
+        {   // 6
+            title: "⚠️ التناقضات المستندية الشائعة",
+            subtitle: "كيف تتجنب رفض الدفع؟",
+            content: `
+                <ul class="step-list">
+                    <li><span class="step-number">!</span> تأخر تاريخ الشحن عن آخر موعد للشحن (L/C expiry).</li>
+                    <li><span class="step-number">!</span> اختلاف أوزان أو كميات بين الفاتورة وقائمة التعبئة.</li>
+                    <li><span class="step-number">!</span> عدم توقيع المستندات بالشكل المطلوب (ختم/توقيع).</li>
+                    <li><span class="step-number">!</span> بنود غير متطابقة مع شروط الاعتماد كالوصف الخاطئ للبضاعة.</li>
+                </ul>
+                <div class="badge-gold">نصيحة ذهبية: راجع المستندات بدقة قبل تقديمها للبنك.</div>
+            `
+        },
+        {   // 7
+            title: "🛡️ مزايا الاعتماد المستندي للمصدر",
+            subtitle: "تقليل مخاطر عدم السداد",
+            content: `<div class="card-grid">
+                        <div><i class="fas fa-shield-alt gold-text"></i> <strong>ضمان مصرفي</strong> - الدفع مقابل مستندات مطابقة.</div>
+                        <div><i class="fas fa-chart-simple gold-text"></i> <strong>تمويل ما قبل الشحن</strong> - إمكانية الحصول على تمويل.</div>
+                        <div><i class="fas fa-gavel gold-text"></i> <strong>تجنب المخاطر السياسية</strong> في بعض الدول.</div>
+                        <div><i class="fas fa-globe gold-text"></i> <strong>تعزيز الثقة</strong> مع عملاء جدد.</div>
+                    </div>`
+        },
+        {   // 8
+            title: "🏦 مزايا الاعتماد للمستورد",
+            subtitle: "استلام مطابق للعقد",
+            content: `<div style="display:flex; gap:1rem; flex-wrap:wrap;"><div style="background:#f9f2e3; padding:1rem; border-radius: 24px;"><i class="fas fa-clipboard-list"></i><p>يتأكد المستورد من أن المستندات تتوافق مع الشروط المتفق عليها قبل الدفع. كما يوفر تمويلاً مؤجلاً وأسعاراً تنافسية.</p><p><i class="fas fa-chart-line"></i>  رقابة على المصدر إذ لا يحصل على ثمن البضاعة إلا بتقديم مستندات مطابقة.</p></div></div>`
+        },
+        {   // 9
+            title: "🧾 مراجعة المستندات - UCP 600",
+            subtitle: "القواعد الموحدة للاعتمادات المستندية",
+            content: `<p>تخضع معظم الاعتمادات المستندية لـ <strong class="gold-text">UCP 600</strong> الصادرة عن غرفة التجارة الدولية. المادة 14 تحدد مبدأ الفحص خلال 5 أيام عمل. يجب أن تبدو المستندات مطابقة من حيث الشكل الخارجي.</p>
+                       <hr><div class="info-card"><i class="fas fa-balance-scale"></i> مبدأ "الامتثال الصارم" Strict Compliance: أي اختلاف ولو بسيط يعتبر تناقضاً. 🔍</div>`
+        },
+        {   // 10
+            title: "⚡ الاعتماد المستندي إلكترونياً (eLC)",
+            subtitle: "التحول الرقمي في التمويل",
+            content: `<p><i class="fas fa-microchip"></i> مع تطور التكنولوجيا ظهرت الاعتمادات المستندية الإلكترونية عبر منصات مثل Bolero و essDocs، مما يقلل زمن المعالجة والتكاليف. المستندات الإلكترونية تحمل توقيعاً رقمياً. <span class="badge-gold">مستقبل التجارة</span></p>
+                     <div class="card-grid"><div>✔️ سرعة فائقة<br>✔️ تقليل الأخطاء الورقية<br>✔️ تتبع فوري</div><div>⚠️ يحتاج بنية تحتية رقمية متطورة بين البنوك.</div></div>`
+        },
+        {   // 11
+            title: "📊 التكاليف والعمولات",
+            subtitle: "كم تبلغ رسوم الاعتماد؟",
+            content: `<ul><li><i class="fas fa-coins"></i> رسوم فتح الاعتماد: 0.25% - 1% من قيمة الاعتماد.</li>
+                    <li><i class="fas fa-stamp"></i> رسوم التعديل (Amendment fees) إن وجدت.</li>
+                    <li><i class="fas fa-envelope"></i> رسوم البريد السريع للمستندات.</li>
+                    <li><i class="fas fa-check-double"></i> رسوم فحص المستندات في البنك المراسل.</li></ul>
+                    <p class="gold-text">تختلف حسب البنك والمخاطر وطول فترة الاعتماد.</p>`
+        },
+        {   // 12
+            title: "📌 نصائح لتجنب مخاطر الاعتماد المستندي",
+            subtitle: "احترافية في الصفقات",
+            content: `<div class="card-grid"><div><i class="fas fa-pen-ruler"></i> صياغة دقيقة للعقد وشروط L/C.</div>
+                     <div><i class="fas fa-clock"></i> مراقبة تواريخ انتهاء الصلاحية والشحن.</div>
+                     <div><i class="fas fa-file-signature"></i> التأكد من توافق الفواتير مع رقم الاعتماد.</div>
+                     <div><i class="fas fa-people-arrows"></i> التواصل مع البنك قبل تقديم المستندات لإجراء فحص مسبق.</div></div>`
+        },
+        {   // 13
+            title: "🔁 تسوية المنازعات في الاعتمادات",
+            subtitle: "حالات عدم الدفع",
+            content: `<p>إذا رفض البنك الدفع بحجة عدم المطابقة، يحق للمصدر الطعن وفقاً لـ UCP 600 أو اللجوء إلى لجنة البنوك. وفي بعض الحالات يتم تفعيل خطاب الضمان أو التحكيم التجاري. <i class="fas fa-gavel"></i></p>
+                     <div class="badge-gold">الإجراء الصحيح: فحص الاعتراض مع إدارة المخاطر البنكية قبل رفع دعوى.</div>`
+        },
+        {   // 14
+            title: "📈 أمثلة عملية",
+            subtitle: "حالة دراسية: شركة تصدير من تركيا إلى ألمانيا",
+            content: `<p>أصدر المستورد الألماني اعتماداً مستندياً غير قابل للإلغاء بقيمة 300,000 يورو مع اشتراط شهادة منشأ أوروبية. قام المصدر التركي بشحن البضاعة وقدم المستندات لكن أحد المستندات كان من توقيع خاطئ. بعد تعديل المستندات استلم قيمة الشحنة خلال 6 أيام عمل.</p>
+                     <i class="fas fa-lightbulb gold-text"> الدرس: التدقيق على نموذج التوقيعات المطلوبة مهم جداً.</i>`
+        },
+        {   // 15
+            title: "🏁 خلاصة واختبار سريع",
+            subtitle: "تذكر دائماً",
+            content: `<div style="background:#80002010; padding:1rem; border-radius: 28px;"><p><i class="fas fa-star-of-life" style="color:#b8860b;"></i> <strong>جوهر الاعتماد المستندي:</strong> استقلالية المستندات عن العقد التجاري، ويجب أن تكون المستندات مطابقة تماماً للاعتماد.</p>
+            <p><strong>سؤال للمتدربين:</strong> ما الفرق بين الاعتماد المؤكد وغير المؤكد؟ وكيف يحمي كل طرف؟</p>
+            <hr><p style="font-size:0.9rem;">شكراً لمتابعتكم! تطبيق عملي: يفضل استخدام القوالب الموحدة للمستندات.</p></div>`
+        }
+    ];
+
+    // التأكد من أن عدد الشرائح = 15 (مطابقة للمطلوب)
+    // إذا كان هناك أي نقص، تم بناء المصفوفة بدقة 15 شريحة.
+    // في حال أردت تعديل الشرائح: فقط عدل الكائنات أعلاه. يمكنك إضافة شرائح جديدة أو إعادة ترتيب.
+    
+    let currentIndex = 0;
+    const totalSlides = slidesData.length; // = 15
+
+    // عناصر DOM
+    const dynamicContent = document.getElementById('dynamicContent');
+    const prevBtn = document.getElementById('prevSlideBtn');
+    const nextBtn = document.getElementById('nextSlideBtn');
+    const slideCounterSpan = document.getElementById('slideCounter');
+    const progressDotsDiv = document.getElementById('progressDots');
+
+    // دالة عرض الشريحة بناءً على الفهرس
+    function renderSlide(index) {
+        const slide = slidesData[index];
+        if (!slide) return;
+        
+        // بناء هيكل محتوى الشريحة مع أيقونات توافقية
+        const titleHtml = `<h1 class="title-main">${slide.title}</h1>`;
+        const subHtml = slide.subtitle ? `<div class="subhead"><i class="fas fa-chevron-left gold-text"></i> ${slide.subtitle} <i class="fas fa-chevron-right gold-text"></i></div>` : '';
+        const bodyHtml = slide.content;
+        
+        const fullHtml = `
+            <div class="slide-transition">
+                ${titleHtml}
+                ${subHtml}
+                <div style="margin-top: 0.8rem;">
+                    ${bodyHtml}
+                </div>
+            </div>
+        `;
+        dynamicContent.innerHTML = fullHtml;
+        
+        // تحديث العداد
+        slideCounterSpan.innerText = `شريحة ${index+1} / ${totalSlides}`;
+        
+        // تحديث أزرار التنقل
+        prevBtn.disabled = (index === 0);
+        nextBtn.disabled = (index === totalSlides - 1);
+        
+        // تحديث النقاط التقدمية
+        updateProgressDots(index);
+    }
+    
+    // دوائر التقدم التفاعلية
+    function updateProgressDots(activeIdx) {
+        progressDotsDiv.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === activeIdx) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                if (i !== currentIndex) {
+                    currentIndex = i;
+                    renderSlide(currentIndex);
+                }
+            });
+            progressDotsDiv.appendChild(dot);
+        }
+    }
+    
+    // أحداث التنقل
+    function nextSlide() {
+        if (currentIndex < totalSlides - 1) {
+            currentIndex++;
+            renderSlide(currentIndex);
+        }
+    }
+    
+    function prevSlide() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            renderSlide(currentIndex);
+        }
+    }
+    
+    // إضافة مستمعي الأزرار + دعم لوحة المفاتيح (سهم يمين ويسار)
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            nextSlide();   // بسبب rtl: السهم الأيسر يعني التالي في المعتاد
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            prevSlide();
+        }
+    });
+    
+    // بدء العرض
+    renderSlide(0);
+</script>
+</body>
+</html>
