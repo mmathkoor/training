@@ -297,6 +297,11 @@
 <div class="controls-wrapper">
     <button class="btn-nav" onclick="nextSlide()" title="التالي"><i class="fas fa-chevron-right"></i></button>
     <button class="btn-nav" onclick="prevSlide()" title="السابق"><i class="fas fa-chevron-left"></i></button>
+	<div style="display: flex; align-items: center; gap: 12px; background: #f0f0f0; padding: 5px 15px; border-radius: 40px; margin: 0 10px;">
+    <span style="font-size: 16px; font-weight: bold; color: #7a1a2b;" id="slideCounter">1 / 39</span>
+    <input type="number" id="gotoSlide" min="1" max="39" value="1" style="width: 60px; padding: 8px; border-radius: 30px; border: 1px solid #d4af37; text-align: center; font-weight: bold;">
+    <button onclick="goToSlide()" style="background: #7a1a2b; color: white; border: none; border-radius: 30px; padding: 8px 15px; cursor: pointer; font-weight: bold;">اذهب</button>
+</div>
 </div>
 
 <div id="presentation-container">
@@ -1001,25 +1006,46 @@
     <!-- ================================================================
          الشريحة 26: التوازن بين الخدمة والامتثال
          ================================================================ -->
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
-        <div class="max-w-5xl mx-auto text-center">
-            <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
-                <i class="fas fa-balance-scale text-5xl text-[#d4af37]"></i>
+  <div class="slide bg-gradient-to-br from-gray-50 to-white">
+    <div class="max-w-5xl mx-auto text-center">
+        <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
+            <i class="fas fa-balance-scale text-5xl text-[#d4af37]"></i>
+        </div>
+        <h2 class="text-6xl font-black text-[#7a1a2b] mb-6 fade-up delay-100">التوازن بين الخدمة والامتثال</h2>
+        <p class="text-xl text-[#4a5568] mb-6 fade-up delay-200">الامتثال لا يهدف لتعقيد الخدمة… بل يهدف إلى:</p>
+        <div class="grid grid-cols-4 gap-3 mb-8">
+            <div class="bg-green-50 p-4 rounded-xl text-green-800 font-bold scale-pop delay-300"><i class="fas fa-shield-alt ml-1"></i> حماية العميل</div>
+            <div class="bg-green-50 p-4 rounded-xl text-green-800 font-bold scale-pop delay-400"><i class="fas fa-user-tie ml-1"></i> حماية الموظف</div>
+            <div class="bg-green-50 p-4 rounded-xl text-green-800 font-bold scale-pop delay-500"><i class="fas fa-building ml-1"></i> حماية البنك</div>
+            <div class="bg-green-50 p-4 rounded-xl text-green-800 font-bold scale-pop delay-600"><i class="fas fa-chart-line ml-1"></i> مكافحة الاحتيال</div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-md fade-up delay-200">
+            <p class="font-bold text-xl">أمثلة: 📄 تحديث البيانات | 🪪 التحقق من الهوية | 💰 مراقبة العمليات غير المعتادة</p>
+        </div>
+        <p class="mt-8 text-2xl font-bold gold-text-gradient fade-up">الخدمة السريعة لا تعني تجاوز الضوابط</p>
+
+        <!-- السؤال الاحترافي (عرض فقط، غير تفاعلي) -->
+        <div class="mt-12 pt-6 border-t-2 border-dashed border-[#d4af37]/30 fade-up delay-300">
+            <div class="bg-gradient-to-r from-[#7a1a2b]/5 to-[#d4af37]/5 rounded-2xl p-6 max-w-2xl mx-auto shadow-sm">
+                <div class="flex items-center justify-center gap-4 mb-3">
+                    <div class="w-12 h-12 bg-[#d4af37] rounded-full flex items-center justify-center shadow-md">
+                        <i class="fas fa-question text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#7a1a2b]">للنقاش والتفكير</h3>
+                </div>
+                <p class="text-[#4a5568] text-xl leading-relaxed">
+                    <span class="font-bold text-[#7a1a2b]">سؤال:</span> 
+                    "ماهو الأداء المناسب لتوضيح حالة الامتثال؟"
+                </p>
+                <div class="mt-4 flex justify-center gap-2">
+                    <div class="w-2 h-2 bg-[#d4af37] rounded-full"></div>
+                    <div class="w-2 h-2 bg-[#7a1a2b]/50 rounded-full"></div>
+                    <div class="w-2 h-2 bg-[#d4af37] rounded-full"></div>
+                </div>
             </div>
-            <h2 class="text-6xl font-black text-[#7a1a2b] mb-6 fade-up delay-100">التوازن بين الخدمة والامتثال</h2>
-            <p class="text-xl text-[#4a5568] mb-6 fade-up delay-200">الامتثال لا يهدف لتعقيد الخدمة… بل يهدف إلى:</p>
-            <div class="grid grid-cols-4 gap-3 mb-8">
-                <div class="bg-green-50 p-4 rounded-xl text-green-800 font-bold scale-pop delay-300"><i class="fas fa-shield-alt ml-1"></i> حماية العميل</div>
-                <div class="bg-green-50 p-4 rounded-xl text-green-800 font-bold scale-pop delay-400"><i class="fas fa-user-tie ml-1"></i> حماية الموظف</div>
-                <div class="bg-green-50 p-4 rounded-xl text-green-800 font-bold scale-pop delay-500"><i class="fas fa-building ml-1"></i> حماية البنك</div>
-                <div class="bg-green-50 p-4 rounded-xl text-green-800 font-bold scale-pop delay-600"><i class="fas fa-chart-line ml-1"></i> مكافحة الاحتيال</div>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-md fade-up delay-200">
-                <p class="font-bold text-xl">أمثلة: 📄 تحديث البيانات | 🪪 التحقق من الهوية | 💰 مراقبة العمليات غير المعتادة</p>
-            </div>
-            <p class="mt-8 text-2xl font-bold gold-text-gradient fade-up">الخدمة السريعة لا تعني تجاوز الضوابط</p>
         </div>
     </div>
+</div>
 
     <!-- ================================================================
          الشريحة 27: كيف نشرح متطلبات الامتثال للعميل؟
@@ -1292,101 +1318,44 @@
 
 </div>
 
-<script>
-    // ===================================================================
-    // محرك Prezi المتقدم والتحكم بالشرائح
-    // ===================================================================
-    const slides = document.querySelectorAll('.slide');
-    const progressFill = document.getElementById('progressFill');
-    let currentSlide = 0;
-    const totalSlides = slides.length;
-
-    function updateSlides() {
-        slides.forEach((slide, index) => {
-            slide.classList.remove('active', 'prev');
-            // إعادة تشغيل الأنيميشن
-            void slide.offsetWidth;
-            if (index === currentSlide) {
-                slide.classList.add('active');
-                // تفعيل الأعمدة المتحركة في الشريحة 9
-                if (index === 8) {
-                    setTimeout(() => {
-                        const bars = slide.querySelectorAll('[style*="height: 0px"]');
-                        const heights = [70, 85, 100, 140, 100, 85, 120];
-                        bars.forEach((bar, i) => {
-                            if (bar) bar.style.height = heights[i] + 'px';
-                        });
-                    }, 200);
-                }
-            } else if (index < currentSlide) {
-                slide.classList.add('prev');
-            }
-        });
-        const percent = ((currentSlide + 1) / totalSlides) * 100;
-        progressFill.style.width = percent + '%';
-    }
-
-    window.nextSlide = () => {
-        if (currentSlide < totalSlides - 1) {
-            currentSlide++;
-            updateSlides();
-        }
-    };
-
-    window.prevSlide = () => {
-        if (currentSlide > 0) {
-            currentSlide--;
-            updateSlides();
-        }
-    };
-
-    // دعم لوحة المفاتيح
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
-            nextSlide();
-        } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
-            prevSlide();
-        }
-    });
-
-    // دعم النقر على أطراف الشاشة
-    document.addEventListener('click', (e) => {
-        if (e.target.closest('.btn-nav')) return;
-        const x = e.clientX;
-        const width = window.innerWidth;
-        if (x < width * 0.3) {
-            nextSlide();
-        } else if (x > width * 0.7) {
-            prevSlide();
-        }
-    });
-
-    // تهيئة العرض
-    updateSlides();
-</script>
 
 </body>
 </html>
 
-    <script>
+  <script>
         // JavaScript لجميع الشرائح
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         const progressFill = document.getElementById('progressFill');
         const totalSlides = slides.length;
 
+        function updateSlideCounter() {
+            document.getElementById('slideCounter').innerText = (currentSlide + 1) + ' / ' + totalSlides;
+            document.getElementById('gotoSlide').value = currentSlide + 1;
+        }
+
+        function goToSlide() {
+            let slideNum = parseInt(document.getElementById('gotoSlide').value);
+            if (slideNum >= 1 && slideNum <= totalSlides) {
+                currentSlide = slideNum - 1;
+                updateSlides();
+                updateSlideCounter();
+            } else {
+                alert('رقم الشريحة من 1 إلى ' + totalSlides);
+            }
+        }
+
         function updateSlides() {
             slides.forEach((slide, idx) => {
                 slide.classList.remove('active', 'prev');
                 if (idx === currentSlide) {
                     slide.classList.add('active');
-                    // إعادة تشغيل الأنيميشن للأعمدة في الشريحة 9
                     if (idx === 8) {
                         setTimeout(() => {
                             const bars = slide.querySelectorAll('[style*="height: 0px"]');
+                            const heights = [60, 70, 80, 120, 80, 70, 100];
                             bars.forEach((bar, i) => {
-                                const heights = [60, 70, 80, 120, 80, 70, 100];
-                                bar.style.height = heights[i] + 'px';
+                                if (bar) bar.style.height = heights[i] + 'px';
                             });
                         }, 100);
                     }
@@ -1396,6 +1365,7 @@
             });
             const percent = ((currentSlide + 1) / totalSlides) * 100;
             progressFill.style.width = percent + '%';
+            updateSlideCounter();
         }
 
         window.nextSlide = () => {
@@ -1423,19 +1393,9 @@
             if (x < window.innerWidth * 0.3) nextSlide();
             else if (x > window.innerWidth * 0.7) prevSlide();
         });
-        // إعادة تشغيل الأنيميشن عند تحميل الصفحة (للتأكد من ظهورها)
-        window.addEventListener('DOMContentLoaded', () => {
-            const fadeElements = document.querySelectorAll('.fade-in');
-            fadeElements.forEach(el => {
-                // إعادة تشغيل الأنيميشن
-                const animation = el.style.animation;
-                el.style.animation = 'none';
-                el.offsetHeight; // force reflow
-                el.style.animation = animation;
-            });
-        });
+
         updateSlides();
-    </script>
+</script>
 	
 
 </body>
