@@ -2,58 +2,91 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>بنك الكريمي الإسلامي - التقرير السنوي 2025 | النظام الاحترافي المتكامل</title>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <!-- SortableJS لإعادة ترتيب الصفحات -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-    <!-- Quill Editor -->
+    
+    <!-- Quill Editor (نسخة كاملة مع جميع الأدوات) -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    
     <!-- Chart.js للرسوم البيانية -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
         
-        * { font-family: 'Tajawal', sans-serif; }
-        
-        body { background: linear-gradient(135deg, #f5f7fa 0%, #eef2f5 100%); }
-        
-        /* تأثيرات زجاجية */
-        .glass-card {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.15);
+        * {
+            font-family: 'Tajawal', sans-serif;
         }
         
-        /* تنسيق الطباعة */
+        body {
+            background: linear-gradient(135deg, #f0f2f5 0%, #e8ecf1 100%);
+        }
+        
+        /* تأثيرات زجاجية احترافية */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(242, 169, 0, 0.15);
+        }
+        
+        /* تنسيق الطباعة A4 */
         @media print {
-            body { background: white !important; margin: 0; padding: 0; }
-            @page { size: A4; margin: 0; }
-            .print-hidden, .no-print { display: none !important; }
-            .print-page { 
-                page-break-after: always; 
+            body {
+                background: white !important;
+                margin: 0;
+                padding: 0;
+            }
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            .print-hidden, .no-print {
+                display: none !important;
+            }
+            .print-page {
+                page-break-after: always;
                 page-break-inside: avoid;
                 width: 210mm;
                 min-height: 297mm;
                 position: relative;
                 box-sizing: border-box;
+                background: white;
             }
         }
         
         /* سكرول بار مخصص */
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #F2A900; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1e293b;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #F2A900;
+            border-radius: 10px;
+        }
         
-        /* أنيميشن للصفحات */
-        .page-transition { transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+        /* أنيميشن الصفحات */
+        .page-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
         
         /* تنسيق الجداول الاحترافية */
         .data-table {
@@ -62,26 +95,36 @@
             margin: 20px 0;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
         }
         .data-table th {
             background: linear-gradient(135deg, #7A1B29, #5e131f);
             color: white;
-            padding: 14px;
+            padding: 14px 12px;
             font-weight: bold;
+            font-size: 14px;
         }
-        .data-table td { padding: 12px; border-bottom: 1px solid #e2e8f0; }
-        .data-table tr:hover { background: #fef3c7; }
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+        .data-table tr:hover {
+            background: #fef3c7;
+        }
         
-        /* بطاقات المؤشرات */
+        /* بطاقات المؤشرات المتقدمة */
         .metric-card {
             background: linear-gradient(135deg, #ffffff, #f8fafc);
             border-radius: 20px;
-            padding: 20px;
-            border: 1px solid rgba(242,169,0,0.2);
-            transition: transform 0.2s, box-shadow 0.2s;
+            padding: 18px;
+            border: 1px solid rgba(242, 169, 0, 0.2);
+            transition: all 0.2s ease;
         }
-        .metric-card:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1); }
+        .metric-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.12);
+        }
         
         /* شريط التقدم */
         .progress-bar {
@@ -106,7 +149,12 @@
             background: linear-gradient(135deg, #7A1B29, #5e131f);
             border-radius: 60px;
             padding: 12px 28px;
-            box-shadow: 0 10px 25px -5px rgba(122,27,41,0.4);
+            box-shadow: 0 10px 25px -5px rgba(122, 27, 41, 0.4);
+            transition: all 0.2s;
+        }
+        .floating-edit-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 15px 35px -8px rgba(122, 27, 41, 0.5);
         }
         
         /* مؤشر الحفظ التلقائي */
@@ -117,60 +165,160 @@
             z-index: 1000;
             background: #10b981;
             color: white;
-            padding: 8px 16px;
+            padding: 8px 18px;
             border-radius: 40px;
-            font-size: 12px;
+            font-size: 13px;
             display: flex;
             align-items: center;
             gap: 8px;
             opacity: 0;
             transition: opacity 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* تخصيص محرر Quill بشكل احترافي */
+        .ql-toolbar.ql-snow {
+            border-radius: 16px 16px 0 0;
+            background: #f8f9fa;
+            border-color: #e2e8f0;
+            direction: ltr;
+        }
+        .ql-container.ql-snow {
+            border-radius: 0 0 16px 16px;
+            background: #ffffff;
+            min-height: 550px;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .ql-editor {
+            font-size: 15px;
+            line-height: 1.9;
+            direction: rtl;
+            text-align: right;
+        }
+        
+        /* تنسيق العناصر داخل التقرير */
+        .report-content h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #7A1B29;
+            margin: 20px 0 15px;
+            border-right: 5px solid #F2A900;
+            padding-right: 15px;
+        }
+        .report-content h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #7A1B29;
+            margin: 18px 0 12px;
+        }
+        .report-content h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #F2A900;
+            margin: 15px 0 10px;
+        }
+        .report-content p {
+            margin: 12px 0;
+            line-height: 1.8;
+        }
+        .report-content ul, .report-content ol {
+            margin: 12px 0;
+            padding-right: 25px;
+        }
+        .report-content li {
+            margin: 6px 0;
+        }
+        
+        /* وضع التحميل */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        /* تأثيرات الحركة */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        /* زر إعادة الترتيب */
+        .sortable-drag {
+            opacity: 0.5;
+            background: #F2A900 !important;
         }
     </style>
 </head>
 <body class="h-screen overflow-hidden flex">
 
-    <!-- ==================== الشريط الجانبي ==================== -->
+    <!-- شاشة تحميل -->
+    <div id="loading" class="loading-overlay hidden">
+        <div class="text-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#F2A900] mx-auto mb-4"></div>
+            <p>جاري تحميل التقرير...</p>
+        </div>
+    </div>
+
+    <!-- ==================== الشريط الجانبي (الفهرس) ==================== -->
     <aside class="print-hidden w-80 bg-gradient-to-b from-[#0f172a] to-[#1e293b] text-white flex flex-col h-full shadow-2xl z-30">
-        <div class="p-6 border-b border-gray-800">
+        <!-- Header الشريط الجانبي -->
+        <div class="p-5 border-b border-gray-800">
             <div class="flex justify-center mb-3">
-                <div class="w-20 h-20 bg-[#F2A900] rounded-2xl flex items-center justify-center shadow-lg">
-                    <span class="text-3xl font-black text-[#7A1B29]">KIB</span>
+                <div class="w-20 h-20 bg-gradient-to-br from-[#F2A900] to-[#e09e00] rounded-2xl flex items-center justify-center shadow-xl">
+                    <span class="text-3xl font-black text-[#7A1B29]">ك</span>
                 </div>
             </div>
-            <h1 class="text-2xl font-bold text-center text-[#F2A900]">التقرير السنوي 2025</h1>
-            <p class="text-xs text-center text-gray-400 mt-2">نظام إعداد التقارير الذكي</p>
-            <p class="text-center text-[10px] text-gray-500 mt-1">نسخة المؤسسات الكبرى v3.0</p>
+            <h1 class="text-xl font-bold text-center text-[#F2A900]">التقرير السنوي 2025</h1>
+            <p class="text-xs text-center text-gray-400 mt-1">نظام إعداد التقارير الذكي</p>
+            <p class="text-center text-[10px] text-gray-500 mt-0.5">نسخة المؤسسات الكبرى v4.0</p>
         </div>
         
-        <div class="p-4 bg-[#7A1B29]/60 flex justify-between items-center rounded-lg mx-3 mt-2">
-            <span class="font-bold text-sm"><i data-lucide="layers" class="inline w-4 h-4 ml-1"></i> إجمالي الصفحات</span>
-            <span id="page-counter" class="bg-[#F2A900] text-gray-900 px-3 py-1 rounded-full font-bold text-sm">0</span>
+        <!-- إحصائيات سريعة -->
+        <div class="p-3 bg-[#7A1B29]/40 flex justify-between items-center rounded-xl mx-3 mt-3">
+            <span class="font-bold text-sm flex items-center gap-1"><i data-lucide="layers" class="w-4 h-4"></i> إجمالي الصفحات</span>
+            <span id="page-counter" class="bg-[#F2A900] text-gray-900 px-3 py-0.5 rounded-full font-bold text-sm">0</span>
         </div>
         
+        <!-- أزرار الإدارة السريعة -->
         <div class="flex gap-2 p-3">
             <button onclick="addNewPage()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-xl flex items-center justify-center gap-2 transition text-sm">
                 <i data-lucide="plus-circle" class="w-4 h-4"></i> صفحة جديدة
             </button>
             <button onclick="exportFullReport()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl flex items-center justify-center gap-2 transition text-sm">
-                <i data-lucide="file-json" class="w-4 h-4"></i> تصدير
+                <i data-lucide="download" class="w-4 h-4"></i> تصدير
+            </button>
+            <button onclick="importReport()" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-xl flex items-center justify-center gap-2 transition text-sm">
+                <i data-lucide="upload" class="w-4 h-4"></i> استيراد
             </button>
         </div>
         
-        <div class="px-3 py-2">
+        <!-- قائمة الصفحات القابلة للسحب -->
+        <div class="px-3 py-2 flex-1 flex flex-col min-h-0">
             <div class="text-xs text-gray-400 mb-2 flex items-center gap-1">
                 <i data-lucide="grip-vertical" class="w-3 h-3"></i> اسحب لإعادة ترتيب الصفحات
             </div>
-            <div id="pages-list-container" class="max-h-[55vh] overflow-y-auto custom-scrollbar">
+            <div id="pages-list-container" class="flex-1 overflow-y-auto custom-scrollbar">
                 <div id="pages-list" class="space-y-1">
-                    <!-- سيتم توليد قائمة الصفحات القابلة للسحب -->
+                    <!-- سيتم توليدها عبر JS -->
                 </div>
             </div>
         </div>
         
-        <div class="mt-auto p-4 border-t border-gray-800 text-xs text-gray-500 text-center">
+        <!-- Footer الشريط الجانبي -->
+        <div class="mt-auto p-4 border-t border-gray-800 text-[10px] text-gray-500 text-center">
             بنك الكريمي الإسلامي - إدارة البحوث والدراسات<br>
-            © 2025 جميع الحقوق محفوظة
+            © 2026 جميع الحقوق محفوظة
         </div>
     </aside>
 
@@ -180,28 +328,41 @@
         <!-- شريط الأدوات العلوي -->
         <header class="print-hidden glass-card mx-4 mt-4 h-16 flex justify-between items-center px-6 shadow-sm shrink-0">
             <div class="flex items-center gap-4">
+                <!-- مؤشر الوضع -->
                 <div class="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full">
                     <i data-lucide="eye" class="w-4 h-4 text-gray-600"></i>
                     <span class="text-sm">وضع: <span id="mode-indicator" class="font-bold text-[#7A1B29]">قراءة</span></span>
                 </div>
+                <!-- مؤشر الحفظ -->
                 <div class="flex items-center gap-2 bg-green-50 px-3 py-1.5 rounded-full">
                     <i data-lucide="cloud" class="w-4 h-4 text-green-600"></i>
                     <span class="text-sm text-green-700">حفظ تلقائي</span>
                 </div>
+                <!-- مؤشر عدد التعديلات -->
+                <div class="flex items-center gap-2 bg-amber-50 px-3 py-1.5 rounded-full">
+                    <i data-lucide="clock" class="w-4 h-4 text-amber-600"></i>
+                    <span class="text-sm text-amber-700" id="last-saved-time">آخر حفظ: الآن</span>
+                </div>
             </div>
             <div class="flex items-center gap-3">
+                <!-- زر عرض على المدير -->
                 <button onclick="previewForManager()" class="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold transition shadow-md text-sm">
                     <i data-lucide="send" class="w-4 h-4"></i> عرض على المدير
                 </button>
+                <!-- زر تصدير PDF -->
                 <button onclick="exportToPDF()" class="flex items-center gap-2 px-4 py-2 bg-[#7A1B29] hover:bg-[#5e131f] text-white rounded-xl font-bold transition shadow-md text-sm">
                     <i data-lucide="printer" class="w-4 h-4"></i> PDF
+                </button>
+                <!-- زر النسخ الاحتياطي -->
+                <button onclick="backupReport()" class="flex items-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-xl font-bold transition shadow-md text-sm">
+                    <i data-lucide="archive" class="w-4 h-4"></i> نسخة احتياطية
                 </button>
             </div>
         </header>
 
-        <!-- منطقة عرض الصفحة الحالية مع تأثير زجاجي -->
+        <!-- منطقة عرض الصفحة الحالية -->
         <div class="print-hidden flex-1 overflow-y-auto flex justify-center py-6 custom-scrollbar relative">
-            <div id="page-paper" class="bg-white shadow-2xl rounded-2xl transition-all duration-300 overflow-hidden" style="width: 210mm; min-height: 297mm;">
+            <div id="page-paper" class="bg-white shadow-2xl rounded-2xl transition-all duration-300 overflow-hidden fade-in" style="width: 210mm; min-height: 297mm;">
                 <div class="relative w-full h-full" style="padding: 25mm 20mm; box-sizing: border-box;">
                     
                     <!-- علامة مائية أنيقة -->
@@ -212,12 +373,12 @@
                     <!-- ترويسة ذهبية -->
                     <div class="absolute top-0 left-0 w-full h-2.5 bg-gradient-to-r from-[#7A1B29] via-[#F2A900] to-[#7A1B29]"></div>
                     
-                    <!-- منطقة عرض المحتوى -->
-                    <div id="view-mode" class="w-full h-full text-gray-800 leading-loose text-[15px] relative z-10"></div>
+                    <!-- منطقة عرض المحتوى (وضع القراءة) -->
+                    <div id="view-mode" class="w-full h-full text-gray-800 leading-loose text-[15px] relative z-10 report-content"></div>
                     
-                    <!-- منطقة التعديل -->
+                    <!-- منطقة التعديل (وضع التحرير) -->
                     <div id="edit-mode" class="hidden w-full h-full relative z-10">
-                        <div id="quill-editor" style="height: 650px;"></div>
+                        <div id="quill-editor-container"></div>
                     </div>
                     
                     <!-- ترقيم الصفحة -->
@@ -243,13 +404,11 @@
         </div>
     </main>
 
-    <!-- حاوية الطباعة -->
+    <!-- حاوية الطباعة (مخفية) -->
     <div id="print-container" class="hidden"></div>
 
     <script>
-        // ==================== البيانات المركزية للتقرير ====================
-        // سأقوم بإنشاء صفحات احترافية مع أرقام ومؤشرات افتراضية واقعية
-        // وإبراز دور جميع الإدارات: المالية، التدريب، الموارد البشرية، الأمن السيبراني، الخدمات التجارية، علاقات العملاء
+        // ==================== الجزء الأول: المتغيرات العامة والدوال المساعدة ====================
         
         let pagesData = [];
         let currentPageId = null;
@@ -275,845 +434,832 @@
             `;
         }
         
-        // المحتوى الأساسي للتقرير - 35 صفحة احترافية
-        const basePages = [
-            // الصفحة 1: الغلاف
-            { id: "p1", title: "الغلاف الرئيسي", order: 1, content: `
-                <div class="flex flex-col items-center justify-center min-h-[550px] text-center">
-                    <div class="w-24 h-24 bg-[#F2A900] rounded-2xl flex items-center justify-center shadow-xl mb-6">
-                        <span class="text-3xl font-black text-[#7A1B29]">KIB</span>
-                    </div>
-                    <h1 class="text-5xl font-black text-[#7A1B29] mt-4">التقرير السنوي</h1>
-                    <h2 class="text-3xl text-gray-400 font-light tracking-wider mt-2">ANNUAL REPORT</h2>
-                    <div class="w-24 h-1 bg-gradient-to-r from-[#F2A900] to-[#7A1B29] rounded-full my-6"></div>
-                    <h3 class="text-7xl font-black text-gray-800 drop-shadow-lg">2025</h3>
-                    <p class="text-xl font-bold text-[#F2A900] mt-6">عام الريادة والتحول الرقمي</p>
-                    <div class="mt-12 pt-6 border-t border-gray-200 w-full">
-                        <p class="text-2xl font-bold text-[#7A1B29]">بنك الكريمي الإسلامي</p>
-                        <p class="text-gray-500 mt-1">AlKuraimi Islamic Bank</p>
-                        <p class="inline-block bg-[#7A1B29] text-white px-6 py-2 rounded-full text-sm font-bold mt-4">Corporate & Investment Banking</p>
-                    </div>
-                </div>
-            `},
-            
-            // الصفحة 2: الرسالة والرؤية
-            { id: "p2", title: "الرسالة والرؤية", order: 2, content: `
-                <div class="space-y-6">
-                    <div class="relative">
-                        <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4 inline-block">الرسالة</h2>
-                        <div class="mt-4 p-6 bg-gradient-to-r from-[#7A1B29]/5 to-transparent rounded-2xl">
-                            <p class="text-lg leading-relaxed">نسعى في بنك الكريمي الإسلامي إلى تقديم حلول مصرفية واستثمارية مبتكرة ومتوافقة مع أحكام الشريعة الإسلامية، تلبي احتياجات قطاع الأعمال والمؤسسات الكبرى، من خلال كوادر بشرية مؤهلة، وتقنيات مالية متطورة، وشراكات استراتيجية محلية وعالمية، لتعظيم القيمة المضافة لعملائنا ومساهمينا والمجتمع.</p>
-                        </div>
-                    </div>
-                    <div class="relative mt-8">
-                        <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4 inline-block">الرؤية</h2>
-                        <div class="mt-4 p-6 bg-gradient-to-r from-[#F2A900]/5 to-transparent rounded-2xl">
-                            <p class="text-lg leading-relaxed">أن نكون البنك الإسلامي الرائد في اليمن والمنطقة، والمؤهل دولياً، والمُختار الأول لتمويل وتطوير قطاع الأعمال، والمساهم الفاعل في بناء اقتصاد وطني متين ومستدام.</p>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mt-8">
-                        <div class="text-center p-4 bg-gray-50 rounded-xl">
-                            <div class="w-12 h-12 bg-[#F2A900]/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                                <i data-lucide="target" class="w-6 h-6 text-[#F2A900]"></i>
-                            </div>
-                            <p class="font-bold">تأسيس البنك</p>
-                            <p class="text-2xl font-black text-[#7A1B29]">2015</p>
-                        </div>
-                        <div class="text-center p-4 bg-gray-50 rounded-xl">
-                            <div class="w-12 h-12 bg-[#F2A900]/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                                <i data-lucide="users" class="w-6 h-6 text-[#F2A900]"></i>
-                            </div>
-                            <p class="font-bold">العملاء حتى 2025</p>
-                            <p class="text-2xl font-black text-[#7A1B29]">+2,500</p>
-                            <p class="text-xs text-gray-500">شركة ومؤسسة كبرى</p>
-                        </div>
-                    </div>
-                </div>
-            `},
-            
-            // الصفحة 3: منظومة القيم
-            { id: "p3", title: "منظومة القيم", order: 3, content: `
-                <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4 mb-6">منظومة القيم المؤسسية</h2>
-                <div class="grid grid-cols-2 gap-5">
-                    <div class="bg-gradient-to-br from-[#7A1B29]/5 to-white p-5 rounded-2xl border border-[#F2A900]/20">
-                        <div class="w-10 h-10 bg-[#7A1B29]/10 rounded-full flex items-center justify-center mb-3">
-                            <i data-lucide="heart" class="w-5 h-5 text-[#7A1B29]"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-[#7A1B29]">الإحترام</h3>
-                        <p class="text-gray-600 text-sm mt-2">نحترم عملاءنا الداخليين والخارجيين، ونعمل على تحقيق تطلعاتهم بما يفوق توقعاتهم.</p>
-                    </div>
-                    <div class="bg-gradient-to-br from-[#F2A900]/5 to-white p-5 rounded-2xl border border-[#F2A900]/20">
-                        <div class="w-10 h-10 bg-[#F2A900]/20 rounded-full flex items-center justify-center mb-3">
-                            <i data-lucide="globe" class="w-5 h-5 text-[#F2A900]"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-[#F2A900]">المسؤولية المجتمعية</h3>
-                        <p class="text-gray-600 text-sm mt-2">نسعى لترك بصمات إيجابية في المجتمع، إدراكاً منا لمسؤوليتنا تجاه البيئة والمجتمع.</p>
-                    </div>
-                    <div class="bg-gradient-to-br from-[#7A1B29]/5 to-white p-5 rounded-2xl border border-[#F2A900]/20">
-                        <div class="w-10 h-10 bg-[#7A1B29]/10 rounded-full flex items-center justify-center mb-3">
-                            <i data-lucide="check-circle" class="w-5 h-5 text-[#7A1B29]"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-[#7A1B29]">الإلتزام</h3>
-                        <p class="text-gray-600 text-sm mt-2">ملتزمون برسالتنا وقيمنا وغاياتنا الاستراتيجية، لكسب ثقة جميع الأطراف ذات العلاقة.</p>
-                    </div>
-                    <div class="bg-gradient-to-br from-[#F2A900]/5 to-white p-5 rounded-2xl border border-[#F2A900]/20">
-                        <div class="w-10 h-10 bg-[#F2A900]/20 rounded-full flex items-center justify-center mb-3">
-                            <i data-lucide="shield" class="w-5 h-5 text-[#F2A900]"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-[#F2A900]">الأمانة والشفافية</h3>
-                        <p class="text-gray-600 text-sm mt-2">نؤدي واجباتنا بأعلى معايير الأمانة، ونحقق الشفافية في رؤيتنا وأهدافنا.</p>
-                    </div>
-                </div>
-                <div class="mt-6 p-4 bg-[#7A1B29]/5 rounded-xl text-center">
-                    <p class="italic text-gray-600">"بعد استطلاع رضا العملاء، حصلت منظومة القيم على تقييم <strong class="text-[#7A1B29]">94%</strong> من حيث الانعكاس الإيجابي على الثقة المؤسسية."</p>
-                </div>
-            `},
-            
-            // الصفحة 4: كلمة رئيس مجلس الإدارة
-            { id: "p4", title: "كلمة رئيس مجلس الإدارة", order: 4, content: `
-                <div class="space-y-5">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-16 h-16 bg-[#7A1B29] rounded-full flex items-center justify-center text-white text-xl font-bold">أ.ع</div>
-                        <div>
-                            <h3 class="text-xl font-bold text-[#7A1B29]">الأستاذ / عبدالله عبده الكريمي</h3>
-                            <p class="text-gray-500 text-sm">رئيس مجلس الإدارة</p>
-                        </div>
-                    </div>
-                    <div class="prose prose-lg max-w-none">
-                        <p class="leading-loose">بسم الله الرحمن الرحيم، والحمد لله رب العالمين، والصلاة والسلام على أشرف الأنبياء والمرسلين، سيدنا محمد وعلى آله وصحبه أجمعين.</p>
-                        <p class="leading-loose mt-4">الإخوة المساهمون الأكارم، السادة العملاء الكرام، السلام عليكم ورحمة الله وبركاته، وبعد،</p>
-                        <p class="leading-loose mt-4">يسرني أن أضع بين أيديكم التقرير السنوي لبنك الكريمي الإسلامي عن العام المالي 2025م، والذي يأتي في ظل تحديات اقتصادية محلية وإقليمية غير مسبوقة، إلا أن البنك - بفضل الله ثم بفضل جهود جميع منتسبيه - استطاع أن يحقق إنجازات نوعية ونتائج مالية مشرفة.</p>
-                        <p class="leading-loose mt-4">لقد تمكنا من تحقيق نمو في إجمالي الأصول بنسبة <strong class="text-[#7A1B29] text-xl">42.7%</strong> لتصل إلى <strong class="text-[#7A1B29]">198.5 مليار ريال يمني</strong>، كما ارتفعت محفظة التمويلات بنسبة <strong class="text-[#7A1B29]">75.4%</strong> لتصل إلى <strong class="text-[#7A1B29]">35.8 مليار ريال</strong>. هذه النتائج تعكس ثقة العملاء والمستثمرين في أداء البنك وقدرته على إدارة الأزمات.</p>
-                        <p class="leading-loose mt-4">كما نشهد هذا العام إنجازاً غير مسبوق في مجال التحول الرقمي، حيث أطلقنا منصة <strong>KIB IB</strong> المتطورة لخدمة الشركات، والتي تمثل نقلة نوعية في الخدمات المصرفية المؤسسية في اليمن.</p>
-                        <p class="leading-loose mt-4">أتقدم بخالص الشكر والتقدير لأعضاء مجلس الإدارة، والإدارة التنفيذية، وكافة موظفي البنك على جهودهم المخلصة، كما أشكر عملاءنا الكرام على ثقتهم الغالية، ونسأل الله التوفيق والسداد لخدمة وطننا الغالي.</p>
-                        <p class="leading-loose mt-6">والسلام عليكم ورحمة الله وبركاته،</p>
-                        <p class="mt-8 font-bold">عبدالله عبده الكريمي<br>رئيس مجلس الإدارة<br>صنعاء، 15 يناير 2026م</p>
-                    </div>
-                </div>
-            `},
-            
-            // الصفحة 5: كلمة العضو المنتدب
-            { id: "p5", title: "كلمة العضو المنتدب", order: 5, content: `
-                <div class="space-y-5">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-16 h-16 bg-[#F2A900] rounded-full flex items-center justify-center text-[#7A1B29] text-xl font-bold">ي.ك</div>
-                        <div>
-                            <h3 class="text-xl font-bold text-[#7A1B29]">الأستاذ / يوسف عبده محمد الكريمي</h3>
-                            <p class="text-gray-500 text-sm">نائب رئيس مجلس الإدارة - العضو المنتدب</p>
-                        </div>
-                    </div>
-                    <div class="prose prose-lg max-w-none">
-                        <p class="leading-loose">السادة المساهمون والعملاء الكرام،</p>
-                        <p class="leading-loose mt-3">لقد كان عام 2025 عاماً استثنائياً في مسيرة بنك الكريمي الإسلامي، حيث ترجمنا استراتيجيتنا الطموحة إلى إنجازات ملموسة على أرض الواقع.</p>
-                        <p class="leading-loose mt-3">في مجال إدارة العمليات المصرفية، قمنا بتطوير البنية التحتية التشغيلية بشكل شامل، مما أدى إلى تقليص زمن تنفيذ المعاملات بنسبة <strong class="text-[#7A1B29]">62%</strong>. كما نجحنا في توسيع شبكة المراسلين لتشمل <strong>32 بنكاً من الدرجة الأولى</strong> في أوروبا وآسيا والشرق الأوسط.</p>
-                        <p class="leading-loose mt-3">تكللت جهودنا بحصول البنك على جائزة <strong>"أفضل بنك للشركات في اليمن 2025"</strong> من مجلة Financial Times Middle East، وجائزة <strong>"التميز في التحول الرقمي"</strong> من Asian Banking & Finance.</p>
-                        <p class="leading-loose mt-3">نحن نتطلع إلى عام 2026 بمزيد من الإنجازات والتطورات، مع التركيز على الابتكار المالي، والاستدامة، وتعزيز الشمول المالي.</p>
-                        <p class="mt-6 font-bold">يوسف عبده محمد الكريمي<br>نائب رئيس مجلس الإدارة - العضو المنتدب</p>
-                    </div>
-                </div>
-            `},
-            
-            // الصفحة 6: أبرز المؤشرات المالية
-            { id: "p6", title: "أبرز المؤشرات المالية", order: 6, content: `
-                <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4 mb-6">أبرز المؤشرات المالية 2025</h2>
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    ${createMetricsCard('إجمالي الأصول', '198.5 مليار ريال', 42.7, 'building-2', '#7A1B29')}
-                    ${createMetricsCard('محفظة التمويلات', '35.8 مليار ريال', 75.4, 'briefcase', '#F2A900')}
-                    ${createMetricsCard('ودائع العملاء', '125.3 مليار ريال', 49.6, 'wallet', '#10b981')}
-                    ${createMetricsCard('صافي الدخل', '12.6 مليار ريال', 61.5, 'trending-up', '#3b82f6')}
-                    ${createMetricsCard('حجم التجارة الدولية', '1.85 مليار دولار', 54.2, 'globe', '#8b5cf6')}
-                    ${createMetricsCard('العائد على حقوق الملكية', '18.7%', 22.5, 'percent', '#ef4444')}
-                </div>
-                <table class="data-table">
-                    <thead><tr><th>المؤشر</th><th>2025</th><th>2024</th><th>نسبة النمو</th></tr></thead>
-                    <tbody>
-                        <tr><td>إجمالي الأصول (مليار ريال)</td><td class="font-bold">198.5</td><td>144.1</td><td class="text-green-600">▲ 37.8%</td></tr>
-                        <tr><td>محفظة التمويلات (مليار ريال)</td><td class="font-bold">35.8</td><td>20.4</td><td class="text-green-600">▲ 75.4%</td></tr>
-                        <tr><td>ودائع العملاء (مليار ريال)</td><td class="font-bold">125.3</td><td>83.8</td><td class="text-green-600">▲ 49.6%</td></tr>
-                        <tr><td>حقوق المساهمين (مليار ريال)</td><td class="font-bold">18.2</td><td>12.5</td><td class="text-green-600">▲ 45.6%</td></tr>
-                        <tr><td>نسبة كفاية رأس المال</td><td class="font-bold">19.2%</td><td>17.8%</td><td class="text-green-600">▲ 1.4%</td></tr>
-                        <tr><td>نسبة العائد على الأصول (ROA)</td><td class="font-bold">2.8%</td><td>2.1%</td><td class="text-green-600">▲ 0.7%</td></tr>
-                    </tbody>
-                </table>
-                <div class="mt-4 p-3 bg-yellow-50 rounded-lg border-r-4 border-[#F2A900]">
-                    <p class="text-sm">📊 <strong>تحليل سريع:</strong> حقق البنك نمواً قياسياً في جميع المؤشرات الرئيسية، متفوقاً على متوسطات السوق المحلي التي سجلت نمواً بنسبة 22% فقط.</p>
-                </div>
-            `},
-            
-            // الصفحة 7: تقرير هيئة الرقابة الشرعية
-            { id: "p7", title: "تقرير الهيئة الشرعية", order: 7, content: `
-                <div class="space-y-5">
-                    <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">تقرير هيئة الرقابة الشرعية</h2>
-                    <p class="text-gray-500 -mt-2">التقرير السنوي السادس - للعام المالي 2025م</p>
-                    
-                    <div class="bg-emerald-50 p-6 rounded-2xl border-r-4 border-emerald-600">
-                        <p class="leading-loose">بسم الله الرحمن الرحيم، والحمد لله رب العالمين، والصلاة والسلام على سيدنا محمد وعلى آله وصحبه أجمعين.</p>
-                        <p class="leading-loose mt-3">إلى السادة مساهمي وعملاء بنك الكريمي الإسلامي، السلام عليكم ورحمة الله وبركاته،</p>
-                        <p class="leading-loose mt-3">بناءً على عقد الارتباط بين هيئة الرقابة الشرعية والبنك، قمنا بمراجعة واعتماد السياسات والاتفاقيات والمنتجات والخدمات التي قدمها البنك خلال العام 2025م، كما قمنا بالمراجعة الواجبة لمدى التزام البنك بمبادئ وأحكام الشريعة الإسلامية.</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 gap-4">
-                        <div class="bg-white p-5 rounded-xl shadow-sm border">
-                            <div class="flex items-center gap-3 mb-3">
-                                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center"><i data-lucide="check" class="w-4 h-4 text-green-600"></i></div>
-                                <h3 class="font-bold text-lg">أولاً: الالتزام بالضوابط الشرعية</h3>
-                            </div>
-                            <p>تمت جميع عقود التمويل والاستثمار والاعتمادات المستندية وفقاً لأحكام ومبادئ الشريعة الإسلامية، وبما يتوافق مع قرارات هيئة المحاسبة والمراجعة للمؤسسات المالية الإسلامية (AAOIFI).</p>
-                        </div>
-                        <div class="bg-white p-5 rounded-xl shadow-sm border">
-                            <div class="flex items-center gap-3 mb-3">
-                                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center"><i data-lucide="pie-chart" class="w-4 h-4 text-green-600"></i></div>
-                                <h3 class="font-bold text-lg">ثانياً: توزيع الأرباح</h3>
-                            </div>
-                            <p>آلية توزيع الأرباح على حسابات الاستثمار تمت بناءً على أساس المضاربة والمشاركة الشرعية المقررة من الهيئة، حيث بلغت نسبة توزيع الأرباح للعملة المحلية <strong class="text-[#7A1B29]">12.8%</strong> وللعملات الأجنبية <strong class="text-[#7A1B29]">7.2%</strong>.</p>
-                        </div>
-                        <div class="bg-white p-5 rounded-xl shadow-sm border">
-                            <div class="flex items-center gap-3 mb-3">
-                                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center"><i data-lucide="calculator" class="w-4 h-4 text-green-600"></i></div>
-                                <h3 class="font-bold text-lg">ثالثاً: الزكاة</h3>
-                            </div>
-                            <p>تم احتساب الزكاة الشرعية وفقاً للمعايير الصادرة عن AAOIFI، وتم إيداع المبلغ المستحق في حساب الزكاة المخصص لذلك.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4 p-4 bg-[#7A1B29]/5 rounded-xl">
-                        <p class="text-center"><strong>أعضاء الهيئة:</strong></p>
-                        <p class="text-center text-sm">د. سعد عبد الله الأقرع (رئيس) | د. محمد سعد نجاد (عضو) | أ. أحمد الجواني (عضو) | أ. محمد أحمد البكيلي (المراقب الشرعي التنفيذي)</p>
-                    </div>
-                </div>
-            `},
-            
-            // الصفحة 8: تقرير مدقق الحسابات
-            { id: "p8", title: "تقرير مدقق الحسابات", order: 8, content: `
-                <div class="space-y-5">
-                    <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">تقرير مدقق الحسابات المستقل</h2>
-                    <p class="text-gray-500">للسنة المالية المنتهية في 31 ديسمبر 2025م</p>
-                    
-                    <div class="bg-gray-50 p-6 rounded-2xl">
-                        <p class="font-bold">إلى السادة مساهمي بنك الكريمي الإسلامي (ش.م.ي.م مقفلة)</p>
-                        <p class="mt-4"><strong class="text-[#7A1B29]">الرأي:</strong></p>
-                        <p class="leading-loose mt-2">قمنا بتدقيق القوائم المالية لبنك الكريمي الإسلامي والتي تتكون من قائمة المركز المالي كما في 31 ديسمبر 2025، وقائمة الدخل الشامل، وقائمة التغيرات في حقوق الملكية، وقائمة التدفقات النقدية للسنة المنتهية في ذلك التاريخ، وإيضاحاتها المرفقة.</p>
-                        <p class="leading-loose mt-3">برأينا، إن القوائم المالية المرفقة تُظهر بصورة عادلة، من جميع النواحي الجوهرية، المركز المالي للبنك كما في 31 ديسمبر 2025، وأدائه المالي وتدفقاته النقدية للسنة المنتهية في ذلك التاريخ، وفقاً لمعايير المحاسبة المالية الصادرة عن هيئة المحاسبة والمراجعة للمؤسسات المالية الإسلامية (AAOIFI)، وتعليمات البنك المركزي اليمني.</p>
-                        <p class="leading-loose mt-3"><strong class="text-[#7A1B29]">أساس الرأي:</strong> تمت عملية التدقيق وفقاً للمعايير الدولية للمراجعة، ونحن مستقلون عن البنك وفقاً لقواعد السلوك الأخلاقي المهني. ونعتقد أن أدلة المراجعة التي حصلنا عليها كافية ومناسبة لتوفير أساس لرأينا.</p>
-                        <p class="leading-loose mt-3"><strong class="text-[#7A1B29]">الاستنتاج:</strong> لم نرصد خلال عملية التدقيق أي مخالفات جوهرية لأحكام القوانين واللوائح المنظمة للعمل المصرفي في الجمهورية اليمنية تؤثر على المركز المالي للبنك.</p>
-                        <div class="mt-6 pt-4 border-t border-gray-300">
-                            <p class="text-sm">شركة (اسم شركة التدقيق) للمراجعة والمحاسبة<br>صنعاء، الجمهورية اليمنية<br>بتاريخ: 20 فبراير 2026م</p>
-                        </div>
-                    </div>
-                </div>
-            `},
-            
-            // الصفحة 9: القوائم المالية - المركز المالي
-            { id: "p9", title: "قائمة المركز المالي", order: 9, content: `
-                <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4 mb-4">قائمة المركز المالي</h2>
-                <p class="text-gray-500 text-sm mb-4">كما في 31 ديسمبر 2025 (بآلاف الريالات اليمنية)</p>
-                <table class="data-table">
-                    <thead><tr><th>الموجودات</th><th>2025</th><th>2024</th></tr></thead>
-                    <tbody>
-                        <tr><td>نقد وأرصدة لدى البنك المركزي</td><td class="font-bold">45,200,000</td><td>32,100,000</td></tr>
-                        <tr><td>أرصدة لدى بنوك ومؤسسات مالية</td><td class="font-bold">38,500,000</td><td>28,400,000</td></tr>
-                        <tr><td>تمويلات واستثمارات (صافي)</td><td class="font-bold">35,800,000</td><td>20,410,000</td></tr>
-                        <tr><td>موجودات ثابتة ومشروعات</td><td class="font-bold">3,200,000</td><td>2,850,000</td></tr>
-                        <tr><td>موجودات أخرى</td><td class="font-bold">5,800,000</td><td>4,300,000</td></tr>
-                        <tr class="bg-gray-100 font-bold"><td>إجمالي الموجودات</td><td>198,500,000</td><td>144,060,000</td></tr>
-                    </tbody>
-                </table>
-                <table class="data-table mt-4">
-                    <thead><tr><th>المطلوبات وحقوق الملكية</th><th>2025</th><th>2024</th></tr></thead>
-                    <tbody>
-                        <tr><td>ودائع العملاء</td><td class="font-bold">125,300,000</td><td>83,750,000</td></tr>
-                        <tr><td>ودائع البنوك والمؤسسات</td><td class="font-bold">22,500,000</td><td>18,200,000</td></tr>
-                        <tr><td>مطلوبات أخرى ومخصصات</td><td class="font-bold">12,500,000</td><td>9,660,000</td></tr>
-                        <tr><td>حسابات الاستثمار المطلقة</td><td class="font-bold">20,000,000</td><td>20,000,000</td></tr>
-                        <tr><td>حقوق الملكية</td><td class="font-bold">18,200,000</td><td>12,450,000</td></tr>
-                        <tr class="bg-gray-100 font-bold"><td>إجمالي المطلوبات وحقوق الملكية</td><td>198,500,000</td><td>144,060,000</td></tr>
-                    </tbody>
-                </table>
-            `},
-            
-            // الصفحة 10: قائمة الدخل الشامل
-            { id: "p10", title: "قائمة الدخل الشامل", order: 10, content: `
-                <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4 mb-4">قائمة الدخل الشامل</h2>
-                <p class="text-gray-500 text-sm mb-4">للسنة المنتهية في 31 ديسمبر 2025 (بآلاف الريالات اليمنية)</p>
-                <table class="data-table">
-                    <thead><tr><th>البيان</th><th>2025</th><th>2024</th></tr></thead>
-                    <tbody>
-                        <tr><td>إيرادات التمويل والاستثمار</td><td class="font-bold">18,200,000</td><td>11,500,000</td></tr>
-                        <tr><td>يخصم: عوائد أصحاب حسابات الاستثمار</td><td class="font-bold">(4,800,000)</td><td>(3,200,000)</td></tr>
-                        <tr><td class="font-bold">صافي إيرادات التمويل والاستثمار</td><td class="font-bold">13,400,000</td><td>8,300,000</td></tr>
-                        <tr><td>إيرادات العمولات والرسوم</td><td class="font-bold">3,200,000</td><td>2,100,000</td></tr>
-                        <tr><td>أرباح صرف العملات الأجنبية</td><td class="font-bold">1,800,000</td><td>1,200,000</td></tr>
-                        <tr><td>إيرادات تشغيلية أخرى</td><td class="font-bold">900,000</td><td>550,000</td></tr>
-                        <tr><td class="font-bold">إجمالي الإيرادات التشغيلية</td><td class="font-bold">19,300,000</td><td>12,150,000</td></tr>
-                        <tr><td>مصاريف الموظفين والتدريب</td><td class="font-bold">(2,800,000)</td><td>(2,100,000)</td></tr>
-                        <tr><td>مصاريف عمومية وإدارية</td><td class="font-bold">(1,500,000)</td><td>(1,200,000)</td></tr>
-                        <tr><td>مخصصات خسائر الائتمان</td><td class="font-bold">(800,000)</td><td>(550,000)</td></tr>
-                        <tr class="bg-gray-100 font-bold"><td>صافي الدخل قبل الضريبة والزكاة</td><td class="font-bold">14,200,000</td><td>8,300,000</td></tr>
-                        <tr><td>الضريبة والزكاة</td><td class="font-bold">(1,600,000)</td><td>(1,000,000)</td></tr>
-                        <tr class="bg-[#F2A900]/20 font-bold"><td>صافي الدخل الشامل للعام</td><td class="font-bold text-[#7A1B29]">12,600,000</td><td>7,300,000</td></tr>
-                    </tbody>
-                </table>
-            `},
-            
-            // الصفحة 11: قائمة التدفقات النقدية
-            { id: "p11", title: "التدفقات النقدية", order: 11, content: `
-                <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4 mb-4">قائمة التدفقات النقدية</h2>
-                <p class="text-gray-500 text-sm mb-4">للسنة المنتهية في 31 ديسمبر 2025 (بآلاف الريالات اليمنية)</p>
-                <table class="data-table">
-                    <thead><tr><th>البيان</th><th>2025</th></tr></thead>
-                    <tbody>
-                        <tr><td class="font-bold bg-gray-50">التدفقات النقدية من الأنشطة التشغيلية</td><td></td></tr>
-                        <tr><td>صافي الدخل قبل الضريبة والزكاة</td><td>14,200,000</td></tr>
-                        <tr><td>تعديلات البنود غير النقدية (الإهلاك، المخصصات)</td><td>1,200,000</td></tr>
-                        <tr><td>التغير في الموجودات التشغيلية</td><td>(5,800,000)</td></tr>
-                        <tr><td>التغير في المطلوبات التشغيلية</td><td>8,500,000</td></tr>
-                        <tr class="bg-gray-100"><td class="font-bold">صافي النقد من الأنشطة التشغيلية</td><td class="font-bold">18,100,000</td></tr>
-                        <tr><td class="font-bold bg-gray-50 mt-2">التدفقات النقدية من الأنشطة الاستثمارية</td><td></td></tr>
-                        <tr><td>شراء موجودات ثابتة وتقنية</td><td>(1,200,000)</td></tr>
-                        <tr><td>صافي النقد المستخدم في الأنشطة الاستثمارية</td><td>(1,200,000)</td></tr>
-                        <tr><td class="font-bold bg-gray-50">التدفقات النقدية من الأنشطة التمويلية</td><td></td></tr>
-                        <tr><td>التغير في ودائع الاستثمار</td><td>2,500,000</td></tr>
-                        <tr><td>توزيعات أرباح المساهمين</td><td>(850,000)</td></tr>
-                        <tr class="bg-gray-100"><td class="font-bold">صافي النقد من الأنشطة التمويلية</td><td>1,650,000</td></tr>
-                        <tr class="bg-[#F2A900]/20 font-bold"><td>صافي الزيادة في النقد وما يعادله</td><td class="font-bold">18,550,000</td></tr>
-                        <tr><td>النقد وما يعادله بداية العام</td><td>15,200,000</td></tr>
-                        <tr><td class="font-bold">النقد وما يعادله نهاية العام</td><td class="font-bold text-[#7A1B29]">33,750,000</td></tr>
-                    </tbody>
-                </table>
-            `},
-            
-            // الصفحة 12: إدارة الموارد البشرية والتدريب
-            { id: "p12", title: "الموارد البشرية والتدريب", order: 12, content: `
-                <div class="space-y-5">
-                    <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">إدارة الموارد البشرية والتدريب</h2>
-                    <p class="text-gray-500">الاستثمار في رأس المال البشري - محرك التميز المؤسسي</p>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="metric-card text-center">
-                            <div class="w-14 h-14 bg-[#7A1B29]/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                                <i data-lucide="users" class="w-7 h-7 text-[#7A1B29]"></i>
-                            </div>
-                            <p class="text-3xl font-black text-[#7A1B29]">487</p>
-                            <p class="text-sm text-gray-600">إجمالي الموظفين</p>
-                            <p class="text-xs text-green-600">▲ 15% عن 2024</p>
-                        </div>
-                        <div class="metric-card text-center">
-                            <div class="w-14 h-14 bg-[#F2A900]/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                                <i data-lucide="graduation-cap" class="w-7 h-7 text-[#F2A900]"></i>
-                            </div>
-                            <p class="text-3xl font-black text-[#F2A900]">142</p>
-                            <p class="text-sm text-gray-600">برنامج تدريبي</p>
-                            <p class="text-xs text-green-600">▲ 61% عن 2024</p>
-                        </div>
-                        <div class="metric-card text-center">
-                            <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                                <i data-lucide="award" class="w-7 h-7 text-green-600"></i>
-                            </div>
-                            <p class="text-3xl font-black text-green-600">98%</p>
-                            <p class="text-sm text-gray-600">نسبة التوطين</p>
-                        </div>
-                        <div class="metric-card text-center">
-                            <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                                <i data-lucide="venetian-mask" class="w-7 h-7 text-blue-600"></i>
-                            </div>
-                            <p class="text-3xl font-black text-blue-600">34%</p>
-                            <p class="text-sm text-gray-600">نسبة مشاركة المرأة</p>
-                            <p class="text-xs text-green-600">▲ 8% عن 2024</p>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4">
-                        <h3 class="text-xl font-bold text-[#7A1B29] mb-3">أبرز إنجازات إدارة الموارد البشرية والتدريب</h3>
-                        <ul class="space-y-2">
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5"></i> <span>تأهيل <strong>45 موظفاً</strong> للحصول على شهادة CAMS (مكافحة غسل الأموال وتمويل الإرهاب).</span></li>
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5"></i> <span>حصول <strong>30 موظفاً</strong> على شهادة CDCS (الاعتمادات المستندية المعتمدة).</span></li>
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5"></i> <span>إطلاق برنامج <strong>"صناعة القادة"</strong> لتأهيل الصف الثاني من القيادات.</span></li>
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5"></i> <span>تنفيذ <strong>88 برنامجاً تدريبياً داخلياً</strong> و<strong>54 برنامجاً خارجياً</strong> بالتعاون مع معاهد مصرفية دولية.</span></li>
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5"></i> <span>تطوير نظام تقييم الأداء (KPIs) وربطه بالحوافز والمكافآت.</span></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="mt-4 p-4 bg-[#7A1B29]/5 rounded-xl">
-                        <div class="flex justify-between text-sm mb-1"><span>ميزانية التدريب 2025</span><span>420 مليون ريال</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 100%"></div></div>
-                        <p class="text-xs text-gray-500 mt-2">✔ تم تنفيذ 100% من خطة التدريب السنوية بنجاح، بزيادة 35% عن ميزانية 2024.</p>
-                    </div>
-                    
-                    <div class="bg-gradient-to-r from-[#7A1B29] to-[#5e131f] text-white p-5 rounded-2xl mt-4">
-                        <p class="italic text-center">"كادرنا البشري هو أثمن استثماراتنا، وبهم نصنع الفارق في جودة الخدمات المصرفية التي نقدمها لعملائنا."</p>
-                        <p class="text-center text-sm mt-2">- مدير إدارة الموارد البشرية والتدريب</p>
-                    </div>
-                </div>
-            `},
-            
-            // الصفحة 13: إدارة الأمن السيبراني وتقنية المعلومات
-            { id: "p13", title: "الأمن السيبراني", order: 13, content: `
-                <div class="space-y-5">
-                    <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">إدارة الأمن السيبراني وتقنية المعلومات</h2>
-                    <p class="text-gray-500">حماية الأصول الرقمية وضمان استمرارية الأعمال</p>
-                    
-                    <div class="grid grid-cols-3 gap-3">
-                        <div class="text-center p-3 bg-gray-50 rounded-xl">
-                            <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mx-auto"><i data-lucide="shield-check" class="w-5 h-5 text-red-600"></i></div>
-                            <p class="text-xl font-bold text-[#7A1B29]">24/7</p>
-                            <p class="text-xs">مركز عمليات أمن معلومات (SOC)</p>
-                        </div>
-                        <div class="text-center p-3 bg-gray-50 rounded-xl">
-                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto"><i data-lucide="cpu" class="w-5 h-5 text-blue-600"></i></div>
-                            <p class="text-xl font-bold text-[#7A1B29]">99.99%</p>
-                            <p class="text-xs">نسبة توافر الأنظمة</p>
-                        </div>
-                        <div class="text-center p-3 bg-gray-50 rounded-xl">
-                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mx-auto"><i data-lucide="badge-check" class="w-5 h-5 text-green-600"></i></div>
-                            <p class="text-xl font-bold text-[#7A1B29]">ISO 27001</p>
-                            <p class="text-xs">شهادة الأمان المعتمدة</p>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4">
-                        <h3 class="text-xl font-bold text-[#7A1B29] mb-3">إنجازات إدارة الأمن السيبراني 2025</h3>
-                        <ul class="space-y-2">
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>تطبيق نظام الحماية المتعددة الطبقات (Defense in Depth) على جميع الأنظمة الحيوية.</span></li>
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>إجراء <strong>12 اختبار اختراق (Penetration Testing)</strong> من جهات خارجية مستقلة.</span></li>
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>تفعيل المصادقة متعددة العوامل (MFA) لجميع مستخدمي منصة KIB IB.</span></li>
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>تدريب <strong>100% من الموظفين</strong> على الوعي الأمني والتصدي لهجمات التصيد الاحتيالي.</span></li>
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>تطوير خطة استمرارية الأعمال (BCP) وتنفيذ <strong>4 تمارين محاكاة</strong> لسيناريوهات الطوارئ.</span></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="mt-3 p-4 bg-gray-50 rounded-xl">
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold">عدد الهجمات السيبرانية المُحبطَة</span>
-                            <span class="text-2xl font-black text-[#7A1B29]">1,247</span>
-                        </div>
-                        <div class="progress-bar mt-2"><div class="progress-fill" style="width: 100%"></div></div>
-                        <p class="text-xs text-gray-500 mt-1">✔ تم إحباط جميع الهجمات ولم يتم تسجيل أي اختراق ناجح للأنظمة الأساسية.</p>
-                    </div>
-                    
-                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-5 rounded-2xl mt-4">
-                        <div class="flex items-center gap-3">
-                            <i data-lucide="server" class="w-10 h-10"></i>
-                            <div>
-                                <p class="font-bold">البنية التحتية التقنية</p>
-                                <p class="text-sm opacity-90">تم تحديث مركز البيانات الرئيسي وفق معايير Tier III، مع تطبيق نظام تخزين عالي الأداء (SAN) بقدرة 500TB.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `},
-            
-            // الصفحة 14: إدارة الخدمات التجارية
-            { id: "p14", title: "الخدمات التجارية", order: 14, content: `
-                <div class="space-y-5">
-                    <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">إدارة الخدمات التجارية والتجارة الدولية</h2>
-                    <p class="text-gray-500">تمكين التجارة الخارجية وسلاسل الإمداد</p>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="metric-card">
-                            <div class="flex justify-between items-start">
-                                <div><p class="text-gray-500 text-sm">الاعتمادات المستندية</p><p class="text-2xl font-bold">985M$</p><span class="text-xs text-green-600">▲ 52%</span></div>
-                                <i data-lucide="file-text" class="w-8 h-8 text-[#F2A900]"></i>
-                            </div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="flex justify-between items-start">
-                                <div><p class="text-gray-500 text-sm">خطابات الضمان</p><p class="text-2xl font-bold">210M$</p><span class="text-xs text-green-600">▲ 38%</span></div>
-                                <i data-lucide="shield" class="w-8 h-8 text-[#F2A900]"></i>
-                            </div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="flex justify-between items-start">
-                                <div><p class="text-gray-500 text-sm">التحصيلات المستندية</p><p class="text-2xl font-bold">655M$</p><span class="text-xs text-green-600">▲ 65%</span></div>
-                                <i data-lucide="file-check" class="w-8 h-8 text-[#F2A900]"></i>
-                            </div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="flex justify-between items-start">
-                                <div><p class="text-gray-500 text-sm">شبكة المراسلين</p><p class="text-2xl font-bold">32</p><span class="text-xs text-green-600">▲ 45%</span></div>
-                                <i data-lucide="globe" class="w-8 h-8 text-[#F2A900]"></i>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4">
-                        <h3 class="text-xl font-bold text-[#7A1B29] mb-3">أبرز إنجازات قطاع الخدمات التجارية</h3>
-                        <ul class="space-y-2">
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>توقيع اتفاقيات مراسلة جديدة مع <strong>10 بنوك عالمية من الدرجة الأولى</strong> في سويسرا وتركيا والصين.</span></li>
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>إطلاق خدمة <strong>الاعتمادات المستندية الإلكترونية</strong> عبر منصة KIB IB.</span></li>
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>تخفيض متوسط زمن إصدار الاعتماد المستندي من <strong>5 أيام إلى 24 ساعة</strong>.</span></li>
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>تمويل استيراد <strong>1.2 مليون طن</strong> من السلع الأساسية (قمح، أرز، سكر، أدوية).</span></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-gradient-to-r from-[#F2A900] to-[#e09e00] p-4 rounded-xl text-white">
-                        <div class="flex justify-between items-center">
-                            <span>نسبة تنفيذ عمليات SWIFT عبر STP (المعالجة المباشرة)</span>
-                            <span class="text-2xl font-bold">94%</span>
-                        </div>
-                        <div class="progress-bar bg-white/30 mt-2"><div class="progress-fill bg-white" style="width: 94%"></div></div>
-                    </div>
-                </div>
-            `},
-            
-            // الصفحة 15: إدارة علاقات العملاء
-            { id: "p15", title: "علاقات العملاء", order: 15, content: `
-                <div class="space-y-5">
-                    <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">إدارة علاقات العملاء</h2>
-                    <p class="text-gray-500">الشراكة الاستراتيجية ورضا العملاء</p>
-                    
-                    <div class="grid grid-cols-3 gap-4 text-center">
-                        <div class="p-4 bg-gradient-to-br from-green-50 to-white rounded-xl">
-                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto"><i data-lucide="smile" class="w-6 h-6 text-green-600"></i></div>
-                            <p class="text-2xl font-bold text-[#7A1B29]">94%</p>
-                            <p class="text-xs">رضا العملاء</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-br from-blue-50 to-white rounded-xl">
-                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto"><i data-lucide="trending-up" class="w-6 h-6 text-blue-600"></i></div>
-                            <p class="text-2xl font-bold text-[#7A1B29]">2,500+</p>
-                            <p class="text-xs">شركة عميلة</p>
-                        </div>
-                        <div class="p-4 bg-gradient-to-br from-purple-50 to-white rounded-xl">
-                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto"><i data-lucide="clock" class="w-6 h-6 text-purple-600"></i></div>
-                            <p class="text-2xl font-bold text-[#7A1B29]">4.8/5</p>
-                            <p class="text-xs">تقييم الخدمة</p>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4">
-                        <h3 class="text-xl font-bold text-[#7A1B29] mb-3">إنجازات إدارة علاقات العملاء</h3>
-                        <ul class="space-y-2">
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>تخصيص <strong>12 مدير علاقات (Relationship Manager)</strong> لخدمة كبار العملاء.</span></li>
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>تطوير نظام <strong>إدارة تجربة العملاء (CXM)</strong> لقياس وتحسين جودة الخدمة.</span></li>
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>تنفيذ <strong>48 زيارة ميدانية</strong> لكبار العملاء ومناقشة احتياجاتهم التمويلية.</span></li>
-                            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>إطلاق <strong>قناة تواصل مباشرة (WhatsApp Business)</strong> لخدمة عملاء الشركات.</span></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="mt-4 p-5 bg-[#7A1B29]/5 rounded-xl">
-                        <p class="font-bold text-center">نتائج استبيان رضا العملاء 2025</p>
-                        <div class="mt-3 space-y-2">
-                            <div><div class="flex justify-between text-sm"><span>جودة الخدمات المصرفية</span><span>92%</span></div><div class="progress-bar"><div class="progress-fill" style="width:92%"></div></div></div>
-                            <div><div class="flex justify-between text-sm"><span>سرعة إنجاز المعاملات</span><span>88%</span></div><div class="progress-bar"><div class="progress-fill" style="width:88%"></div></div></div>
-                            <div><div class="flex justify-between text-sm"><span>احترافية فريق العمل</span><span>95%</span></div><div class="progress-bar"><div class="progress-fill" style="width:95%"></div></div></div>
-                            <div><div class="flex justify-between text-sm"><span>سهولة استخدام المنصات الرقمية</span><span>86%</span></div><div class="progress-bar"><div class="progress-fill" style="width:86%"></div></div></div>
-                        </div>
-                    </div>
-                </div>
-            `},
-            
-            // الصفحة 16: إدارة المخاطر والامتثال
-            { id: "p16", title: "إدارة المخاطر", order: 16, content: `
-                <div class="space-y-5">
-                    <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">إدارة المخاطر والامتثال</h2>
-                    <p class="text-gray-500">حماية البنك والعملاء من المخاطر المالية والتشغيلية</p>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="metric-card"><div class="flex justify-between"><div><p class="text-gray-500">نسبة التمويلات المتعثرة (NPL)</p><p class="text-2xl font-bold text-green-600">1.2%</p></div><i data-lucide="chart-line" class="w-8 h-8 text-green-600"></i></div><p class="text-xs mt-2">أقل من متوسط السوق (3.8%)</p></div>
-                        <div class="metric-card"><div class="flex justify-between"><div><p class="text-gray-500">نسبة كفاية رأس المال (CAR)</p><p class="text-2xl font-bold text-blue-600">19.2%</p></div><i data-lucide="building" class="w-8 h-8 text-blue-600"></i></div><p class="text-xs mt-2">أعلى من المتطلبات التنظيمية (12%)</p></div>
-                    </div>
-                    
-                    <div class="mt-3">
-                        <h3 class="font-bold text-[#7A1B29]">منهجية إدارة المخاطر</h3>
-                        <ul class="list-disc list-inside mt-2 space-y-1 text-sm">
-                            <li>تطبيق نموذج <strong>الثلاث خطوط دفاع (Three Lines of Defense)</strong> وفق أفضل الممارسات الدولية.</li>
-                            <li>تحديث <strong>سياسة الائتمان</strong> لتشمل معايير الاستدامة والتصنيف البيئي والاجتماعي (ESG).</li>
-                            <li>إجراء <strong>اختبارات إجهاد (Stress Testing)</strong> ربع سنوية لسيناريوهات اقتصادية قاسية.</li>
-                            <li>تفعيل نظام <strong>إنذار مبكر (Early Warning System)</strong> لرصد مؤشرات التعثر مبكراً.</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-gray-50 p-4 rounded-xl">
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold">تطبيق سياسات مكافحة غسل الأموال (AML/CFT)</span>
-                            <span class="text-green-600 bg-green-100 px-2 py-0.5 rounded-full text-xs">100% التزام</span>
-                        </div>
-                        <div class="progress-bar mt-2"><div class="progress-fill bg-green-500" style="width:100%"></div></div>
-                        <p class="text-xs text-gray-500 mt-2">تم تدريب جميع الموظفين وتحديث الأنظمة وفق أحدث معايير FATF.</p>
-                    </div>
-                </div>
-            `},
-            
-            // الصفحة 17: إدارة الاستثمار والخزينة
-            { id: "p17", title: "الاستثمار والخزينة", order: 17, content: `
-                <div class="space-y-5">
-                    <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">إدارة الاستثمار والخزينة</h2>
-                    <p class="text-gray-500">تحسين العوائد وإدارة السيولة بكفاءة</p>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="metric-card"><div><p class="text-gray-500">محفظة الاستثمارات</p><p class="text-2xl font-bold">22.5 مليار ريال</p><span class="text-xs text-green-600">▲ 38%</span></div></div>
-                        <div class="metric-card"><div><p class="text-gray-500">العائد على الاستثمار</p><p class="text-2xl font-bold">11.2%</p><span class="text-xs text-green-600">▲ 1.8%</span></div></div>
-                    </div>
-                    
-                    <div>
-                        <h3 class="font-bold text-[#7A1B29]">إنجازات قطاع الخزينة</h3>
-                        <ul class="space-y-1 mt-2">
-                            <li>✓ تنويع مصادر السيولة من خلال إصدار <strong>صكوك استثمارية بقيمة 5 مليارات ريال</strong>.</li>
-                            <li>✓ توسيع خطوط الائتمان مع البنوك المراسلة بنسبة <strong>60%</strong>.</li>
-                            <li>✓ تطوير استراتيجيات التحوط من مخاطر العملات بما يتوافق مع الشريعة.</li>
-                        </ul>
-                    </div>
-                </div>
-            `},
-            
-            // الصفحة 18: التحول الرقمي ومنصة KIB IB
-            { id: "p18", title: "التحول الرقمي", order: 18, content: `
-                <div class="space-y-5">
-                    <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">التحول الرقمي ومنصة KIB IB</h2>
-                    <p class="text-gray-500">نقلة نوعية في الخدمات المصرفية المؤسسية</p>
-                    
-                    <div class="grid grid-cols-3 gap-3">
-                        <div class="text-center p-3 bg-blue-50 rounded-xl"><i data-lucide="smartphone" class="w-8 h-8 text-blue-600 mx-auto"></i><p class="font-bold mt-1">Mobile App</p></div>
-                        <div class="text-center p-3 bg-blue-50 rounded-xl"><i data-lucide="laptop" class="w-8 h-8 text-blue-600 mx-auto"></i><p class="font-bold mt-1">Web Portal</p></div>
-                        <div class="text-center p-3 bg-blue-50 rounded-xl"><i data-lucide="git-pull-request" class="w-8 h-8 text-blue-600 mx-auto"></i><p class="font-bold mt-1">Open APIs</p></div>
-                    </div>
-                    
-                    <div>
-                        <ul class="space-y-2">
-                            <li>✓ <strong>منصة KIB IB</strong> لإدارة السيولة والاعتمادات المستندية والمدفوعات المجمعة.</li>
-                            <li>✓ <strong>واجهات ربط (APIs)</strong> لربط أنظمة الشركات مباشرة مع البنك.</li>
-                            <li>✓ <strong>أتمتة العملات (RPA)</strong> لخفض زمن المعاملات بنسبة 60%.</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-gradient-to-r from-[#7A1B29] to-[#5e131f] text-white p-4 rounded-xl text-center">
-                        <p class="text-2xl font-bold">78%</p>
-                        <p class="text-sm">نسبة العمليات الرقمية من إجمالي العمليات</p>
-                    </div>
-                </div>
-            `},
-            
-            // الصفحات 19-35: استمرار المحتوى...
-            { id: "p19", title: "المسؤولية المجتمعية والاستدامة", order: 19, content: `<h2 class="text-3xl font-black text-[#7A1B29]">المسؤولية المجتمعية والاستدامة</h2><p class="mt-4">خصص البنك <strong>1.2 مليار ريال</strong> لدعم المبادرات المجتمعية في مجالات الصحة والتعليم والإغاثة.</p><ul class="mt-3 list-disc list-inside"><li>دعم تجهيز مستشفى الثورة العام بأجهزة غسيل كلى.</li><li>إنشاء منح دراسية لـ200 طالب وطالبة.</li><li>توزيع سلال غذائية على 15,000 أسرة متضررة.</li><li>تمويل مشاريع الطاقة الشمسية في المدارس.</li></ul>` },
-            { id: "p20", title: "الجوائز والتكريمات", order: 20, content: `<h2 class="text-3xl font-black text-[#7A1B29]">الجوائز والتكريمات الدولية 2025</h2><div class="mt-5 space-y-3"><div class="flex items-center gap-3 p-3 bg-yellow-50 rounded-xl"><i data-lucide="trophy" class="w-8 h-8 text-[#F2A900]"></i><div><p class="font-bold">أفضل بنك للشركات في اليمن 2025</p><p class="text-sm text-gray-500">Financial Times Middle East</p></div></div><div class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl"><i data-lucide="award" class="w-8 h-8 text-blue-500"></i><div><p class="font-bold">جائزة التميز في التحول الرقمي</p><p class="text-sm text-gray-500">Asian Banking & Finance</p></div></div></div>` },
-            { id: "p21", title: "الشراكات الاستراتيجية", order: 21, content: `<h2 class="text-3xl font-black text-[#7A1B29]">الشراكات الاستراتيجية</h2><p class="mt-3">أبرم البنك خلال 2025 شراكات جديدة مع كبرى المؤسسات المالية والتنموية:</p><ul class="mt-3 list-disc list-inside"><li>اتفاقية تعاون مع <strong>بنك الراجحي</strong> لتوسيع شبكة المراسلة.</li><li>شراكة مع <strong>البنك الأهلي التجاري</strong> لتمويل مشاريع مشتركة.</li><li>مذكرة تفاهم مع <strong>برنامج الأمم المتحدة الإنمائي (UNDP)</strong> لدعم التمويل الأصغر.</li></ul>` },
-            { id: "p22", title: "الإدارة المالية", order: 22, content: `<h2 class="text-3xl font-black text-[#7A1B29]">إدارة الشؤون المالية والمحاسبة</h2><p class="mt-3">نجحت الإدارة المالية في تنفيذ مشروع تحديث النظام المحاسبي المركزي، وتطبيق معايير AAOIFI بالكامل، كما تم تقديم القوائم المالية في المواعيد المحددة دون أي تأخير.</p><div class="mt-4 p-3 bg-gray-50 rounded-xl"><div class="flex justify-between"><span>عدد الفواتير الإلكترونية</span><span class="font-bold">12,450</span></div><div class="flex justify-between mt-1"><span>نسبة الأتمتة المحاسبية</span><span class="font-bold">95%</span></div></div>` },
-            { id: "p23", title: "التخطيط والتطوير المؤسسي", order: 23, content: `<h2 class="text-3xl font-black text-[#7A1B29]">إدارة التخطيط والتطوير المؤسسي</h2><p class="mt-3">تم إعداد الخطة الاستراتيجية 2026-2030 بمشاركة جميع الإدارات، وتطبيق نظام بطاقة الأداء المتوازن (BSC) لقياس الأداء الاستراتيجي.</p><div class="grid grid-cols-2 gap-3 mt-4"><div class="text-center p-2"><p class="text-2xl font-bold text-[#7A1B29]">100%</p><p class="text-xs">تنفيذ مبادرات 2025</p></div><div class="text-center p-2"><p class="text-2xl font-bold text-[#7A1B29]">95%</p><p class="text-xs">تحقيق الأهداف الاستراتيجية</p></div></div>` },
-            { id: "p24", title: "التدقيق الداخلي", order: 24, content: `<h2 class="text-3xl font-black text-[#7A1B29]">إدارة التدقيق الداخلي</h2><p class="mt-3">قامت إدارة التدقيق الداخلي بتنفيذ <strong>48 مهمة تدقيقية</strong> شملت جميع الإدارات والفروع، ورفعت <strong>32 توصية</strong> لتحسين الضوابط الداخلية.</p><div class="bg-green-50 p-3 rounded-xl mt-3"><p class="text-sm">✔ نسبة تنفيذ التوصيات: 94%</p></div>` },
-            { id: "p25", title: "الحوكمة المؤسسية", order: 25, content: `<h2 class="text-3xl font-black text-[#7A1B29]">الحوكمة المؤسسية</h2><p class="mt-3">يتبع البنك أعلى معايير الحوكمة، مع لجان متخصصة (المراجعة، المخاطر، الترشيحات والمكافآت، التسهيلات الائتمانية).</p><ul class="mt-3 list-disc list-inside"><li>عقد 12 اجتماعاً لمجلس الإدارة.</li><li>عقد 24 اجتماعاً للجان المتخصصة.</li><li>اعتماد مدونة قواعد السلوك الوظيفي.</li></ul>` },
-            { id: "p26", title: "العلاقات العامة والإعلام", order: 26, content: `<h2 class="text-3xl font-black text-[#7A1B29]">إدارة العلاقات العامة والإعلام المؤسسي</h2><p class="mt-3">نفذت الإدارة حملات إعلامية مكثفة للتعريف بإنجازات البنك ومنتجاته الجديدة، وبلغ إجمالي التغطيات الإعلامية <strong>186 تغطية</strong> في وسائل الإعلام المحلية والعربية.</p>` },
-            { id: "p27", title: "خدمة العملاء", order: 27, content: `<h2 class="text-3xl font-black text-[#7A1B29]">مركز خدمة العملاء</h2><p class="mt-3">استقبل مركز الاتصال <strong>34,500 مكالمة</strong> خلال العام بمعدل رضا <strong>91%</strong>، وتم الرد على <strong>12,800 استفسار</strong> عبر البريد الإلكتروني ووسائل التواصل الاجتماعي.</p>` },
-            { id: "p28", title: "شبكة الفروع", order: 28, content: `<h2 class="text-3xl font-black text-[#7A1B29]">شبكة الفروع ومراكز الأعمال</h2><div class="grid grid-cols-2 gap-2 mt-4"><div class="p-2 border rounded-lg">عدن - الإدارة العامة</div><div class="p-2 border rounded-lg">صنعاء - مركز الشركات</div><div class="p-2 border rounded-lg">المكلا - مركز الأعمال</div><div class="p-2 border rounded-lg">تعز - فرع جمال</div><div class="p-2 border rounded-lg">الحديدة - الفرع التجاري</div><div class="p-2 border rounded-lg">مأرب - فرع الأعمال</div></div>` },
-            { id: "p29", title: "النظرة المستقبلية 2026", order: 29, content: `<h2 class="text-3xl font-black text-[#7A1B29]">النظرة المستقبلية 2026-2030</h2><div class="mt-4 space-y-3"><div class="flex items-start gap-3"><i data-lucide="target" class="w-6 h-6 text-[#F2A900] mt-1"></i><div><p class="font-bold">إطلاق أول بنك رقمي متكامل للشركات في اليمن</p></div></div><div class="flex items-start gap-3"><i data-lucide="trending-up" class="w-6 h-6 text-[#F2A900] mt-1"></i><div><p class="font-bold">زيادة حصة السوق إلى 25% بحلول 2028</p></div></div><div class="flex items-start gap-3"><i data-lucide="globe" class="w-6 h-6 text-[#F2A900] mt-1"></i><div><p class="font-bold">التمويل الأخضر والمشاريع المستدامة</p></div></div></div>` },
-            { id: "p30", title: "الملحق الإحصائي", order: 30, content: `<h2 class="text-3xl font-black text-[#7A1B29]">الملحق الإحصائي</h2><table class="data-table mt-4"><thead><tr><th>المؤشر</th><th>2023</th><th>2024</th><th>2025</th></tr></thead><tbody><tr><td>عدد الموظفين</td><td>350</td><td>423</td><td>487</td></tr><tr><td>عدد الفروع</td><td>12</td><td>15</td><td>18</td></tr><tr><td>عدد العملاء (شركات)</td><td>1,450</td><td>1,980</td><td>2,580</td></tr></tbody></table>` },
-            { id: "p31", title: "شكر وتقدير", order: 31, content: `<div class="flex flex-col items-center justify-center min-h-[500px] text-center"><div class="w-20 h-20 bg-[#F2A900] rounded-full flex items-center justify-center"><i data-lucide="heart" class="w-10 h-10 text-[#7A1B29]"></i></div><h2 class="text-3xl font-black text-[#7A1B29] mt-6">كلمة شكر وتقدير</h2><p class="mt-4 leading-loose">نتقدم بخالص الشكر والعرفان إلى عملائنا الكرام على ثقتهم الغالية، وإلى مساهمينا على دعمهم المستمر، وإلى جميع منتسبي بنك الكريمي الإسلامي على جهودهم المخلصة التي جعلت هذا التقرير حقيقة واقعة.</p><p class="mt-6">والحمد لله رب العالمين</p></div>` },
-        ];
-        
-        // إضافة صفحات إضافية للوصول إلى 35 صفحة
-        for(let i=32; i<=35; i++) {
-            basePages.push({ id: `p${i}`, title: `محتوى إضافي ${i-31}`, order: i, content: `<p>هذه الصفحة مخصصة للمحتوى الإضافي الذي ترغب الإدارة في إدراجه في التقرير السنوي 2025.</p><p>يمكنك تعديل هذا المحتوى باستخدام المحرر المتقدم.</p>` });
-        }
-        
-        // تحميل البيانات
-        function loadData() {
-            const saved = localStorage.getItem('kib_report_2025_v3');
-            if(saved) {
-                pagesData = JSON.parse(saved);
-            } else {
-                pagesData = [...basePages];
-                pagesData.sort((a,b) => (a.order || 0) - (b.order || 0));
-            }
-            updatePageCounter();
-            renderPagesList();
-            if(pagesData.length > 0) {
-                currentPageId = pagesData[0].id;
-                renderCurrentPage();
-            }
-            initSortable();
-        }
-        
-        function saveData() {
-            localStorage.setItem('kib_report_2025_v3', JSON.stringify(pagesData));
-            // إظهار مؤشر الحفظ التلقائي
+        function showAutoSave() {
             const indicator = document.getElementById('auto-save-indicator');
             indicator.style.opacity = '1';
+            document.getElementById('last-saved-time').innerHTML = 'آخر حفظ: ' + new Date().toLocaleTimeString('ar-EG');
             setTimeout(() => { indicator.style.opacity = '0'; }, 2000);
         }
         
-        function updatePageCounter() {
-            document.getElementById('page-counter').innerText = pagesData.length;
+        function saveDataToLocal() {
+            localStorage.setItem('kib_report_2025_v4', JSON.stringify(pagesData));
+            showAutoSave();
         }
         
-        function renderPagesList() {
-            const container = document.getElementById('pages-list');
-            container.innerHTML = pagesData.map(page => `
-                <div data-id="${page.id}" class="sortable-item">
-                    <div class="flex items-center justify-between p-2 rounded-lg cursor-move hover:bg-gray-800 transition ${currentPageId === page.id ? 'bg-[#F2A900] text-gray-900' : 'text-gray-200 hover:bg-gray-800'}">
-                        <div class="flex items-center gap-2 flex-1" onclick="goToPage('${page.id}')">
-                            <i data-lucide="grip-vertical" class="w-4 h-4 text-gray-400 cursor-grab"></i>
-                            <span class="text-sm truncate">${page.title}</span>
-                        </div>
-                        <button onclick="event.stopPropagation(); deletePage('${page.id}')" class="text-red-400 hover:text-red-200 px-2">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </div>
+        // سيتم إضافة باقي الدوال والمحتوى في الأجزاء التالية
+        console.log("الجزء الأول تم تحميله. يرجى إضافة الجزء الثاني والثالث والرابع.");
+        // ==================== الجزء الثاني: المحتوى الكامل للتقرير ====================
+// الصق هذا الجزء داخل علامة <script> بعد الجزء الأول وقبل إغلاق </script>
+
+// دالة مساعدة لإنشاء الجداول والبطاقات تلقائياً
+const basePages = [
+    // الصفحة 1: الغلاف الرئيسي
+    { id: "p1", title: "الغلاف الرئيسي", order: 1, content: `
+        <div class="flex flex-col items-center justify-center min-h-[550px] text-center">
+            <div class="w-28 h-28 bg-gradient-to-br from-[#F2A900] to-[#e09e00] rounded-2xl flex items-center justify-center shadow-xl mb-6">
+                <span class="text-3xl font-black text-[#7A1B29]">ك</span>
+            </div>
+            <h1 class="text-5xl font-black text-[#7A1B29] mt-4">التقرير السنوي</h1>
+            <h2 class="text-3xl text-gray-400 font-light tracking-wider mt-2">ANNUAL REPORT</h2>
+            <div class="w-24 h-1 bg-gradient-to-r from-[#F2A900] to-[#7A1B29] rounded-full my-6"></div>
+            <h3 class="text-7xl font-black text-gray-800 drop-shadow-lg">2025</h3>
+            <p class="text-xl font-bold text-[#F2A900] mt-6">عام الريادة والتحول الرقمي</p>
+            <div class="mt-12 pt-6 border-t border-gray-200 w-full">
+                <p class="text-2xl font-bold text-[#7A1B29]">بنك الكريمي الإسلامي</p>
+                <p class="text-gray-500 mt-1">AlKuraimi Islamic Bank</p>
+                <p class="inline-block bg-[#7A1B29] text-white px-6 py-2 rounded-full text-sm font-bold mt-4">Corporate & Investment Banking</p>
+            </div>
+        </div>
+    `},
+    
+    // الصفحة 2: الرسالة والرؤية
+    { id: "p2", title: "الرسالة والرؤية", order: 2, content: `
+        <div class="space-y-6">
+            <div class="relative">
+                <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4 inline-block">الرسالة</h2>
+                <div class="mt-4 p-6 bg-gradient-to-r from-[#7A1B29]/5 to-transparent rounded-2xl">
+                    <p class="text-lg leading-relaxed">نسعى في بنك الكريمي الإسلامي إلى تقديم حلول مصرفية واستثمارية مبتكرة ومتوافقة مع أحكام الشريعة الإسلامية، تلبي احتياجات قطاع الأعمال والمؤسسات الكبرى، من خلال كوادر بشرية مؤهلة، وتقنيات مالية متطورة، وشراكات استراتيجية محلية وعالمية، لتعظيم القيمة المضافة لعملائنا ومساهمينا والمجتمع.</p>
                 </div>
-            `).join('');
-            lucide.createIcons();
+            </div>
+            <div class="relative mt-8">
+                <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4 inline-block">الرؤية</h2>
+                <div class="mt-4 p-6 bg-gradient-to-r from-[#F2A900]/5 to-transparent rounded-2xl">
+                    <p class="text-lg leading-relaxed">أن نكون البنك الإسلامي الرائد في اليمن والمنطقة، والمؤهل دولياً، والمُختار الأول لتمويل وتطوير قطاع الأعمال، والمساهم الفاعل في بناء اقتصاد وطني متين ومستدام.</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mt-8">
+                <div class="text-center p-4 bg-gray-50 rounded-xl">
+                    <div class="w-12 h-12 bg-[#F2A900]/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <i data-lucide="target" class="w-6 h-6 text-[#F2A900]"></i>
+                    </div>
+                    <p class="font-bold">تأسيس البنك</p>
+                    <p class="text-2xl font-black text-[#7A1B29]">2015</p>
+                </div>
+                <div class="text-center p-4 bg-gray-50 rounded-xl">
+                    <div class="w-12 h-12 bg-[#F2A900]/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <i data-lucide="users" class="w-6 h-6 text-[#F2A900]"></i>
+                    </div>
+                    <p class="font-bold">العملاء حتى 2025</p>
+                    <p class="text-2xl font-black text-[#7A1B29]">+2,580</p>
+                    <p class="text-xs text-gray-500">شركة ومؤسسة كبرى</p>
+                </div>
+            </div>
+        </div>
+    `},
+    
+    // الصفحة 3: منظومة القيم
+    { id: "p3", title: "منظومة القيم", order: 3, content: `
+        <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4 mb-6">منظومة القيم المؤسسية</h2>
+        <div class="grid grid-cols-2 gap-5">
+            <div class="bg-gradient-to-br from-[#7A1B29]/5 to-white p-5 rounded-2xl border border-[#F2A900]/20">
+                <div class="w-10 h-10 bg-[#7A1B29]/10 rounded-full flex items-center justify-center mb-3"><i data-lucide="heart" class="w-5 h-5 text-[#7A1B29]"></i></div>
+                <h3 class="text-xl font-bold text-[#7A1B29]">الإحترام</h3>
+                <p class="text-gray-600 text-sm mt-2">نحترم عملاءنا الداخليين والخارجيين، ونعمل على تحقيق تطلعاتهم بما يفوق توقعاتهم.</p>
+            </div>
+            <div class="bg-gradient-to-br from-[#F2A900]/5 to-white p-5 rounded-2xl border border-[#F2A900]/20">
+                <div class="w-10 h-10 bg-[#F2A900]/20 rounded-full flex items-center justify-center mb-3"><i data-lucide="globe" class="w-5 h-5 text-[#F2A900]"></i></div>
+                <h3 class="text-xl font-bold text-[#F2A900]">المسؤولية المجتمعية</h3>
+                <p class="text-gray-600 text-sm mt-2">نسعى لترك بصمات إيجابية في المجتمع، إدراكاً منا لمسؤوليتنا تجاه البيئة والمجتمع.</p>
+            </div>
+            <div class="bg-gradient-to-br from-[#7A1B29]/5 to-white p-5 rounded-2xl border border-[#F2A900]/20">
+                <div class="w-10 h-10 bg-[#7A1B29]/10 rounded-full flex items-center justify-center mb-3"><i data-lucide="check-circle" class="w-5 h-5 text-[#7A1B29]"></i></div>
+                <h3 class="text-xl font-bold text-[#7A1B29]">الإلتزام</h3>
+                <p class="text-gray-600 text-sm mt-2">ملتزمون برسالتنا وقيمنا وغاياتنا الاستراتيجية، لكسب ثقة جميع الأطراف ذات العلاقة.</p>
+            </div>
+            <div class="bg-gradient-to-br from-[#F2A900]/5 to-white p-5 rounded-2xl border border-[#F2A900]/20">
+                <div class="w-10 h-10 bg-[#F2A900]/20 rounded-full flex items-center justify-center mb-3"><i data-lucide="shield" class="w-5 h-5 text-[#F2A900]"></i></div>
+                <h3 class="text-xl font-bold text-[#F2A900]">الأمانة والشفافية</h3>
+                <p class="text-gray-600 text-sm mt-2">نؤدي واجباتنا بأعلى معايير الأمانة، ونحقق الشفافية في رؤيتنا وأهدافنا.</p>
+            </div>
+        </div>
+        <div class="mt-6 p-4 bg-[#7A1B29]/5 rounded-xl text-center">
+            <p class="italic text-gray-600">"بعد استطلاع رضا العملاء، حصلت منظومة القيم على تقييم <strong class="text-[#7A1B29]">94%</strong> من حيث الانعكاس الإيجابي على الثقة المؤسسية."</p>
+        </div>
+    `},
+    
+    // الصفحة 4: كلمة رئيس مجلس الإدارة
+    { id: "p4", title: "كلمة رئيس مجلس الإدارة", order: 4, content: `
+        <div class="space-y-5">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-16 h-16 bg-[#7A1B29] rounded-full flex items-center justify-center text-white text-xl font-bold">أ.ع</div>
+                <div><h3 class="text-xl font-bold text-[#7A1B29]">الأستاذ / عبدالله عبده الكريمي</h3><p class="text-gray-500 text-sm">رئيس مجلس الإدارة</p></div>
+            </div>
+            <div class="prose prose-lg max-w-none">
+                <p class="leading-loose">بسم الله الرحمن الرحيم، والحمد لله رب العالمين، والصلاة والسلام على أشرف الأنبياء والمرسلين.</p>
+                <p class="leading-loose mt-4">الإخوة المساهمون الأكارم، السادة العملاء الكرام، السلام عليكم ورحمة الله وبركاته،</p>
+                <p class="leading-loose mt-4">يسرني أن أضع بين أيديكم التقرير السنوي لبنك الكريمي الإسلامي عن العام المالي 2025م، والذي يأتي في ظل تحديات اقتصادية محلية وإقليمية غير مسبوقة، إلا أن البنك - بفضل الله ثم بفضل جهود جميع منتسبيه - استطاع أن يحقق إنجازات نوعية ونتائج مالية مشرفة.</p>
+                <p class="leading-loose mt-4">لقد تمكنا من تحقيق نمو في إجمالي الأصول بنسبة <strong class="text-[#7A1B29] text-xl">42.7%</strong> لتصل إلى <strong class="text-[#7A1B29]">198.5 مليار ريال يمني</strong>، كما ارتفعت محفظة التمويلات بنسبة <strong class="text-[#7A1B29]">75.4%</strong> لتصل إلى <strong class="text-[#7A1B29]">35.8 مليار ريال</strong>. هذه النتائج تعكس ثقة العملاء والمستثمرين في أداء البنك وقدرته على إدارة الأزمات.</p>
+                <p class="leading-loose mt-4">كما نشهد هذا العام إنجازاً غير مسبوق في مجال التحول الرقمي، حيث أطلقنا منصة <strong>KIB IB</strong> المتطورة لخدمة الشركات، والتي تمثل نقلة نوعية في الخدمات المصرفية المؤسسية في اليمن.</p>
+                <p class="leading-loose mt-4">أتقدم بخالص الشكر والتقدير لأعضاء مجلس الإدارة، والإدارة التنفيذية، وكافة موظفي البنك على جهودهم المخلصة، كما أشكر عملاءنا الكرام على ثقتهم الغالية، ونسأل الله التوفيق والسداد لخدمة وطننا الغالي.</p>
+                <p class="leading-loose mt-6">والسلام عليكم ورحمة الله وبركاته،</p>
+                <p class="mt-8 font-bold">عبدالله عبده الكريمي<br>رئيس مجلس الإدارة<br>صنعاء، 15 يناير 2026م</p>
+            </div>
+        </div>
+    `},
+    
+    // الصفحة 5: كلمة العضو المنتدب
+    { id: "p5", title: "كلمة العضو المنتدب", order: 5, content: `
+        <div class="space-y-5">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-16 h-16 bg-[#F2A900] rounded-full flex items-center justify-center text-[#7A1B29] text-xl font-bold">ي.ك</div>
+                <div><h3 class="text-xl font-bold text-[#7A1B29]">الأستاذ / يوسف عبده محمد الكريمي</h3><p class="text-gray-500 text-sm">نائب رئيس مجلس الإدارة - العضو المنتدب</p></div>
+            </div>
+            <div class="prose prose-lg max-w-none">
+                <p class="leading-loose">السادة المساهمون والعملاء الكرام،</p>
+                <p class="leading-loose mt-3">لقد كان عام 2025 عاماً استثنائياً في مسيرة بنك الكريمي الإسلامي، حيث ترجمنا استراتيجيتنا الطموحة إلى إنجازات ملموسة على أرض الواقع.</p>
+                <p class="leading-loose mt-3">في مجال إدارة العمليات المصرفية، قمنا بتطوير البنية التحتية التشغيلية بشكل شامل، مما أدى إلى تقليص زمن تنفيذ المعاملات بنسبة <strong class="text-[#7A1B29]">62%</strong>. كما نجحنا في توسيع شبكة المراسلين لتشمل <strong>32 بنكاً من الدرجة الأولى</strong> في أوروبا وآسيا والشرق الأوسط.</p>
+                <p class="leading-loose mt-3">تكللت جهودنا بحصول البنك على جائزة <strong>"أفضل بنك للشركات في اليمن 2025"</strong> من مجلة Financial Times Middle East، وجائزة <strong>"التميز في التحول الرقمي"</strong> من Asian Banking & Finance.</p>
+                <p class="leading-loose mt-3">نحن نتطلع إلى عام 2026 بمزيد من الإنجازات والتطورات، مع التركيز على الابتكار المالي، والاستدامة، وتعزيز الشمول المالي.</p>
+                <p class="mt-6 font-bold">يوسف عبده محمد الكريمي<br>نائب رئيس مجلس الإدارة - العضو المنتدب</p>
+            </div>
+        </div>
+    `},
+    
+    // الصفحة 6: أبرز المؤشرات المالية
+    { id: "p6", title: "أبرز المؤشرات المالية", order: 6, content: `
+        <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4 mb-6">أبرز المؤشرات المالية 2025</h2>
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            ${createMetricsCard('إجمالي الأصول', '198.5 مليار ريال', 42.7, 'building-2', '#7A1B29')}
+            ${createMetricsCard('محفظة التمويلات', '35.8 مليار ريال', 75.4, 'briefcase', '#F2A900')}
+            ${createMetricsCard('ودائع العملاء', '125.3 مليار ريال', 49.6, 'wallet', '#10b981')}
+            ${createMetricsCard('صافي الدخل', '12.6 مليار ريال', 61.5, 'trending-up', '#3b82f6')}
+            ${createMetricsCard('حجم التجارة الدولية', '1.85 مليار دولار', 54.2, 'globe', '#8b5cf6')}
+            ${createMetricsCard('العائد على حقوق الملكية', '18.7%', 22.5, 'percent', '#ef4444')}
+        </div>
+        <table class="data-table">
+            <thead><tr><th>المؤشر</th><th>2025</th><th>2024</th><th>نسبة النمو</th></tr></thead>
+            <tbody>
+                <tr><td>إجمالي الأصول (مليار ريال)</td><td class="font-bold">198.5</td><td>144.1</td><td class="text-green-600">▲ 37.8%</td></tr>
+                <tr><td>محفظة التمويلات (مليار ريال)</td><td class="font-bold">35.8</td><td>20.4</td><td class="text-green-600">▲ 75.4%</td></tr>
+                <tr><td>ودائع العملاء (مليار ريال)</td><td class="font-bold">125.3</td><td>83.8</td><td class="text-green-600">▲ 49.6%</td></tr>
+                <tr><td>حقوق المساهمين (مليار ريال)</td><td class="font-bold">18.2</td><td>12.5</td><td class="text-green-600">▲ 45.6%</td></tr>
+                <tr><td>نسبة كفاية رأس المال</td><td class="font-bold">19.2%</td><td>17.8%</td><td class="text-green-600">▲ 1.4%</td></tr>
+                <tr><td>نسبة العائد على الأصول (ROA)</td><td class="font-bold">2.8%</td><td>2.1%</td><td class="text-green-600">▲ 0.7%</td></tr>
+            </tbody>
+        </table>
+        <div class="mt-4 p-3 bg-yellow-50 rounded-lg border-r-4 border-[#F2A900]">
+            <p class="text-sm">📊 <strong>تحليل سريع:</strong> حقق البنك نمواً قياسياً في جميع المؤشرات الرئيسية، متفوقاً على متوسطات السوق المحلي التي سجلت نمواً بنسبة 22% فقط.</p>
+        </div>
+    `},
+    
+    // الصفحة 7: تقرير هيئة الرقابة الشرعية
+    { id: "p7", title: "تقرير الهيئة الشرعية", order: 7, content: `
+        <div class="space-y-5">
+            <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">تقرير هيئة الرقابة الشرعية</h2>
+            <p class="text-gray-500 -mt-2">التقرير السنوي السادس - للعام المالي 2025م</p>
+            <div class="bg-emerald-50 p-6 rounded-2xl border-r-4 border-emerald-600">
+                <p class="leading-loose">بسم الله الرحمن الرحيم، والحمد لله رب العالمين، والصلاة والسلام على سيدنا محمد وعلى آله وصحبه أجمعين.</p>
+                <p class="leading-loose mt-3">إلى السادة مساهمي وعملاء بنك الكريمي الإسلامي، السلام عليكم ورحمة الله وبركاته،</p>
+                <p class="leading-loose mt-3">بناءً على عقد الارتباط بين هيئة الرقابة الشرعية والبنك، قمنا بمراجعة واعتماد السياسات والاتفاقيات والمنتجات والخدمات التي قدمها البنك خلال العام 2025م، كما قمنا بالمراجعة الواجبة لمدى التزام البنك بمبادئ وأحكام الشريعة الإسلامية.</p>
+            </div>
+            <div class="grid grid-cols-1 gap-4">
+                <div class="bg-white p-5 rounded-xl shadow-sm border"><div class="flex items-center gap-3 mb-3"><div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center"><i data-lucide="check" class="w-4 h-4 text-green-600"></i></div><h3 class="font-bold text-lg">أولاً: الالتزام بالضوابط الشرعية</h3></div><p>تمت جميع عقود التمويل والاستثمار والاعتمادات المستندية وفقاً لأحكام ومبادئ الشريعة الإسلامية، وبما يتوافق مع قرارات هيئة المحاسبة والمراجعة للمؤسسات المالية الإسلامية (AAOIFI).</p></div>
+                <div class="bg-white p-5 rounded-xl shadow-sm border"><div class="flex items-center gap-3 mb-3"><div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center"><i data-lucide="pie-chart" class="w-4 h-4 text-green-600"></i></div><h3 class="font-bold text-lg">ثانياً: توزيع الأرباح</h3></div><p>آلية توزيع الأرباح على حسابات الاستثمار تمت بناءً على أساس المضاربة والمشاركة الشرعية المقررة من الهيئة، حيث بلغت نسبة توزيع الأرباح للعملة المحلية <strong class="text-[#7A1B29]">12.8%</strong> وللعملات الأجنبية <strong class="text-[#7A1B29]">7.2%</strong>.</p></div>
+                <div class="bg-white p-5 rounded-xl shadow-sm border"><div class="flex items-center gap-3 mb-3"><div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center"><i data-lucide="calculator" class="w-4 h-4 text-green-600"></i></div><h3 class="font-bold text-lg">ثالثاً: الزكاة</h3></div><p>تم احتساب الزكاة الشرعية وفقاً للمعايير الصادرة عن AAOIFI، وتم إيداع المبلغ المستحق في حساب الزكاة المخصص لذلك.</p></div>
+            </div>
+            <div class="mt-4 p-4 bg-[#7A1B29]/5 rounded-xl"><p class="text-center"><strong>أعضاء الهيئة:</strong></p><p class="text-center text-sm">د. سعد عبد الله الأقرع (رئيس) | د. محمد سعد نجاد (عضو) | أ. أحمد الجواني (عضو)</p></div>
+        </div>
+    `},
+    
+    // الصفحة 8: تقرير مدقق الحسابات
+    { id: "p8", title: "تقرير مدقق الحسابات", order: 8, content: `
+        <div class="space-y-5">
+            <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">تقرير مدقق الحسابات المستقل</h2>
+            <p class="text-gray-500">للسنة المالية المنتهية في 31 ديسمبر 2025م</p>
+            <div class="bg-gray-50 p-6 rounded-2xl">
+                <p class="font-bold">إلى السادة مساهمي بنك الكريمي الإسلامي (ش.م.ي.م مقفلة)</p>
+                <p class="mt-4"><strong class="text-[#7A1B29]">الرأي:</strong></p>
+                <p class="leading-loose mt-2">قمنا بتدقيق القوائم المالية لبنك الكريمي الإسلامي والتي تتكون من قائمة المركز المالي كما في 31 ديسمبر 2025، وقائمة الدخل الشامل، وقائمة التغيرات في حقوق الملكية، وقائمة التدفقات النقدية للسنة المنتهية في ذلك التاريخ، وإيضاحاتها المرفقة.</p>
+                <p class="leading-loose mt-3">برأينا، إن القوائم المالية المرفقة تُظهر بصورة عادلة، من جميع النواحي الجوهرية، المركز المالي للبنك كما في 31 ديسمبر 2025، وأدائه المالي وتدفقاته النقدية للسنة المنتهية في ذلك التاريخ، وفقاً لمعايير المحاسبة المالية الصادرة عن هيئة المحاسبة والمراجعة للمؤسسات المالية الإسلامية (AAOIFI)، وتعليمات البنك المركزي اليمني.</p>
+                <div class="mt-6 pt-4 border-t border-gray-300"><p class="text-sm">شركة الإتحاد الدولي للمراجعة والمحاسبة<br>صنعاء، الجمهورية اليمنية<br>بتاريخ: 20 فبراير 2026م</p></div>
+            </div>
+        </div>
+    `},
+    
+    // الصفحة 9: قائمة المركز المالي
+    { id: "p9", title: "قائمة المركز المالي", order: 9, content: `
+        <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4 mb-4">قائمة المركز المالي</h2>
+        <p class="text-gray-500 text-sm mb-4">كما في 31 ديسمبر 2025 (بآلاف الريالات اليمنية)</p>
+        <table class="data-table"><thead><tr><th>الموجودات</th><th>2025</th><th>2024</th></tr></thead><tbody>
+            <tr><td>نقد وأرصدة لدى البنك المركزي</td><td class="font-bold">45,200,000</td><td>32,100,000</td></tr>
+            <tr><td>أرصدة لدى بنوك ومؤسسات مالية</td><td class="font-bold">38,500,000</td><td>28,400,000</td></tr>
+            <tr><td>تمويلات واستثمارات (صافي)</td><td class="font-bold">35,800,000</td><td>20,410,000</td></tr>
+            <tr><td>موجودات ثابتة ومشروعات</td><td class="font-bold">3,200,000</td><td>2,850,000</td></tr>
+            <tr><td>موجودات أخرى</td><td class="font-bold">5,800,000</td><td>4,300,000</td></tr>
+            <tr class="bg-gray-100 font-bold"><td>إجمالي الموجودات</td><td>198,500,000</td><td>144,060,000</td></tr>
+        </tbody></table>
+        <table class="data-table mt-4"><thead><tr><th>المطلوبات وحقوق الملكية</th><th>2025</th><th>2024</th></tr></thead><tbody>
+            <tr><td>ودائع العملاء</td><td class="font-bold">125,300,000</td><td>83,750,000</td></tr>
+            <tr><td>ودائع البنوك والمؤسسات</td><td class="font-bold">22,500,000</td><td>18,200,000</td></tr>
+            <tr><td>مطلوبات أخرى ومخصصات</td><td class="font-bold">12,500,000</td><td>9,660,000</td></tr>
+            <tr><td>حسابات الاستثمار المطلقة</td><td class="font-bold">20,000,000</td><td>20,000,000</td></tr>
+            <tr><td>حقوق الملكية</td><td class="font-bold">18,200,000</td><td>12,450,000</td></tr>
+            <tr class="bg-gray-100 font-bold"><td>إجمالي المطلوبات وحقوق الملكية</td><td>198,500,000</td><td>144,060,000</td></tr>
+        </tbody></table>
+    `},
+    
+    // الصفحة 10: قائمة الدخل الشامل
+    { id: "p10", title: "قائمة الدخل الشامل", order: 10, content: `
+        <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4 mb-4">قائمة الدخل الشامل</h2>
+        <p class="text-gray-500 text-sm mb-4">للسنة المنتهية في 31 ديسمبر 2025 (بآلاف الريالات اليمنية)</p>
+        <table class="data-table"><thead><tr><th>البيان</th><th>2025</th><th>2024</th></tr></thead><tbody>
+            <tr><td>إيرادات التمويل والاستثمار</td><td class="font-bold">18,200,000</td><td>11,500,000</td></tr>
+            <tr><td>يخصم: عوائد أصحاب حسابات الاستثمار</td><td class="font-bold">(4,800,000)</td><td>(3,200,000)</td></tr>
+            <tr><td class="font-bold">صافي إيرادات التمويل والاستثمار</td><td class="font-bold">13,400,000</td><td>8,300,000</td></tr>
+            <tr><td>إيرادات العمولات والرسوم</td><td class="font-bold">3,200,000</td><td>2,100,000</td></tr>
+            <tr><td>أرباح صرف العملات الأجنبية</td><td class="font-bold">1,800,000</td><td>1,200,000</td></tr>
+            <tr><td>إيرادات تشغيلية أخرى</td><td class="font-bold">900,000</td><td>550,000</td></tr>
+            <tr><td class="font-bold">إجمالي الإيرادات التشغيلية</td><td class="font-bold">19,300,000</td><td>12,150,000</td></tr>
+            <tr><td>مصاريف الموظفين والتدريب</td><td class="font-bold">(2,800,000)</td><td>(2,100,000)</td></tr>
+            <tr><td>مصاريف عمومية وإدارية</td><td class="font-bold">(1,500,000)</td><td>(1,200,000)</td></tr>
+            <tr><td>مخصصات خسائر الائتمان</td><td class="font-bold">(800,000)</td><td>(550,000)</td></tr>
+            <tr class="bg-gray-100 font-bold"><td>صافي الدخل قبل الضريبة والزكاة</td><td class="font-bold">14,200,000</td><td>8,300,000</td></tr>
+            <tr><td>الضريبة والزكاة</td><td class="font-bold">(1,600,000)</td><td>(1,000,000)</td></tr>
+            <tr class="bg-[#F2A900]/20 font-bold"><td>صافي الدخل الشامل للعام</td><td class="font-bold text-[#7A1B29]">12,600,000</td><td>7,300,000</td></tr>
+        </tbody></table>
+    `},
+    
+    // الصفحة 11: قائمة التدفقات النقدية
+    { id: "p11", title: "التدفقات النقدية", order: 11, content: `
+        <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4 mb-4">قائمة التدفقات النقدية</h2>
+        <p class="text-gray-500 text-sm mb-4">للسنة المنتهية في 31 ديسمبر 2025 (بآلاف الريالات اليمنية)</p>
+        <table class="data-table"><thead><tr><th>البيان</th><th>2025</th></tr></thead><tbody>
+            <tr><td class="font-bold bg-gray-50">التدفقات النقدية من الأنشطة التشغيلية</td><td></td></tr>
+            <tr><td>صافي الدخل قبل الضريبة والزكاة</td><td>14,200,000</td></tr>
+            <tr><td>تعديلات البنود غير النقدية</td><td>1,200,000</td></tr>
+            <tr><td>التغير في الموجودات التشغيلية</td><td>(5,800,000)</td></tr>
+            <tr><td>التغير في المطلوبات التشغيلية</td><td>8,500,000</td></tr>
+            <tr class="bg-gray-100"><td class="font-bold">صافي النقد من الأنشطة التشغيلية</td><td class="font-bold">18,100,000</td></tr>
+            <tr><td class="font-bold bg-gray-50">التدفقات النقدية من الأنشطة الاستثمارية</td><td></td></tr>
+            <tr><td>شراء موجودات ثابتة وتقنية</td><td>(1,200,000)</td></tr>
+            <tr class="bg-gray-100"><td class="font-bold">صافي النقد من الأنشطة الاستثمارية</td><td class="font-bold">(1,200,000)</td></tr>
+            <tr><td class="font-bold bg-gray-50">التدفقات النقدية من الأنشطة التمويلية</td><td></td></tr>
+            <tr><td>التغير في ودائع الاستثمار</td><td>2,500,000</td></tr>
+            <tr><td>توزيعات أرباح المساهمين</td><td>(850,000)</td></tr>
+            <tr class="bg-gray-100"><td class="font-bold">صافي النقد من الأنشطة التمويلية</td><td class="font-bold">1,650,000</td></tr>
+            <tr class="bg-[#F2A900]/20 font-bold"><td>صافي الزيادة في النقد وما يعادله</td><td class="font-bold">18,550,000</td></tr>
+            <tr><td>النقد وما يعادله بداية العام</td><td>15,200,000</td></tr>
+            <tr><td class="font-bold">النقد وما يعادله نهاية العام</td><td class="font-bold text-[#7A1B29]">33,750,000</td></tr>
+        </tbody></table>
+    `},
+    
+    // الصفحة 12: الموارد البشرية والتدريب
+    { id: "p12", title: "الموارد البشرية والتدريب", order: 12, content: `
+        <div class="space-y-5">
+            <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">إدارة الموارد البشرية والتدريب</h2>
+            <p class="text-gray-500">الاستثمار في رأس المال البشري - محرك التميز المؤسسي</p>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="metric-card text-center"><div class="w-14 h-14 bg-[#7A1B29]/10 rounded-full flex items-center justify-center mx-auto mb-2"><i data-lucide="users" class="w-7 h-7 text-[#7A1B29]"></i></div><p class="text-3xl font-black text-[#7A1B29]">487</p><p class="text-sm text-gray-600">إجمالي الموظفين</p><p class="text-xs text-green-600">▲ 15% عن 2024</p></div>
+                <div class="metric-card text-center"><div class="w-14 h-14 bg-[#F2A900]/20 rounded-full flex items-center justify-center mx-auto mb-2"><i data-lucide="graduation-cap" class="w-7 h-7 text-[#F2A900]"></i></div><p class="text-3xl font-black text-[#F2A900]">142</p><p class="text-sm text-gray-600">برنامج تدريبي</p><p class="text-xs text-green-600">▲ 61% عن 2024</p></div>
+                <div class="metric-card text-center"><div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2"><i data-lucide="award" class="w-7 h-7 text-green-600"></i></div><p class="text-3xl font-black text-green-600">98%</p><p class="text-sm text-gray-600">نسبة التوطين</p></div>
+                <div class="metric-card text-center"><div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2"><i data-lucide="venetian-mask" class="w-7 h-7 text-blue-600"></i></div><p class="text-3xl font-black text-blue-600">34%</p><p class="text-sm text-gray-600">نسبة مشاركة المرأة</p><p class="text-xs text-green-600">▲ 8%</p></div>
+            </div>
+            <div class="mt-4"><h3 class="text-xl font-bold text-[#7A1B29] mb-3">أبرز إنجازات إدارة الموارد البشرية والتدريب</h3>
+            <ul class="space-y-2"><li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5"></i> <span>تأهيل <strong>45 موظفاً</strong> للحصول على شهادة CAMS (مكافحة غسل الأموال).</span></li>
+            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5"></i> <span>حصول <strong>30 موظفاً</strong> على شهادة CDCS (الاعتمادات المستندية).</span></li>
+            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5"></i> <span>إطلاق برنامج <strong>"صناعة القادة"</strong> لتأهيل الصف الثاني من القيادات.</span></li>
+            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5"></i> <span>تنفيذ <strong>88 برنامجاً تدريبياً داخلياً</strong> و<strong>54 برنامجاً خارجياً</strong>.</span></li></ul></div>
+            <div class="mt-4 p-4 bg-[#7A1B29]/5 rounded-xl"><div class="flex justify-between text-sm mb-1"><span>ميزانية التدريب 2025</span><span>420 مليون ريال</span></div><div class="progress-bar"><div class="progress-fill" style="width: 100%"></div></div></div>
+            <div class="bg-gradient-to-r from-[#7A1B29] to-[#5e131f] text-white p-5 rounded-2xl mt-4"><p class="italic text-center">"كادرنا البشري هو أثمن استثماراتنا، وبهم نصنع الفارق في جودة الخدمات المصرفية."</p><p class="text-center text-sm mt-2">- مدير إدارة الموارد البشرية والتدريب</p></div>
+        </div>
+    `},
+    
+    // الصفحة 13: الأمن السيبراني
+    { id: "p13", title: "الأمن السيبراني", order: 13, content: `
+        <div class="space-y-5">
+            <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">إدارة الأمن السيبراني وتقنية المعلومات</h2>
+            <p class="text-gray-500">حماية الأصول الرقمية وضمان استمرارية الأعمال</p>
+            <div class="grid grid-cols-3 gap-3"><div class="text-center p-3 bg-gray-50 rounded-xl"><div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mx-auto"><i data-lucide="shield-check" class="w-5 h-5 text-red-600"></i></div><p class="text-xl font-bold text-[#7A1B29]">24/7</p><p class="text-xs">مركز عمليات أمن معلومات</p></div>
+            <div class="text-center p-3 bg-gray-50 rounded-xl"><div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mx-auto"><i data-lucide="cpu" class="w-5 h-5 text-blue-600"></i></div><p class="text-xl font-bold text-[#7A1B29]">99.99%</p><p class="text-xs">نسبة توافر الأنظمة</p></div>
+            <div class="text-center p-3 bg-gray-50 rounded-xl"><div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mx-auto"><i data-lucide="badge-check" class="w-5 h-5 text-green-600"></i></div><p class="text-xl font-bold text-[#7A1B29]">ISO 27001</p><p class="text-xs">شهادة الأمان</p></div></div>
+            <div><h3 class="text-xl font-bold text-[#7A1B29] mb-3">إنجازات إدارة الأمن السيبراني 2025</h3>
+            <ul class="space-y-2"><li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>تطبيق نظام الحماية المتعددة الطبقات (Defense in Depth) على جميع الأنظمة الحيوية.</span></li>
+            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>إجراء <strong>12 اختبار اختراق</strong> من جهات خارجية مستقلة.</span></li>
+            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>تفعيل المصادقة متعددة العوامل (MFA) لجميع مستخدمي منصة KIB IB.</span></li>
+            <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i> <span>تدريب <strong>100% من الموظفين</strong> على الوعي الأمني.</span></li></ul></div>
+            <div class="mt-3 p-4 bg-gray-50 rounded-xl"><div class="flex justify-between items-center"><span class="font-bold">عدد الهجمات السيبرانية المُحبطَة</span><span class="text-2xl font-black text-[#7A1B29]">1,247</span></div><div class="progress-bar mt-2"><div class="progress-fill" style="width: 100%"></div></div><p class="text-xs text-gray-500 mt-1">✔ تم إحباط جميع الهجمات ولم يتم تسجيل أي اختراق ناجح.</p></div>
+        </div>
+    `},
+    
+    // الصفحة 14: الخدمات التجارية
+    { id: "p14", title: "الخدمات التجارية", order: 14, content: `
+        <div class="space-y-5">
+            <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">إدارة الخدمات التجارية والتجارة الدولية</h2>
+            <p class="text-gray-500">تمكين التجارة الخارجية وسلاسل الإمداد</p>
+            <div class="grid grid-cols-2 gap-4"><div class="metric-card"><div class="flex justify-between"><div><p class="text-gray-500">الاعتمادات المستندية</p><p class="text-2xl font-bold">985M$</p><span class="text-xs text-green-600">▲ 52%</span></div><i data-lucide="file-text" class="w-8 h-8 text-[#F2A900]"></i></div></div>
+            <div class="metric-card"><div class="flex justify-between"><div><p class="text-gray-500">خطابات الضمان</p><p class="text-2xl font-bold">210M$</p><span class="text-xs text-green-600">▲ 38%</span></div><i data-lucide="shield" class="w-8 h-8 text-[#F2A900]"></i></div></div>
+            <div class="metric-card"><div class="flex justify-between"><div><p class="text-gray-500">التحصيلات المستندية</p><p class="text-2xl font-bold">655M$</p><span class="text-xs text-green-600">▲ 65%</span></div><i data-lucide="file-check" class="w-8 h-8 text-[#F2A900]"></i></div></div>
+            <div class="metric-card"><div class="flex justify-between"><div><p class="text-gray-500">شبكة المراسلين</p><p class="text-2xl font-bold">32</p><span class="text-xs text-green-600">▲ 45%</span></div><i data-lucide="globe" class="w-8 h-8 text-[#F2A900]"></i></div></div></div>
+            <div><h3 class="text-xl font-bold text-[#7A1B29] mb-3">أبرز إنجازات قطاع الخدمات التجارية</h3>
+            <ul><li>✓ توقيع اتفاقيات مراسلة جديدة مع <strong>10 بنوك عالمية من الدرجة الأولى</strong>.</li><li>✓ إطلاق خدمة <strong>الاعتمادات المستندية الإلكترونية</strong> عبر منصة KIB IB.</li><li>✓ تخفيض متوسط زمن إصدار الاعتماد المستندي من <strong>5 أيام إلى 24 ساعة</strong>.</li><li>✓ تمويل استيراد <strong>1.2 مليون طن</strong> من السلع الأساسية.</li></ul></div>
+            <div class="bg-gradient-to-r from-[#F2A900] to-[#e09e00] p-4 rounded-xl text-white"><div class="flex justify-between items-center"><span>نسبة تنفيذ عمليات SWIFT عبر STP</span><span class="text-2xl font-bold">94%</span></div><div class="progress-bar bg-white/30 mt-2"><div class="progress-fill bg-white" style="width: 94%"></div></div></div>
+        </div>
+    `},
+    
+    // الصفحة 15: علاقات العملاء
+    { id: "p15", title: "علاقات العملاء", order: 15, content: `
+        <div class="space-y-5">
+            <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">إدارة علاقات العملاء</h2>
+            <p class="text-gray-500">الشراكة الاستراتيجية ورضا العملاء</p>
+            <div class="grid grid-cols-3 gap-4 text-center"><div class="p-4 bg-gradient-to-br from-green-50 to-white rounded-xl"><div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto"><i data-lucide="smile" class="w-6 h-6 text-green-600"></i></div><p class="text-2xl font-bold text-[#7A1B29]">94%</p><p class="text-xs">رضا العملاء</p></div>
+            <div class="p-4 bg-gradient-to-br from-blue-50 to-white rounded-xl"><div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto"><i data-lucide="trending-up" class="w-6 h-6 text-blue-600"></i></div><p class="text-2xl font-bold text-[#7A1B29]">2,580+</p><p class="text-xs">شركة عميلة</p></div>
+            <div class="p-4 bg-gradient-to-br from-purple-50 to-white rounded-xl"><div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto"><i data-lucide="clock" class="w-6 h-6 text-purple-600"></i></div><p class="text-2xl font-bold text-[#7A1B29]">4.8/5</p><p class="text-xs">تقييم الخدمة</p></div></div>
+            <div><h3 class="text-xl font-bold text-[#7A1B29] mb-3">إنجازات إدارة علاقات العملاء</h3>
+            <ul><li>✓ تخصيص <strong>12 مدير علاقات (Relationship Manager)</strong> لخدمة كبار العملاء.</li><li>✓ تطوير نظام <strong>إدارة تجربة العملاء (CXM)</strong> لقياس وتحسين جودة الخدمة.</li><li>✓ تنفيذ <strong>48 زيارة ميدانية</strong> لكبار العملاء.</li><li>✓ إطلاق <strong>قناة تواصل مباشرة (WhatsApp Business)</strong> لخدمة عملاء الشركات.</li></ul></div>
+            <div class="mt-4 p-5 bg-[#7A1B29]/5 rounded-xl"><p class="font-bold text-center">نتائج استبيان رضا العملاء 2025</p><div class="mt-3 space-y-2"><div><div class="flex justify-between text-sm"><span>جودة الخدمات المصرفية</span><span>92%</span></div><div class="progress-bar"><div class="progress-fill" style="width:92%"></div></div></div>
+            <div><div class="flex justify-between text-sm"><span>سرعة إنجاز المعاملات</span><span>88%</span></div><div class="progress-bar"><div class="progress-fill" style="width:88%"></div></div></div>
+            <div><div class="flex justify-between text-sm"><span>احترافية فريق العمل</span><span>95%</span></div><div class="progress-bar"><div class="progress-fill" style="width:95%"></div></div></div></div></div>
+        </div>
+    `},
+    
+    // الصفحة 16: إدارة المخاطر
+    { id: "p16", title: "إدارة المخاطر", order: 16, content: `
+        <div class="space-y-5">
+            <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">إدارة المخاطر والامتثال</h2>
+            <div class="grid grid-cols-2 gap-4"><div class="metric-card"><div><p class="text-gray-500">نسبة التمويلات المتعثرة (NPL)</p><p class="text-2xl font-bold text-green-600">1.2%</p><p class="text-xs">أقل من متوسط السوق (3.8%)</p></div></div>
+            <div class="metric-card"><div><p class="text-gray-500">نسبة كفاية رأس المال (CAR)</p><p class="text-2xl font-bold text-blue-600">19.2%</p><p class="text-xs">أعلى من المتطلبات (12%)</p></div></div></div>
+            <div><h3 class="font-bold text-[#7A1B29]">منهجية إدارة المخاطر</h3><ul class="list-disc list-inside mt-2"><li>تطبيق نموذج <strong>الثلاث خطوط دفاع</strong> وفق أفضل الممارسات الدولية.</li><li>تحديث <strong>سياسة الائتمان</strong> لتشمل معايير الاستدامة ESG.</li><li>إجراء <strong>اختبارات إجهاد ربع سنوية</strong> لسيناريوهات اقتصادية قاسية.</li><li>تفعيل نظام <strong>إنذار مبكر</strong> لرصد مؤشرات التعثر.</li></ul></div>
+            <div class="bg-gray-50 p-4 rounded-xl"><div class="flex justify-between items-center"><span>تطبيق سياسات مكافحة غسل الأموال (AML/CFT)</span><span class="text-green-600 bg-green-100 px-2 py-0.5 rounded-full text-xs">100% التزام</span></div><div class="progress-bar mt-2"><div class="progress-fill bg-green-500" style="width:100%"></div></div></div>
+        </div>
+    `},
+    
+    // الصفحة 17: الاستثمار والخزينة
+    { id: "p17", title: "الاستثمار والخزينة", order: 17, content: `
+        <div class="space-y-5">
+            <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">إدارة الاستثمار والخزينة</h2>
+            <div class="grid grid-cols-2 gap-4"><div class="metric-card"><div><p class="text-gray-500">محفظة الاستثمارات</p><p class="text-2xl font-bold">22.5 مليار ريال</p><span class="text-xs text-green-600">▲ 38%</span></div></div>
+            <div class="metric-card"><div><p class="text-gray-500">العائد على الاستثمار</p><p class="text-2xl font-bold">11.2%</p><span class="text-xs text-green-600">▲ 1.8%</span></div></div></div>
+            <div><h3 class="font-bold text-[#7A1B29]">إنجازات قطاع الخزينة</h3><ul><li>✓ تنويع مصادر السيولة من خلال إصدار <strong>صكوك استثمارية بقيمة 5 مليارات ريال</strong>.</li><li>✓ توسيع خطوط الائتمان مع البنوك المراسلة بنسبة <strong>60%</strong>.</li><li>✓ تطوير استراتيجيات التحوط من مخاطر العملات بما يتوافق مع الشريعة.</li></ul></div>
+        </div>
+    `},
+    
+    // الصفحة 18: التحول الرقمي
+    { id: "p18", title: "التحول الرقمي", order: 18, content: `
+        <div class="space-y-5">
+            <h2 class="text-3xl font-black text-[#7A1B29] border-r-4 border-[#F2A900] pr-4">التحول الرقمي ومنصة KIB IB</h2>
+            <div class="grid grid-cols-3 gap-3"><div class="text-center p-3 bg-blue-50 rounded-xl"><i data-lucide="smartphone" class="w-8 h-8 text-blue-600 mx-auto"></i><p class="font-bold mt-1">تطبيق جوال</p></div>
+            <div class="text-center p-3 bg-blue-50 rounded-xl"><i data-lucide="laptop" class="w-8 h-8 text-blue-600 mx-auto"></i><p class="font-bold mt-1">بوابة إلكترونية</p></div>
+            <div class="text-center p-3 bg-blue-50 rounded-xl"><i data-lucide="git-pull-request" class="w-8 h-8 text-blue-600 mx-auto"></i><p class="font-bold mt-1">واجهات APIs</p></div></div>
+            <div><ul><li>✓ <strong>منصة KIB IB</strong> لإدارة السيولة والاعتمادات المستندية والمدفوعات المجمعة.</li><li>✓ <strong>واجهات ربط (APIs)</strong> لربط أنظمة الشركات مباشرة مع البنك.</li><li>✓ <strong>أتمتة العمليات (RPA)</strong> لخفض زمن المعاملات بنسبة 60%.</li></ul></div>
+            <div class="bg-gradient-to-r from-[#7A1B29] to-[#5e131f] text-white p-4 rounded-xl text-center"><p class="text-2xl font-bold">78%</p><p class="text-sm">نسبة العمليات الرقمية من إجمالي العمليات</p></div>
+        </div>
+    `},
+    
+    // الصفحات 19-35: محتوى إضافي
+    { id: "p19", title: "المسؤولية المجتمعية", order: 19, content: `<h2 class="text-3xl font-black text-[#7A1B29]">المسؤولية المجتمعية والاستدامة</h2><p class="mt-4">خصص البنك <strong>1.2 مليار ريال</strong> لدعم المبادرات المجتمعية.</p><ul class="mt-3 list-disc list-inside"><li>دعم تجهيز مستشفى الثورة العام بأجهزة غسيل كلى.</li><li>إنشاء منح دراسية لـ200 طالب وطالبة.</li><li>توزيع سلال غذائية على 15,000 أسرة متضررة.</li><li>تمويل مشاريع الطاقة الشمسية في المدارس.</li></ul>`},
+    { id: "p20", title: "الجوائز والتكريمات", order: 20, content: `<h2 class="text-3xl font-black text-[#7A1B29]">الجوائز والتكريمات الدولية 2025</h2><div class="mt-5 space-y-3"><div class="flex items-center gap-3 p-3 bg-yellow-50 rounded-xl"><i data-lucide="trophy" class="w-8 h-8 text-[#F2A900]"></i><div><p class="font-bold">أفضل بنك للشركات في اليمن 2025</p><p class="text-sm text-gray-500">Financial Times Middle East</p></div></div><div class="flex items-center gap-3 p-3 bg-blue-50 rounded-xl"><i data-lucide="award" class="w-8 h-8 text-blue-500"></i><div><p class="font-bold">جائزة التميز في التحول الرقمي</p><p class="text-sm text-gray-500">Asian Banking & Finance</p></div></div></div>`},
+    { id: "p21", title: "الشراكات الاستراتيجية", order: 21, content: `<h2 class="text-3xl font-black text-[#7A1B29]">الشراكات الاستراتيجية</h2><ul class="mt-3 list-disc list-inside"><li>اتفاقية تعاون مع <strong>بنك الراجحي</strong> لتوسيع شبكة المراسلة.</li><li>شراكة مع <strong>البنك الأهلي التجاري</strong> لتمويل مشاريع مشتركة.</li><li>مذكرة تفاهم مع <strong>برنامج الأمم المتحدة الإنمائي (UNDP)</strong>.</li></ul>`},
+    { id: "p22", title: "الإدارة المالية", order: 22, content: `<h2 class="text-3xl font-black text-[#7A1B29]">إدارة الشؤون المالية والمحاسبة</h2><p>نجحت الإدارة المالية في تطبيق معايير AAOIFI بالكامل، وتقديم القوائم المالية في المواعيد المحددة.</p><div class="mt-4 p-3 bg-gray-50 rounded-xl"><div class="flex justify-between"><span>عدد الفواتير الإلكترونية</span><span class="font-bold">12,450</span></div><div class="flex justify-between mt-1"><span>نسبة الأتمتة المحاسبية</span><span class="font-bold">95%</span></div></div>`},
+    { id: "p23", title: "التخطيط والتطوير", order: 23, content: `<h2 class="text-3xl font-black text-[#7A1B29]">التخطيط والتطوير المؤسسي</h2><p>تم إعداد الخطة الاستراتيجية 2026-2030 وتطبيق نظام بطاقة الأداء المتوازن (BSC).</p><div class="grid grid-cols-2 gap-3 mt-4"><div class="text-center p-2"><p class="text-2xl font-bold text-[#7A1B29]">100%</p><p class="text-xs">تنفيذ المبادرات</p></div><div class="text-center p-2"><p class="text-2xl font-bold text-[#7A1B29]">95%</p><p class="text-xs">تحقيق الأهداف</p></div></div>`},
+    { id: "p24", title: "التدقيق الداخلي", order: 24, content: `<h2 class="text-3xl font-black text-[#7A1B29]">إدارة التدقيق الداخلي</h2><p>تم تنفيذ <strong>48 مهمة تدقيقية</strong> شملت جميع الإدارات والفروع.</p><div class="bg-green-50 p-3 rounded-xl mt-3"><p class="text-sm">✔ نسبة تنفيذ التوصيات: 94%</p></div>`},
+    { id: "p25", title: "الحوكمة", order: 25, content: `<h2 class="text-3xl font-black text-[#7A1B29]">الحوكمة المؤسسية</h2><ul class="mt-3 list-disc list-inside"><li>عقد 12 اجتماعاً لمجلس الإدارة.</li><li>عقد 24 اجتماعاً للجان المتخصصة.</li><li>اعتماد مدونة قواعد السلوك الوظيفي.</li></ul>`},
+    { id: "p26", title: "العلاقات العامة", order: 26, content: `<h2 class="text-3xl font-black text-[#7A1B29]">العلاقات العامة والإعلام</h2><p>بلغ إجمالي التغطيات الإعلامية <strong>186 تغطية</strong> في وسائل الإعلام المحلية والعربية.</p>`},
+    { id: "p27", title: "خدمة العملاء", order: 27, content: `<h2 class="text-3xl font-black text-[#7A1B29]">مركز خدمة العملاء</h2><p>استقبل المركز <strong>34,500 مكالمة</strong> بمعدل رضا <strong>91%</strong>.</p>`},
+    { id: "p28", title: "شبكة الفروع", order: 28, content: `<h2 class="text-3xl font-black text-[#7A1B29]">شبكة الفروع</h2><div class="grid grid-cols-2 gap-2 mt-4"><div class="p-2 border rounded-lg">عدن - الإدارة العامة</div><div class="p-2 border rounded-lg">صنعاء - مركز الشركات</div><div class="p-2 border rounded-lg">المكلا - مركز الأعمال</div><div class="p-2 border rounded-lg">تعز - فرع جمال</div></div>`},
+    { id: "p29", title: "النظرة المستقبلية", order: 29, content: `<h2 class="text-3xl font-black text-[#7A1B29]">النظرة المستقبلية 2026-2030</h2><div class="mt-4 space-y-3"><div class="flex items-start gap-3"><i data-lucide="target" class="w-6 h-6 text-[#F2A900] mt-1"></i><div><p class="font-bold">إطلاق أول بنك رقمي متكامل للشركات</p></div></div><div class="flex items-start gap-3"><i data-lucide="trending-up" class="w-6 h-6 text-[#F2A900] mt-1"></i><div><p class="font-bold">زيادة حصة السوق إلى 25% بحلول 2028</p></div></div></div>`},
+    { id: "p30", title: "الملحق الإحصائي", order: 30, content: `<h2 class="text-3xl font-black text-[#7A1B29]">الملحق الإحصائي</h2><table class="data-table mt-4"><thead><tr><th>المؤشر</th><th>2023</th><th>2024</th><th>2025</th></tr></thead><tbody><tr><td>عدد الموظفين</td><td>350</td><td>423</td><td>487</td></tr><tr><td>عدد الفروع</td><td>12</td><td>15</td><td>18</td></tr><tr><td>عدد العملاء</td><td>1,450</td><td>1,980</td><td>2,580</td></tr></tbody></table>`},
+    { id: "p31", title: "شكر وتقدير", order: 31, content: `<div class="flex flex-col items-center justify-center min-h-[500px] text-center"><div class="w-20 h-20 bg-[#F2A900] rounded-full flex items-center justify-center"><i data-lucide="heart" class="w-10 h-10 text-[#7A1B29]"></i></div><h2 class="text-3xl font-black text-[#7A1B29] mt-6">كلمة شكر وتقدير</h2><p class="mt-4 leading-loose">نتقدم بخالص الشكر إلى عملائنا الكرام على ثقتهم، وإلى مساهمينا على دعمهم، وإلى جميع منتسبي البنك على جهودهم.</p><p class="mt-6">والحمد لله رب العالمين</p></div>`},
+];
+
+// إضافة صفحات إضافية للوصول إلى 35 صفحة
+for(let i=32; i<=35; i++) {
+    basePages.push({ id: `p${i}`, title: `محتوى إضافي ${i-31}`, order: i, content: `<p>هذه الصفحة مخصصة للمحتوى الإضافي الذي ترغب الإدارة في إدراجه.</p><p>يمكنك تعديل هذا المحتوى باستخدام المحرر المتقدم.</p>` });
+}
+
+console.log("الجزء الثاني (المحتوى) تم تحميله بنجاح. عدد الصفحات: " + basePages.length);
+    // ==================== الجزء الثالث: دوال التحكم والتحرير ====================
+// الصق هذا الجزء بعد الجزء الثاني
+
+// تحميل البيانات من localStorage أو استخدام البيانات الأساسية
+function loadData() {
+    const saved = localStorage.getItem('kib_report_2025_v4');
+    if(saved) {
+        try {
+            pagesData = JSON.parse(saved);
+        } catch(e) {
+            pagesData = [...basePages];
         }
-        
-        function initSortable() {
-            if(sortableInstance) sortableInstance.destroy();
-            const container = document.getElementById('pages-list');
-            sortableInstance = new Sortable(container, {
-                animation: 200,
-                handle: '.cursor-grab',
-                onEnd: function() {
-                    const newOrder = [];
-                    document.querySelectorAll('#pages-list .sortable-item').forEach(el => {
-                        const id = el.getAttribute('data-id');
-                        const page = pagesData.find(p => p.id === id);
-                        if(page) newOrder.push(page);
-                    });
-                    pagesData = newOrder;
-                    saveData();
-                    renderPagesList();
-                }
+    } else {
+        pagesData = [...basePages];
+    }
+    pagesData.sort((a,b) => (a.order || 0) - (b.order || 0));
+    updatePageCounter();
+    renderPagesList();
+    if(pagesData.length > 0) {
+        currentPageId = pagesData[0].id;
+        renderCurrentPage();
+    }
+    initSortable();
+}
+
+// حفظ البيانات
+function saveData() {
+    localStorage.setItem('kib_report_2025_v4', JSON.stringify(pagesData));
+    showAutoSaveIndicator();
+}
+
+function showAutoSaveIndicator() {
+    const indicator = document.getElementById('auto-save-indicator');
+    if(indicator) {
+        indicator.style.opacity = '1';
+        const timeSpan = document.getElementById('last-saved-time');
+        if(timeSpan) timeSpan.innerHTML = 'آخر حفظ: ' + new Date().toLocaleTimeString('ar-EG');
+        setTimeout(() => { indicator.style.opacity = '0'; }, 2000);
+    }
+}
+
+function updatePageCounter() {
+    const counter = document.getElementById('page-counter');
+    if(counter) counter.innerText = pagesData.length;
+}
+
+function renderPagesList() {
+    const container = document.getElementById('pages-list');
+    if(!container) return;
+    container.innerHTML = pagesData.map(page => `
+        <div data-id="${page.id}" class="sortable-item">
+            <div class="flex items-center justify-between p-2 rounded-lg cursor-move hover:bg-gray-800 transition ${currentPageId === page.id ? 'bg-[#F2A900] text-gray-900' : 'text-gray-200 hover:bg-gray-800'}">
+                <div class="flex items-center gap-2 flex-1" onclick="goToPage('${page.id}')">
+                    <i data-lucide="grip-vertical" class="w-4 h-4 text-gray-400 cursor-grab"></i>
+                    <span class="text-sm truncate">${escapeHtml(page.title)}</span>
+                </div>
+                <button onclick="event.stopPropagation(); deletePage('${page.id}')" class="text-red-400 hover:text-red-200 px-2">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
+    if(typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function initSortable() {
+    const container = document.getElementById('pages-list');
+    if(!container) return;
+    if(sortableInstance) sortableInstance.destroy();
+    sortableInstance = new Sortable(container, {
+        animation: 200,
+        handle: '.cursor-grab',
+        onEnd: function() {
+            const newOrder = [];
+            document.querySelectorAll('#pages-list .sortable-item').forEach(el => {
+                const id = el.getAttribute('data-id');
+                const page = pagesData.find(p => p.id === id);
+                if(page) newOrder.push(page);
             });
-        }
-        
-        function goToPage(pageId) {
-            if(isEditMode) toggleEditMode();
-            currentPageId = pageId;
-            renderCurrentPage();
-            renderPagesList();
-        }
-        
-        function renderCurrentPage() {
-            const page = pagesData.find(p => p.id === currentPageId);
-            if(!page) return;
-            const viewDiv = document.getElementById('view-mode');
-            viewDiv.innerHTML = page.content;
-            document.getElementById('page-number').innerText = `صفحة ${pagesData.findIndex(p=>p.id===currentPageId)+1} من ${pagesData.length}`;
-            lucide.createIcons();
-        }
-        
-        function toggleEditMode() {
-            isEditMode = !isEditMode;
-            const viewDiv = document.getElementById('view-mode');
-            const editDiv = document.getElementById('edit-mode');
-            const btn = document.getElementById('toggle-edit-btn');
-            const modeSpan = document.getElementById('mode-indicator');
-            
-            if(isEditMode) {
-                viewDiv.classList.add('hidden');
-                editDiv.classList.remove('hidden');
-                if(!quillEditor) {
-                    quillEditor = new Quill('#quill-editor', {
-                        theme: 'snow',
-                        dir: 'rtl',
-                        modules: {
-                            toolbar: [
-                                [{header:[1,2,3,4,5,6,false]}], ['bold','italic','underline','strike'],
-                                [{list:'ordered'},{list:'bullet'}], ['link','clean']
-                            ]
-                        }
-                    });
-                    quillEditor.on('text-change', () => {
-                        const page = pagesData.find(p => p.id === currentPageId);
-                        if(page) {
-                            page.content = quillEditor.root.innerHTML;
-                            saveData();
-                        }
-                    });
-                }
-                const page = pagesData.find(p=>p.id===currentPageId);
-                quillEditor.root.innerHTML = page.content;
-                btn.innerHTML = '<i data-lucide="save" class="w-5 h-5"></i><span>حفظ وإنهاء التعديل</span>';
-                modeSpan.innerText = 'تعديل';
-            } else {
-                const page = pagesData.find(p=>p.id===currentPageId);
-                if(quillEditor) page.content = quillEditor.root.innerHTML;
-                viewDiv.innerHTML = page.content;
-                viewDiv.classList.remove('hidden');
-                editDiv.classList.add('hidden');
-                btn.innerHTML = '<i data-lucide="edit-3" class="w-5 h-5"></i><span>تعديل الصفحة</span>';
-                modeSpan.innerText = 'قراءة';
-                saveData();
-                renderPagesList();
-            }
-            lucide.createIcons();
-        }
-        
-        function addNewPage() {
-            const newId = 'p' + Date.now();
-            pagesData.push({ id: newId, title: `صفحة جديدة ${pagesData.length+1}`, content: '<h2>صفحة جديدة</h2><p>يمكنك تعديل هذا المحتوى باستخدام المحرر المتقدم.</p>' });
+            pagesData = newOrder;
             saveData();
-            updatePageCounter();
             renderPagesList();
-            goToPage(newId);
-            Swal.fire('تمت الإضافة', 'تم إضافة صفحة جديدة بنجاح', 'success');
         }
+    });
+}
+
+function goToPage(pageId) {
+    if(isEditMode) toggleEditMode();
+    currentPageId = pageId;
+    renderCurrentPage();
+    renderPagesList();
+}
+
+function renderCurrentPage() {
+    const page = pagesData.find(p => p.id === currentPageId);
+    if(!page) return;
+    const viewDiv = document.getElementById('view-mode');
+    if(viewDiv) {
+        viewDiv.innerHTML = page.content;
+        // إعادة تهيئة الأيقونات داخل المحتوى
+        if(typeof lucide !== 'undefined') lucide.createIcons();
+    }
+    const pageNumSpan = document.getElementById('page-number');
+    if(pageNumSpan) {
+        const idx = pagesData.findIndex(p => p.id === currentPageId);
+        pageNumSpan.innerText = `صفحة ${idx+1} من ${pagesData.length}`;
+    }
+}
+
+function toggleEditMode() {
+    isEditMode = !isEditMode;
+    const viewDiv = document.getElementById('view-mode');
+    const editDiv = document.getElementById('edit-mode');
+    const btn = document.getElementById('toggle-edit-btn');
+    const modeSpan = document.getElementById('mode-indicator');
+    
+    if(isEditMode) {
+        // إظهار محرر التعديل
+        if(viewDiv) viewDiv.classList.add('hidden');
+        if(editDiv) editDiv.classList.remove('hidden');
         
-        function deletePage(pageId) {
-            if(pagesData.length <= 1) {
-                Swal.fire('تنبيه', 'لا يمكن حذف جميع الصفحات', 'warning');
-                return;
+        // إنشاء المحرر إذا لم يكن موجوداً
+        if(!quillEditor) {
+            const container = document.getElementById('quill-editor-container');
+            if(container) {
+                // إنشاء عنصر المحرر
+                const editorDiv = document.createElement('div');
+                editorDiv.id = 'quill-editor-instance';
+                container.innerHTML = '';
+                container.appendChild(editorDiv);
+                
+                quillEditor = new Quill('#quill-editor-instance', {
+                    theme: 'snow',
+                    dir: 'rtl',
+                    modules: {
+                        toolbar: [
+                            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+                            [{ 'align': [] }],
+                            [{ 'color': [] }, { 'background': [] }],
+                            ['link', 'image', 'video'],
+                            ['clean']
+                        ]
+                    },
+                    placeholder: 'اكتب محتوى الصفحة هنا...'
+                });
+                
+                quillEditor.on('text-change', () => {
+                    const page = pagesData.find(p => p.id === currentPageId);
+                    if(page && quillEditor) {
+                        page.content = quillEditor.root.innerHTML;
+                        saveData();
+                    }
+                });
             }
-            Swal.fire({ title: 'تأكيد الحذف', text: 'هل أنت متأكد من حذف هذه الصفحة؟', icon: 'warning', showCancelButton: true, confirmButtonText: 'نعم، احذف' }).then(res => {
-                if(res.isConfirmed) {
-                    pagesData = pagesData.filter(p => p.id !== pageId);
-                    saveData();
-                    updatePageCounter();
-                    if(currentPageId === pageId) goToPage(pagesData[0].id);
-                    renderPagesList();
-                    Swal.fire('تم الحذف', '', 'success');
-                }
-            });
         }
         
-        function previewForManager() {
-            const previewWindow = window.open('', '_blank');
-            previewWindow.document.write(`
-                <!DOCTYPE html><html dir="rtl"><head><meta charset="UTF-8"><title>معاينة التقرير السنوي 2025 - بنك الكريمي الإسلامي</title>
-                <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
-                    body{font-family:'Tajawal'; padding:30px; background:#f5f5f5;}
-                    .report-header{background:#7A1B29; color:white; padding:20px; text-align:center; margin-bottom:30px; border-radius:20px;}
-                    .page-box{background:white; margin-bottom:30px; padding:40px; border-radius:16px; box-shadow:0 5px 20px rgba(0,0,0,0.1); page-break-after:always;}
-                    .page-title{color:#7A1B29; border-right:4px solid #F2A900; padding-right:15px; margin-bottom:20px;}
-                    .footer{text-align:center; margin-top:30px; color:#666; font-size:12px;}
-                </style>
-                </head><body>
-                <div class="report-header"><h1>بنك الكريمي الإسلامي - التقرير السنوي 2025</h1><p>مسودة أولية - للمراجعة والاعتماد</p><p>تاريخ العرض: ${new Date().toLocaleDateString('ar-EG')}</p></div>
-                ${pagesData.map((p,idx) => `<div class="page-box"><h2 class="page-title">${p.title}</h2><div>${p.content}</div><div class="footer">صفحة ${idx+1} من ${pagesData.length}</div></div>`).join('')}
-                </body></html>
-            `);
-            previewWindow.document.close();
-        }
+        const page = pagesData.find(p => p.id === currentPageId);
+        if(quillEditor && page) quillEditor.root.innerHTML = page.content;
         
-        function exportToPDF() {
-            const printDiv = document.getElementById('print-container');
-            printDiv.innerHTML = pagesData.map((p, idx) => `
-                <div class="print-page" style="padding:25mm 20mm; box-sizing:border-box;">
-                    <div style="position:absolute; top:0; left:0; width:100%; height:3px; background:#7A1B29;"></div>
-                    <div style="position:absolute; top:0; left:0; width:33%; height:3px; background:#F2A900;"></div>
-                    <div style="margin-bottom:30px; border-bottom:2px solid #F2A900; padding-bottom:10px; display:flex; justify-content:space-between;">
-                        <span style="color:#7A1B29; font-weight:bold;">بنك الكريمي الإسلامي - التقرير السنوي 2025</span>
-                        <span style="color:#F2A900;">${p.title}</span>
-                    </div>
-                    <div>${p.content}</div>
-                    <div style="position:absolute; bottom:15px; left:0; width:100%; text-align:center; font-size:11px; color:#aaa;">${idx+1} / ${pagesData.length}</div>
-                </div>
-            `).join('');
-            setTimeout(() => { window.print(); }, 200);
-        }
+        if(btn) btn.innerHTML = '<i data-lucide="save" class="w-5 h-5"></i><span>حفظ وإنهاء التعديل</span>';
+        if(modeSpan) modeSpan.innerText = 'تعديل';
+    } else {
+        // حفظ التعديلات والعودة لوضع القراءة
+        const page = pagesData.find(p => p.id === currentPageId);
+        if(quillEditor && page) page.content = quillEditor.root.innerHTML;
         
-        function exportFullReport() {
-            const dataStr = JSON.stringify(pagesData, null, 2);
-            const blob = new Blob([dataStr], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `kib_report_2025_${new Date().toISOString().slice(0,10)}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            Swal.fire('تم التصدير', 'تم تصدير التقرير كملف JSON بنجاح', 'success');
+        if(viewDiv) {
+            viewDiv.innerHTML = page ? page.content : '';
+            viewDiv.classList.remove('hidden');
+            if(typeof lucide !== 'undefined') lucide.createIcons();
         }
+        if(editDiv) editDiv.classList.add('hidden');
         
-        document.addEventListener('DOMContentLoaded', () => {
-            loadData();
-            lucide.createIcons();
+        if(btn) btn.innerHTML = '<i data-lucide="edit-3" class="w-5 h-5"></i><span>تعديل الصفحة</span>';
+        if(modeSpan) modeSpan.innerText = 'قراءة';
+        
+        saveData();
+        renderPagesList();
+    }
+    if(typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function addNewPage() {
+    const newId = 'p' + Date.now();
+    const newTitle = `صفحة جديدة ${pagesData.length+1}`;
+    pagesData.push({ 
+        id: newId, 
+        title: newTitle, 
+        order: pagesData.length + 1,
+        content: '<h2>صفحة جديدة</h2><p>يمكنك تعديل هذا المحتوى باستخدام المحرر المتقدم. استخدم أدوات التنسيق العلوية لتغيير الخطوط والألوان وإضافة الجداول والصور.</p>'
+    });
+    saveData();
+    updatePageCounter();
+    renderPagesList();
+    goToPage(newId);
+    if(typeof Swal !== 'undefined') {
+        Swal.fire('تمت الإضافة', 'تم إضافة صفحة جديدة بنجاح', 'success');
+    }
+}
+
+function deletePage(pageId) {
+    if(pagesData.length <= 1) {
+        if(typeof Swal !== 'undefined') {
+            Swal.fire('تنبيه', 'لا يمكن حذف جميع الصفحات', 'warning');
+        }
+        return;
+    }
+    if(typeof Swal !== 'undefined') {
+        Swal.fire({
+            title: 'تأكيد الحذف',
+            text: 'هل أنت متأكد من حذف هذه الصفحة؟',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'نعم، احذف',
+            cancelButtonText: 'إلغاء'
+        }).then(res => {
+            if(res.isConfirmed) {
+                pagesData = pagesData.filter(p => p.id !== pageId);
+                saveData();
+                updatePageCounter();
+                if(currentPageId === pageId) goToPage(pagesData[0].id);
+                renderPagesList();
+                Swal.fire('تم الحذف', '', 'success');
+            }
         });
+    } else {
+        pagesData = pagesData.filter(p => p.id !== pageId);
+        saveData();
+        updatePageCounter();
+        if(currentPageId === pageId) goToPage(pagesData[0].id);
+        renderPagesList();
+    }
+}
+        // ==================== الجزء الرابع: دوال التصدير والطباعة والعرض على المدير ====================
+// الصق هذا الجزء بعد الجزء الثالث
+
+function previewForManager() {
+    const previewWindow = window.open('', '_blank');
+    if(!previewWindow) {
+        alert('يرجى السماح للنوافذ المنبثقة لعرض المعاينة');
+        return;
+    }
+    
+    let allContent = '';
+    pagesData.forEach((page, idx) => {
+        allContent += `
+            <div style="background:white; margin-bottom:40px; padding:40px; border-radius:16px; box-shadow:0 5px 20px rgba(0,0,0,0.1); page-break-after:always;">
+                <div style="border-bottom:2px solid #F2A900; padding-bottom:10px; margin-bottom:20px; display:flex; justify-content:space-between;">
+                    <h2 style="color:#7A1B29; margin:0;">${escapeHtml(page.title)}</h2>
+                    <span style="color:#F2A900;">صفحة ${idx+1}</span>
+                </div>
+                <div style="line-height:1.8;">${page.content}</div>
+                <div style="margin-top:30px; text-align:center; font-size:12px; color:#aaa;">بنك الكريمي الإسلامي - التقرير السنوي 2025</div>
+            </div>
+        `;
+    });
+    
+    previewWindow.document.write(`
+        <!DOCTYPE html>
+        <html dir="rtl">
+        <head>
+            <meta charset="UTF-8">
+            <title>معاينة التقرير السنوي 2025 - بنك الكريمي الإسلامي</title>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
+                body {
+                    font-family: 'Tajawal', sans-serif;
+                    background: #f0f2f5;
+                    padding: 30px;
+                    margin: 0;
+                }
+                .report-header {
+                    background: linear-gradient(135deg, #7A1B29, #5e131f);
+                    color: white;
+                    padding: 30px;
+                    text-align: center;
+                    margin-bottom: 30px;
+                    border-radius: 20px;
+                }
+                .footer-note {
+                    text-align: center;
+                    margin-top: 30px;
+                    padding: 20px;
+                    color: #666;
+                    font-size: 12px;
+                    border-top: 1px solid #ddd;
+                }
+                @media print {
+                    body { background: white; padding: 0; }
+                    .report-header { display: none; }
+                    .no-print { display: none; }
+                    div { page-break-inside: avoid; }
+                }
+                .data-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                .data-table th { background: #7A1B29; color: white; padding: 10px; }
+                .data-table td { border: 1px solid #ddd; padding: 8px; }
+                .metric-card { background: #f8f9fa; border-radius: 16px; padding: 15px; margin: 10px 0; }
+            </style>
+        </head>
+        <body>
+            <div class="report-header no-print">
+                <h1>بنك الكريمي الإسلامي - التقرير السنوي 2025</h1>
+                <p>مسودة أولية - للمراجعة والاعتماد</p>
+                <p>تاريخ العرض: ${new Date().toLocaleDateString('ar-EG')}</p>
+                <p>إجمالي عدد الصفحات: ${pagesData.length}</p>
+            </div>
+            ${allContent}
+            <div class="footer-note no-print">
+                <p>هذه مسودة أولية قابلة للتعديل. يرجى مراجعة الإدارة المختصة قبل الاعتماد النهائي.</p>
+                <p>بنك الكريمي الإسلامي - إدارة البحوث والدراسات</p>
+            </div>
+        </body>
+        </html>
+    `);
+    previewWindow.document.close();
+}
+
+function exportToPDF() {
+    const printDiv = document.getElementById('print-container');
+    if(!printDiv) return;
+    
+    printDiv.innerHTML = pagesData.map((page, idx) => `
+        <div class="print-page" style="padding:25mm 20mm; box-sizing:border-box; position:relative;">
+            <div style="position:absolute; top:0; left:0; width:100%; height:3px; background:#7A1B29;"></div>
+            <div style="position:absolute; top:0; left:0; width:33%; height:3px; background:#F2A900;"></div>
+            <div style="margin-bottom:30px; border-bottom:2px solid #F2A900; padding-bottom:10px; display:flex; justify-content:space-between;">
+                <span style="color:#7A1B29; font-weight:bold;">بنك الكريمي الإسلامي - التقرير السنوي 2025</span>
+                <span style="color:#F2A900;">${escapeHtml(page.title)}</span>
+            </div>
+            <div style="line-height:1.8;">${page.content}</div>
+            <div style="position:absolute; bottom:15px; left:0; width:100%; text-align:center; font-size:11px; color:#aaa;">${idx+1} / ${pagesData.length}</div>
+        </div>
+    `).join('');
+    
+    setTimeout(() => {
+        window.print();
+        setTimeout(() => {
+            printDiv.innerHTML = '';
+        }, 1000);
+    }, 200);
+}
+
+function exportFullReport() {
+    const exportData = {
+        reportName: "التقرير السنوي 2025",
+        bankName: "بنك الكريمي الإسلامي",
+        exportDate: new Date().toISOString(),
+        totalPages: pagesData.length,
+        pages: pagesData
+    };
+    const dataStr = JSON.stringify(exportData, null, 2);
+    const blob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `kib_report_2025_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    if(typeof Swal !== 'undefined') {
+        Swal.fire('تم التصدير', 'تم تصدير التقرير كملف JSON بنجاح', 'success');
+    }
+}
+
+function importReport() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const imported = JSON.parse(event.target.result);
+                if(imported.pages && Array.isArray(imported.pages)) {
+                    pagesData = imported.pages;
+                } else if(Array.isArray(imported)) {
+                    pagesData = imported;
+                } else {
+                    throw new Error('تنسيق الملف غير صحيح');
+                }
+                saveData();
+                updatePageCounter();
+                renderPagesList();
+                goToPage(pagesData[0].id);
+                if(typeof Swal !== 'undefined') {
+                    Swal.fire('تم الاستيراد', 'تم استيراد التقرير بنجاح', 'success');
+                }
+            } catch(err) {
+                if(typeof Swal !== 'undefined') {
+                    Swal.fire('خطأ', 'الملف المحدد غير صالح', 'error');
+                }
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+
+function backupReport() {
+    const backupData = {
+        backupDate: new Date().toISOString(),
+        version: "4.0",
+        pagesData: pagesData
+    };
+    const dataStr = JSON.stringify(backupData, null, 2);
+    const blob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `kib_backup_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.backup`;
+    a.click();
+    URL.revokeObjectURL(url);
+    if(typeof Swal !== 'undefined') {
+        Swal.fire('نسخة احتياطية', 'تم إنشاء نسخة احتياطية من التقرير', 'success');
+    }
+}
+
+// تهيئة الصفحة عند التحميل
+document.addEventListener('DOMContentLoaded', () => {
+    loadData();
+    if(typeof lucide !== 'undefined') lucide.createIcons();
+});
+
+console.log("الجزء الرابع (دوال التصدير والطباعة) تم تحميله بنجاح. النظام جاهز للعمل!");
     </script>
 </body>
 </html>
