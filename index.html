@@ -257,12 +257,23 @@
 
         /* أزرار التحكم */
         .controls-wrapper {
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+ 			position: fixed; 
+            bottom: 25px; 
+            left: 50%; 
+            transform: translateX(-50%);
             display: flex; gap: 20px; z-index: 1000;
             background: rgba(255, 255, 255, 0.98); padding: 8px 28px; border-radius: 80px;
             box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(212, 175, 55, 0.4);
+            /* التعديل هنا: جعل المؤشر يظهر كأنه قابل للسحب */
+            cursor: grab;
+            user-select: none; /* منع تظليل النصوص أثناء السحب */
+            touch-action: none; /* منع السكرول في الشاشات اللمسية أثناء السحب */
+        }
+		  .controls-wrapper.dragging {
+            cursor: grabbing;
+            opacity: 0.9;
         }
         .btn-nav {
             width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(135deg, var(--gray-mid), var(--gray-dark));
@@ -294,7 +305,7 @@
 <body>
 
 <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-<div class="controls-wrapper">
+<div class="controls-wrapper" id="draggableControls">
     <button class="btn-nav" onclick="nextSlide()" title="التالي"><i class="fas fa-chevron-right"></i></button>
     <button class="btn-nav" onclick="prevSlide()" title="السابق"><i class="fas fa-chevron-left"></i></button>
 	<div style="display: flex; align-items: center; gap: 12px; background: #f0f0f0; padding: 5px 15px; border-radius: 40px; margin: 0 10px;">
@@ -1518,11 +1529,78 @@
         document.addEventListener('click', (e) => {
             if (e.target.closest('.btn-nav')) return;
             const x = e.clientX;
+            // إيقاف التقليب التلقائي عند النقر إذا كان النقر على شريط التحكم لتجنب تقليب الشريحة عند السحب
+            if(e.target.closest('#draggableControls')) return; 
+
             if (x < window.innerWidth * 0.3) nextSlide();
             else if (x > window.innerWidth * 0.7) prevSlide();
         });
 
         updateSlides();
+	   // ===================================================================
+        // كود سحب (Drag & Drop) شريط التحكم
+        // ===================================================================
+        const draggableMenu = document.getElementById('draggableControls');
+        let isDragging = false;
+        let startX, startY;
+
+        // دعم الماوس
+        draggableMenu.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', dragMove);
+        document.addEventListener('mouseup', dragEnd);
+
+        // دعم اللمس (للهواتف والآيباد)
+        draggableMenu.addEventListener('touchstart', dragStart, {passive: false});
+        document.addEventListener('touchmove', dragMove, {passive: false});
+        document.addEventListener('touchend', dragEnd);
+
+        function dragStart(e) {
+            // منع السحب إذا تم النقر على حقل إدخال أو زر حتى يمكن استخدامه
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                return;
+            }
+
+            isDragging = true;
+            draggableMenu.classList.add('dragging');
+
+            let clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            let clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+            startX = clientX;
+            startY = clientY;
+
+            // تحرير العنصر من التوسيط التلقائي ليتبع الماوس
+            const rect = draggableMenu.getBoundingClientRect();
+            draggableMenu.style.transform = 'none'; 
+            draggableMenu.style.bottom = 'auto'; 
+            draggableMenu.style.left = rect.left + 'px';
+            draggableMenu.style.top = rect.top + 'px';
+        }
+
+        function dragMove(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+
+            let clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            let clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+            let dx = clientX - startX;
+            let dy = clientY - startY;
+
+            let currentLeft = parseInt(draggableMenu.style.left) || 0;
+            let currentTop = parseInt(draggableMenu.style.top) || 0;
+
+            draggableMenu.style.left = (currentLeft + dx) + 'px';
+            draggableMenu.style.top = (currentTop + dy) + 'px';
+
+            startX = clientX;
+            startY = clientY;
+        }
+
+        function dragEnd() {
+            isDragging = false;
+            draggableMenu.classList.remove('dragging');
+        }
 </script>
 	
 
