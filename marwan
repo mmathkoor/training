@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الدليل الشامل لاحتراف التسويق الرقمي والمبيعات</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+    
+    <style>
+        /* ===================================================================
+           VARIABLES - الألوان (تم تعديلها لتناسب طابع تقني/تسويقي حديث - أزرق وذهبي)
+           =================================================================== */
+        :root {
+            --primary: #0f172a; /* Slate 900 */
+            --primary-light: #1e293b; /* Slate 800 */
+            --accent: #3b82f6; /* Blue 500 */
+            --gold: #d4af37;
+            --gold-light: #f5e18b;
+            --gold-dark: #b8901a;
+            --gray-dark: #334155;
+            --gray-mid: #64748b;
+            --gray-light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body { font-family: 'Tajawal', sans-serif; background: radial-gradient(circle at 30% 40%, #f8fafc 0%, #e2e8f0 100%); overflow: hidden; width: 100vw; height: 100vh; }
+        h1, h2, h3, h4, .font-cairo { font-family: 'Cairo', sans-serif; }
+
+        /* ===================================================================
+           PREZI-STYLE TRANSITIONS
+           =================================================================== */
+        #presentation-container { position: relative; width: 100%; height: 100%; perspective: 3000px; display: flex; align-items: center; justify-content: center; }
+        .slide {
+            position: absolute; width: 1350px; height: 820px; background: var(--white); border-radius: 50px;
+            box-shadow: 0 60px 120px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(59, 130, 246, 0.1);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 45px 65px;
+            transition: all 1.1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            opacity: 0; visibility: hidden;
+            transform: translate3d(1000px, 60px, -1400px) rotateY(-25deg) rotateX(5deg);
+            transform-style: preserve-3d;
+        }
+        .slide.active { opacity: 1; visibility: visible; transform: translate3d(0, 0, 0) rotateY(0deg) rotateX(0deg) scale(1); z-index: 50; box-shadow: 0 40px 90px rgba(15, 23, 42, 0.15); }
+        .slide.prev { opacity: 0; visibility: hidden; transform: translate3d(-1000px, -60px, -1400px) rotateY(25deg) rotateX(-5deg); z-index: 20; }
+
+        /* ===================================================================
+           ANIMATIONS 
+           =================================================================== */
+        @keyframes float-slow { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-20px) rotate(2deg); } }
+        @keyframes pulse-accent { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 50% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(59, 130, 246, 0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeLeft { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeRight { from { opacity: 0; transform: translateX(-60px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes scalePop { 0% { opacity: 0; transform: scale(0.7); } 70% { transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
+
+        .active .float-slow { animation: float-slow 5s ease-in-out infinite; }
+        .active .pulse-accent { animation: pulse-accent 2s ease-in-out infinite; }
+        .active .fade-up { animation: fadeUp 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards; opacity: 0; }
+        .active .fade-left { animation: fadeLeft 0.6s ease forwards; opacity: 0; }
+        .active .fade-right { animation: fadeRight 0.6s ease forwards; opacity: 0; }
+        .active .scale-pop { animation: scalePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; opacity: 0; }
+
+        .delay-100 { animation-delay: 0.1s; } .delay-200 { animation-delay: 0.2s; } .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; } .delay-500 { animation-delay: 0.5s; } .delay-600 { animation-delay: 0.6s; }
+
+        /* ===================================================================
+           UI ELEMENTS
+           =================================================================== */
+        .accent-divider { width: 120px; height: 5px; background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary)); border-radius: 5px; margin: 0 auto 25px auto; }
+        .accent-text-gradient { background: linear-gradient(120deg, var(--accent), #60a5fa, var(--primary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .hover-card { transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1); cursor: pointer; }
+        .hover-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08); }
+
+        .progress-bar { position: fixed; top: 0; left: 0; width: 100%; height: 6px; background: rgba(0, 0, 0, 0.05); z-index: 1000; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); width: 0%; transition: width 0.6s ease; }
+
+        .controls-wrapper {
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; z-index: 1000;
+            background: rgba(255, 255, 255, 0.95); padding: 8px 28px; border-radius: 80px; box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1); border: 1px solid rgba(59, 130, 246, 0.2);
+            cursor: grab; user-select: none; touch-action: none;
+        }
+        .controls-wrapper.dragging { cursor: grabbing; opacity: 0.9; }
+        .btn-nav { width: 50px; height: 50px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; border: none; cursor: pointer; transition: all 0.2s ease; }
+        .btn-nav:hover { background: var(--accent); transform: scale(1.1); }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="controls-wrapper" id="draggableControls">
+    <button class="btn-nav" onclick="nextSlide()" title="التالي"><i class="fas fa-chevron-right"></i></button>
+    <button class="btn-nav" onclick="prevSlide()" title="السابق"><i class="fas fa-chevron-left"></i></button>
+    <div style="display: flex; align-items: center; gap: 12px; background: #f8fafc; padding: 5px 15px; border-radius: 40px; margin: 0 10px;">
+        <span style="font-size: 16px; font-weight: bold; color: var(--primary);" id="slideCounter">1 / 55</span>
+        <input type="number" id="gotoSlide" min="1" max="55" value="1" style="width: 60px; padding: 8px; border-radius: 30px; border: 1px solid var(--accent); text-align: center; font-weight: bold; outline:none;">
+        <button onclick="goToSlide()" style="background: var(--primary); color: white; border: none; border-radius: 30px; padding: 8px 15px; cursor: pointer; font-weight: bold;">اذهب</button>
+    </div>
+</div>
+
+<div id="presentation-container">
+
+    <!-- ======================= SECTION 1: INTRODUCTION ======================= -->
+    <!-- Slide 1: Cover -->
+    <div class="slide bg-gradient-to-br from-slate-50 to-blue-50">
+        <div class="text-center w-full">
+            <div class="flex justify-center mb-8 scale-pop">
+                <div class="w-40 h-40 bg-gradient-to-br from-[#0f172a] to-[#3b82f6] rounded-3xl flex items-center justify-center shadow-2xl float-slow transform rotate-3">
+                    <i class="fas fa-rocket text-7xl text-white"></i>
+                </div>
+            </div>
+            <h1 class="text-7xl font-black text-[#0f172a] mb-5 font-cairo fade-up delay-100">الدليل الشامل لاحتراف</h1>
+            <p class="text-5xl font-bold accent-text-gradient mb-8 fade-up delay-200">التسويق الرقمي، المحتوى، والمبيعات</p>
+            <div class="accent-divider fade-up delay-300"></div>
+            <p class="text-2xl text-[#4a5568] font-bold bg-white border border-blue-100 inline-block px-10 py-4 rounded-full shadow-sm fade-up delay-400 mt-4">برنامج تدريبي متقدم - من المفهوم إلى التطبيق</p>
+        </div>
+    </div>
+
+    <!-- Slide 2: Agenda -->
+    <div class="slide">
+        <div class="w-full max-w-6xl mx-auto">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-12 text-center fade-up">📑 محاور البرنامج التدريبي</h2>
+            <div class="grid grid-cols-2 gap-8">
+                <div class="flex gap-6 bg-slate-50 p-6 rounded-2xl border-r-4 border-[#3b82f6] shadow-sm hover-card fade-up delay-100">
+                    <div class="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center shrink-0"><i class="fas fa-sitemap text-3xl text-[#3b82f6]"></i></div>
+                    <div><h3 class="text-2xl font-bold text-[#0f172a] mb-2">الفصل الأول: أساسيات التسويق</h3><p class="text-lg text-gray-600">المفاهيم، المزيج التسويقي التقليدي (4Ps) والحديث (7Ps).</p></div>
+                </div>
+                <div class="flex gap-6 bg-slate-50 p-6 rounded-2xl border-r-4 border-[#3b82f6] shadow-sm hover-card fade-up delay-200">
+                    <div class="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center shrink-0"><i class="fas fa-pen-nib text-3xl text-[#3b82f6]"></i></div>
+                    <div><h3 class="text-2xl font-bold text-[#0f172a] mb-2">الفصل الثاني: صناعة المحتوى</h3><p class="text-lg text-gray-600">أنواع المحتوى، قمع التسويق، واستراتيجيات الكتابة البيعية (Copywriting).</p></div>
+                </div>
+                <div class="flex gap-6 bg-slate-50 p-6 rounded-2xl border-r-4 border-[#3b82f6] shadow-sm hover-card fade-up delay-300">
+                    <div class="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center shrink-0"><i class="fas fa-users-cog text-3xl text-[#3b82f6]"></i></div>
+                    <div><h3 class="text-2xl font-bold text-[#0f172a] mb-2">الفصل الثالث: سيكولوجية العميل</h3><p class="text-lg text-gray-600">أنواع العملاء، رحلة العميل، وكيفية التعامل مع كل نمط باحترافية.</p></div>
+                </div>
+                <div class="flex gap-6 bg-slate-50 p-6 rounded-2xl border-r-4 border-[#3b82f6] shadow-sm hover-card fade-up delay-400">
+                    <div class="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center shrink-0"><i class="fas fa-mobile-alt text-3xl text-[#3b82f6]"></i></div>
+                    <div><h3 class="text-2xl font-bold text-[#0f172a] mb-2">الفصل الرابع: تطبيقات عملية</h3><p class="text-lg text-gray-600">منصات التواصل الاجتماعي، أدوات الإدارة، وتحليل الأداء.</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================= SECTION 2: MARKETING BASICS & 7Ps ======================= -->
+    <!-- Slide 3: What is Marketing -->
+    <div class="slide bg-[#0f172a] text-white !border-none">
+        <div class="max-w-5xl mx-auto text-center">
+            <i class="fas fa-bullhorn text-7xl text-[#3b82f6] mb-8 float-slow fade-up"></i>
+            <h2 class="text-6xl font-black mb-8 fade-up delay-100">ما هو التسويق؟</h2>
+            <div class="bg-white/10 backdrop-blur-md p-10 rounded-3xl border border-white/20 fade-up delay-200">
+                <p class="text-3xl leading-relaxed font-light">
+                    "التسويق ليس مجرد بيع ما تنتجه، بل هو <span class="font-bold text-[#3b82f6]">معرفة ما يجب أن تنتجه</span>. هو فن خلق قيمة حقيقية للعميل، وتوصيل هذه القيمة، وإقناعه بها."
+                </p>
+            </div>
+            <div class="grid grid-cols-3 gap-6 mt-12 fade-up delay-300">
+                <div class="p-4 bg-white/5 rounded-xl"><i class="fas fa-search mb-3 text-2xl text-gray-400"></i><h4 class="text-xl font-bold">1. اكتشاف الاحتياج</h4></div>
+                <div class="p-4 bg-white/5 rounded-xl"><i class="fas fa-cogs mb-3 text-2xl text-gray-400"></i><h4 class="text-xl font-bold">2. تطوير الحل (المنتج)</h4></div>
+                <div class="p-4 bg-white/5 rounded-xl"><i class="fas fa-comments mb-3 text-2xl text-gray-400"></i><h4 class="text-xl font-bold">3. إيصال الرسالة</h4></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Traditional vs Digital Marketing -->
+    <div class="slide">
+        <div class="w-full max-w-6xl mx-auto text-center">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-12 fade-up">التسويق التقليدي مقابل الرقمي</h2>
+            <div class="flex gap-8">
+                <div class="w-1/2 bg-gray-50 p-8 rounded-3xl shadow-sm border-t-4 border-gray-400 fade-left delay-100">
+                    <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-tv text-4xl text-gray-600"></i></div>
+                    <h3 class="text-3xl font-bold text-gray-700 mb-6">التسويق التقليدي</h3>
+                    <ul class="text-right space-y-4 text-xl text-gray-600">
+                        <li><i class="fas fa-times-circle text-red-500 ml-2"></i> <strong>الاتجاه:</strong> اتجاه واحد (من الشركة للجمهور).</li>
+                        <li><i class="fas fa-times-circle text-red-500 ml-2"></i> <strong>الاستهداف:</strong> واسع وعشوائي (تلفزيون، صحف).</li>
+                        <li><i class="fas fa-times-circle text-red-500 ml-2"></i> <strong>التكلفة:</strong> عالية جداً.</li>
+                        <li><i class="fas fa-times-circle text-red-500 ml-2"></i> <strong>القياس:</strong> صعب جداً وتقريبي.</li>
+                    </ul>
+                </div>
+                <div class="w-1/2 bg-blue-50 p-8 rounded-3xl shadow-sm border-t-4 border-[#3b82f6] fade-right delay-200">
+                    <div class="w-20 h-20 bg-blue-200 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-mobile-alt text-4xl text-[#3b82f6]"></i></div>
+                    <h3 class="text-3xl font-bold text-[#0f172a] mb-6">التسويق الرقمي</h3>
+                    <ul class="text-right space-y-4 text-xl text-gray-700">
+                        <li><i class="fas fa-check-circle text-green-500 ml-2"></i> <strong>الاتجاه:</strong> تفاعلي (اتجاهين).</li>
+                        <li><i class="fas fa-check-circle text-green-500 ml-2"></i> <strong>الاستهداف:</strong> دقيق جداً (عمر، اهتمامات، موقع).</li>
+                        <li><i class="fas fa-check-circle text-green-500 ml-2"></i> <strong>التكلفة:</strong> مرنة وتناسب الجميع.</li>
+                        <li><i class="fas fa-check-circle text-green-500 ml-2"></i> <strong>القياس:</strong> دقيق وفوري (نقرات، تحويلات).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Marketing Mix Intro -->
+    <div class="slide bg-slate-50">
+        <div class="w-full text-center">
+            <h2 class="text-6xl font-black text-[#0f172a] mb-6 fade-up">المزيج التسويقي (Marketing Mix)</h2>
+            <p class="text-2xl text-gray-600 mb-12 fade-up delay-100">الأساس الذي تُبنى عليه أي استراتيجية تسويقية ناجحة</p>
+            
+            <div class="flex justify-center items-center gap-10">
+                <div class="text-center fade-up delay-200">
+                    <div class="w-48 h-48 bg-white rounded-full shadow-lg border-8 border-gray-200 flex flex-col items-center justify-center mb-4">
+                        <span class="text-6xl font-black text-gray-400">4Ps</span>
+                    </div>
+                    <p class="text-xl font-bold text-gray-500">النموذج التقليدي (للسلع)</p>
+                </div>
+                
+                <i class="fas fa-arrow-left text-4xl text-[#3b82f6] animate-pulse"></i>
+                
+                <div class="text-center fade-up delay-300">
+                    <div class="w-64 h-64 bg-white rounded-full shadow-2xl border-8 border-[#3b82f6] flex flex-col items-center justify-center mb-4 relative pulse-accent">
+                        <span class="text-7xl font-black text-[#0f172a]">7Ps</span>
+                    </div>
+                    <p class="text-2xl font-bold text-[#3b82f6]">النموذج الحديث (للسلع والخدمات)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: The 4Ps (Part 1) -->
+    <div class="slide">
+        <div class="w-full max-w-6xl mx-auto">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-10 text-center fade-up">المزيج التسويقي الأساسي (4Ps)</h2>
+            <div class="grid grid-cols-2 gap-8">
+                <!-- Product -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-r-8 border-blue-600 hover-card fade-up delay-100">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center"><i class="fas fa-box-open text-3xl text-blue-600"></i></div>
+                        <h3 class="text-3xl font-bold">1. المنتج (Product)</h3>
+                    </div>
+                    <p class="text-gray-600 text-lg mb-4">هو السلعة أو الخدمة التي تقدمها لتلبية حاجة العميل. المنتج هو "البطل".</p>
+                    <ul class="text-sm text-gray-500 space-y-2 list-disc list-inside pr-4">
+                        <li>ما هي المشكلة التي يحلها؟</li>
+                        <li>ما هي ميزته التنافسية؟</li>
+                        <li>جودة التغليف والتصميم.</li>
+                    </ul>
+                </div>
+                <!-- Price -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-r-8 border-green-500 hover-card fade-up delay-200">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center"><i class="fas fa-tags text-3xl text-green-600"></i></div>
+                        <h3 class="text-3xl font-bold">2. السعر (Price)</h3>
+                    </div>
+                    <p class="text-gray-600 text-lg mb-4">القيمة النقدية التي يدفعها العميل. السعر يعكس "القيمة" في ذهن العميل.</p>
+                    <ul class="text-sm text-gray-500 space-y-2 list-disc list-inside pr-4">
+                        <li>تسعير اختراق السوق (رخيص للانتشار).</li>
+                        <li>تسعير الكشط (غالي للفخامة).</li>
+                        <li>الخصومات وطرق الدفع.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: The 4Ps (Part 2) -->
+    <div class="slide">
+        <div class="w-full max-w-6xl mx-auto">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-10 text-center fade-up">المزيج التسويقي الأساسي (4Ps)</h2>
+            <div class="grid grid-cols-2 gap-8">
+                <!-- Place -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-r-8 border-purple-500 hover-card fade-up delay-100">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center"><i class="fas fa-store text-3xl text-purple-600"></i></div>
+                        <h3 class="text-3xl font-bold">3. المكان/التوزيع (Place)</h3>
+                    </div>
+                    <p class="text-gray-600 text-lg mb-4">كيف يصل المنتج إلى العميل النهائي بسهولة وفي الوقت المناسب.</p>
+                    <ul class="text-sm text-gray-500 space-y-2 list-disc list-inside pr-4">
+                        <li>البيع المباشر (متجرك الفعلي/الإلكتروني).</li>
+                        <li>التوزيع غير المباشر (تجار التجزئة، وسطاء).</li>
+                        <li>سرعة وتكلفة التوصيل.</li>
+                    </ul>
+                </div>
+                <!-- Promotion -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-r-8 border-orange-500 hover-card fade-up delay-200">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center"><i class="fas fa-bullhorn text-3xl text-orange-600"></i></div>
+                        <h3 class="text-3xl font-bold">4. الترويج (Promotion)</h3>
+                    </div>
+                    <p class="text-gray-600 text-lg mb-4">كيف تخبر العالم عن منتجك وتقنعهم بشرائه.</p>
+                    <ul class="text-sm text-gray-500 space-y-2 list-disc list-inside pr-4">
+                        <li>الإعلانات (الرقمية والتقليدية).</li>
+                        <li>العلاقات العامة والتسويق بالمحتوى.</li>
+                        <li>عروض المبيعات والخصومات.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: The Extra 3Ps (Services) -->
+    <div class="slide bg-slate-800 text-white !border-none">
+        <div class="w-full max-w-6xl mx-auto">
+            <h2 class="text-5xl font-black mb-4 text-center fade-up">تطور المزيج إلى 7Ps</h2>
+            <p class="text-xl text-gray-400 text-center mb-10 fade-up delay-100">تمت إضافة 3 عناصر لتناسب تسويق الخدمات والبيئة الحديثة</p>
+            
+            <div class="grid grid-cols-3 gap-6">
+                <!-- People -->
+                <div class="bg-white/10 p-6 rounded-2xl border-t-4 border-blue-400 hover:bg-white/20 transition-colors fade-up delay-200">
+                    <i class="fas fa-users text-4xl text-blue-400 mb-4 block text-center"></i>
+                    <h3 class="text-2xl font-bold text-center mb-3">5. الأشخاص (People)</h3>
+                    <p class="text-gray-300 text-sm text-center">الموظفون هم واجهة الشركة. تدريبهم، أسلوبهم، ومهاراتهم في خدمة العملاء جزء أساسي من التسويق.</p>
+                </div>
+                <!-- Process -->
+                <div class="bg-white/10 p-6 rounded-2xl border-t-4 border-yellow-400 hover:bg-white/20 transition-colors fade-up delay-300">
+                    <i class="fas fa-cogs text-4xl text-yellow-400 mb-4 block text-center"></i>
+                    <h3 class="text-2xl font-bold text-center mb-3">6. العمليات (Process)</h3>
+                    <p class="text-gray-300 text-sm text-center">رحلة العميل منذ لحظة الطلب حتى الاستلام. هل هي معقدة؟ هل موقعك بطيء؟ سهولة العملية تزيد المبيعات.</p>
+                </div>
+                <!-- Physical Evidence -->
+                <div class="bg-white/10 p-6 rounded-2xl border-t-4 border-green-400 hover:bg-white/20 transition-colors fade-up delay-400">
+                    <i class="fas fa-building text-4xl text-green-400 mb-4 block text-center"></i>
+                    <h3 class="text-2xl font-bold text-center mb-3">7. الدليل المادي (Physical Evidence)</h3>
+                    <p class="text-gray-300 text-sm text-center">الأشياء الملموسة التي تثبت جودتك. ديكور محلك، تصميم موقعك، التغليف، تقييمات العملاء السابقين (Review).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: 7Ps Interactive Example -->
+    <div class="slide bg-blue-50">
+        <div class="w-full max-w-6xl mx-auto">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-10 text-center fade-up">تطبيق عملي: تحليل 7Ps لـ (مقهى مختص)</h2>
+            <div class="flex flex-wrap justify-center gap-4 text-center">
+                <div class="w-64 bg-white p-4 rounded-xl shadow-md border-b-4 border-blue-500 scale-pop delay-100">
+                    <p class="font-bold text-blue-600 mb-1">Product (المنتج)</p>
+                    <p class="text-sm">قهوة مختصة عضوية، حلويات مخبوزة محلياً.</p>
+                </div>
+                <div class="w-64 bg-white p-4 rounded-xl shadow-md border-b-4 border-green-500 scale-pop delay-200">
+                    <p class="font-bold text-green-600 mb-1">Price (السعر)</p>
+                    <p class="text-sm">سعر مرتفع نسبياً (Premium) يعكس الجودة العالية.</p>
+                </div>
+                <div class="w-64 bg-white p-4 rounded-xl shadow-md border-b-4 border-purple-500 scale-pop delay-300">
+                    <p class="font-bold text-purple-600 mb-1">Place (المكان)</p>
+                    <p class="text-sm">موقع في شارع راقٍ، وتطبيق للطلب المسبق.</p>
+                </div>
+                <div class="w-64 bg-white p-4 rounded-xl shadow-md border-b-4 border-orange-500 scale-pop delay-400">
+                    <p class="font-bold text-orange-600 mb-1">Promotion (الترويج)</p>
+                    <p class="text-sm">إعلانات انستجرام، شراكة مع مؤثرين، برامج ولاء.</p>
+                </div>
+                <div class="w-64 bg-white p-4 rounded-xl shadow-md border-b-4 border-indigo-500 scale-pop delay-500">
+                    <p class="font-bold text-indigo-600 mb-1">People (الأشخاص)</p>
+                    <p class="text-sm">باريستا مبتسمون، خبراء في شرح أنواع البن.</p>
+                </div>
+                <div class="w-64 bg-white p-4 rounded-xl shadow-md border-b-4 border-yellow-500 scale-pop delay-600">
+                    <p class="font-bold text-yellow-600 mb-1">Process (العمليات)</p>
+                    <p class="text-sm">نظام دفع سريع، تسليم الطلب في أقل من 3 دقائق.</p>
+                </div>
+                <div class="w-64 bg-white p-4 rounded-xl shadow-md border-b-4 border-teal-500 scale-pop delay-700">
+                    <p class="font-bold text-teal-600 mb-1">Physical Evidence</p>
+                    <p class="text-sm">رائحة البن الذكية، ديكور خشبي هادئ، أكواب أنيقة.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================= SECTION 3: CONTENT MARKETING & COPYWRITING ======================= -->
+    <!-- Slide 10: Content is King -->
+    <div class="slide">
+        <div class="max-w-5xl mx-auto text-center">
+            <i class="fas fa-crown text-8xl text-[#d4af37] mb-8 float-slow fade-up"></i>
+            <h2 class="text-7xl font-black text-[#0f172a] mb-6 fade-up delay-100">"المحتوى هو الملك"</h2>
+            <p class="text-2xl text-gray-500 mb-10 fade-up delay-200">- بيل غيتس، 1996</p>
+            
+            <div class="bg-gradient-to-r from-blue-50 to-slate-50 p-10 rounded-3xl shadow-inner border border-blue-100 fade-up delay-300">
+                <p class="text-3xl text-[#0f172a] font-bold leading-relaxed mb-6">
+                    الناس لا يشترون المنتجات، بل يشترون <span class="text-[#3b82f6]">النسخة الأفضل من أنفسهم</span>. 
+                </p>
+                <p class="text-2xl text-gray-600">
+                    التسويق هو الغاية، والمحتوى هو الوسيلة التي نستخدمها لإقناع العميل بأن منتجنا هو ما ينقصه.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Content Writing vs Copywriting -->
+    <div class="slide bg-slate-50">
+        <div class="w-full max-w-6xl mx-auto">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-12 text-center fade-up">كتابة المحتوى العادي vs الكتابة البيعية (Copywriting)</h2>
+            <div class="flex gap-8">
+                <div class="w-1/2 bg-white p-8 rounded-3xl shadow-sm fade-left delay-100">
+                    <h3 class="text-3xl font-bold text-gray-700 mb-6 flex items-center gap-3"><i class="fas fa-book-open text-[#3b82f6]"></i> كتابة المحتوى (Content)</h3>
+                    <ul class="space-y-4 text-xl text-gray-600">
+                        <li><strong>الهدف:</strong> التثقيف، الترفيه، وبناء العلاقة (Engagement).</li>
+                        <li><strong>الأسلوب:</strong> معلوماتي، مقالات، مدونات، منشورات عامة.</li>
+                        <li><strong>النتيجة المطلوبة:</strong> لايك، مشاركة، بناء ثقة على المدى الطويل.</li>
+                        <li class="bg-gray-50 p-4 rounded-lg text-lg border-r-4 border-gray-400"><em>مثال: "5 نصائح للحفاظ على نظافة سيارتك في الصيف."</em></li>
+                    </ul>
+                </div>
+                <div class="w-1/2 bg-[#0f172a] text-white p-8 rounded-3xl shadow-xl fade-right delay-200 transform scale-105">
+                    <h3 class="text-3xl font-bold mb-6 flex items-center gap-3"><i class="fas fa-shopping-cart text-[#3b82f6]"></i> الكتابة البيعية (Copywriting)</h3>
+                    <ul class="space-y-4 text-xl text-gray-300">
+                        <li><strong>الهدف:</strong> الإقناع المباشر ودفع العميل لاتخاذ إجراء (Sales).</li>
+                        <li><strong>الأسلوب:</strong> سيكولوجي، يركز على الألم والحل، نصوص إعلانات.</li>
+                        <li><strong>النتيجة المطلوبة:</strong> شراء، تسجيل، اتصال، اشتراك (Action).</li>
+                        <li class="bg-white/10 p-4 rounded-lg text-lg border-r-4 border-[#3b82f6] text-white"><em>مثال: "هل تعاني من حرارة الصيف في سيارتك؟ احجز موعد تظليل الآن واحصل على خصم 20%."</em></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Types of Content Writing -->
+    <div class="slide">
+        <div class="w-full max-w-6xl mx-auto text-center">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-12 fade-up">أشهر أنواع كتابة المحتوى التسويقي</h2>
+            <div class="grid grid-cols-4 gap-6">
+                <div class="bg-slate-50 p-6 rounded-2xl shadow-sm hover-card fade-up delay-100">
+                    <i class="fas fa-share-alt text-4xl text-[#3b82f6] mb-4 block"></i>
+                    <h3 class="font-bold text-xl mb-2">سوشيال ميديا</h3>
+                    <p class="text-sm text-gray-500">منشورات تفاعلية لفيسبوك، تويتر، انستجرام.</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-2xl shadow-sm hover-card fade-up delay-200">
+                    <i class="fas fa-search text-4xl text-[#3b82f6] mb-4 block"></i>
+                    <h3 class="font-bold text-xl mb-2">مقالات SEO</h3>
+                    <p class="text-sm text-gray-500">مقالات للمدونات متوافقة مع محركات البحث (جوجل).</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-2xl shadow-sm hover-card fade-up delay-300">
+                    <i class="fas fa-ad text-4xl text-[#3b82f6] mb-4 block"></i>
+                    <h3 class="font-bold text-xl mb-2">إعلانات (Ad Copy)</h3>
+                    <p class="text-sm text-gray-500">نصوص قصيرة ومقنعة للحملات الإعلانية الممولة.</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-2xl shadow-sm hover-card fade-up delay-400">
+                    <i class="fas fa-video text-4xl text-[#3b82f6] mb-4 block"></i>
+                    <h3 class="font-bold text-xl mb-2">سكربت فيديو/ريلز</h3>
+                    <p class="text-sm text-gray-500">كتابة سيناريو جذاب لفيديوهات التيك توك والريلز.</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-2xl shadow-sm hover-card fade-up delay-500">
+                    <i class="fas fa-envelope-open-text text-4xl text-[#3b82f6] mb-4 block"></i>
+                    <h3 class="font-bold text-xl mb-2">نشرات بريدية</h3>
+                    <p class="text-sm text-gray-500">رسائل إيميل أو واتساب تسويقية للعملاء.</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-2xl shadow-sm hover-card fade-up delay-600">
+                    <i class="fas fa-desktop text-4xl text-[#3b82f6] mb-4 block"></i>
+                    <h3 class="font-bold text-xl mb-2">صفحات هبوط</h3>
+                    <p class="text-sm text-gray-500">محتوى موقع ويب مخصص للبيع (Landing Pages).</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-2xl shadow-sm hover-card fade-up delay-700">
+                    <i class="fas fa-tags text-4xl text-[#3b82f6] mb-4 block"></i>
+                    <h3 class="font-bold text-xl mb-2">وصف المنتجات</h3>
+                    <p class="text-sm text-gray-500">كتابة وصف جذاب يحول الميزات إلى فوائد في المتاجر.</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-2xl shadow-sm hover-card fade-up delay-800">
+                    <i class="fas fa-file-alt text-4xl text-[#3b82f6] mb-4 block"></i>
+                    <h3 class="font-bold text-xl mb-2">كتابة تقنية</h3>
+                    <p class="text-sm text-gray-500">أدلة الاستخدام، دراسات الحالة، التقارير التقنية.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Inbound Marketing Methodology (Funnel) -->
+    <div class="slide">
+        <div class="w-full max-w-6xl mx-auto text-center">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-4 fade-up">منهجية التسويق والمحتوى (قمع المبيعات Funnel)</h2>
+            <p class="text-xl text-gray-500 mb-10 fade-up delay-100">كيف نحول الغريب إلى عميل مخلص عبر المحتوى؟</p>
+            
+            <div class="flex justify-between items-center bg-slate-50 p-8 rounded-3xl shadow-sm border border-gray-100 relative">
+                <!-- الخط الواصل -->
+                <div class="absolute top-1/2 left-10 right-10 h-2 bg-gray-200 -translate-y-1/2 z-0"></div>
+                
+                <!-- Stage 1 -->
+                <div class="relative z-10 text-center w-1/4 fade-up delay-200">
+                    <div class="w-24 h-24 bg-gray-400 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-md text-white font-bold">غريب</div>
+                    <h3 class="font-bold text-lg mb-2 text-gray-700">الجذب (Attract)</h3>
+                    <p class="text-xs bg-white p-2 rounded shadow-sm">محتوى تعليمي، مدونات، SEO، سوشيال ميديا.</p>
+                </div>
+                <!-- Stage 2 -->
+                <div class="relative z-10 text-center w-1/4 fade-up delay-300">
+                    <div class="w-24 h-24 bg-[#3b82f6] rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-md text-white font-bold">زائر</div>
+                    <h3 class="font-bold text-lg mb-2 text-blue-700">التحويل (Convert)</h3>
+                    <p class="text-xs bg-white p-2 rounded shadow-sm">صفحات هبوط، فورم تسجيل، دعوة للعمل (CTA).</p>
+                </div>
+                <!-- Stage 3 -->
+                <div class="relative z-10 text-center w-1/4 fade-up delay-400">
+                    <div class="w-24 h-24 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-md text-white font-bold">محتمل</div>
+                    <h3 class="font-bold text-lg mb-2 text-orange-600">الإغلاق (Close)</h3>
+                    <p class="text-xs bg-white p-2 rounded shadow-sm">إيميلات بيعية، عروض خاصة، دراسات حالة.</p>
+                </div>
+                <!-- Stage 4 -->
+                <div class="relative z-10 text-center w-1/4 fade-up delay-500">
+                    <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-md text-white font-bold">عميل</div>
+                    <h3 class="font-bold text-lg mb-2 text-green-600">الإسعاد (Delight)</h3>
+                    <p class="text-xs bg-white p-2 rounded shadow-sm">محتوى حصري، استبيانات، برامج ولاء (يتحول لمروّج).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 14: Stages of Awareness -->
+    <div class="slide bg-[#0f172a] text-white !border-none">
+        <div class="w-full max-w-5xl mx-auto">
+            <h2 class="text-5xl font-black mb-10 text-center fade-up">مراحل وعي العميل (Stages of Awareness)</h2>
+            <p class="text-xl text-gray-400 text-center mb-10 fade-up delay-100">لا يمكنك بيع منتج لشخص لا يدرك أن لديه مشكلة!</p>
+            
+            <div class="space-y-4">
+                <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl fade-left delay-200 border-l-4 border-gray-500">
+                    <div class="w-10 h-10 bg-gray-500 rounded-full flex items-center justify-center shrink-0 font-bold">1</div>
+                    <div><h4 class="text-xl font-bold text-gray-300">غير واعي تماماً (Unaware)</h4><p class="text-sm">لا يعرف أن لديه مشكلة أصلاً. (المحتوى: قصص إلهام، إحصائيات صادمة).</p></div>
+                </div>
+                <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl fade-left delay-300 border-l-4 border-yellow-500">
+                    <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center shrink-0 font-bold">2</div>
+                    <div><h4 class="text-xl font-bold text-yellow-300">واعي بالمشكلة (Problem-Aware)</h4><p class="text-sm">يعرف المشكلة لكن لا يعرف الحل. (المحتوى: توضيح أسباب المشكلة ونصائح).</p></div>
+                </div>
+                <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl fade-left delay-400 border-l-4 border-blue-500">
+                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center shrink-0 font-bold">3</div>
+                    <div><h4 class="text-xl font-bold text-blue-300">واعي بالحل (Solution-Aware)</h4><p class="text-sm">يعرف أن هناك حلولاً لكنه لم يختر منتجك بعد. (المحتوى: مقارنات، إثبات قوة الحل).</p></div>
+                </div>
+                <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl fade-left delay-500 border-l-4 border-green-500">
+                    <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shrink-0 font-bold">4</div>
+                    <div><h4 class="text-xl font-bold text-green-300">واعي بالمنتج (Product-Aware)</h4><p class="text-sm">يعرف منتجك لكن يحتاج دفعة للشراء. (المحتوى: عروض، ضمانات، شهادات عملاء).</p></div>
+                </div>
+                <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl fade-left delay-600 border-l-4 border-purple-500">
+                    <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center shrink-0 font-bold">5</div>
+                    <div><h4 class="text-xl font-bold text-purple-300">الأكثر وعياً (Most Aware)</h4><p class="text-sm">جاهز للشراء فوراً. (المحتوى: رابط الشراء المباشر، خصم حصري سريع).</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 15: Content Writing Formulas (AIDA) -->
+    <div class="slide">
+        <div class="w-full max-w-5xl mx-auto">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-10 text-center fade-up">صيغ كتابة الإعلانات القوية: AIDA</h2>
+            <div class="grid grid-cols-4 gap-4 mb-10">
+                <div class="bg-red-50 p-6 rounded-2xl text-center border-t-4 border-red-500 shadow-sm scale-pop delay-100">
+                    <h3 class="text-4xl font-black text-red-500 mb-2">A</h3>
+                    <p class="font-bold text-lg text-gray-700">Attention</p>
+                    <p class="text-sm text-gray-500">جذب الانتباه بـ Hook قوي.</p>
+                </div>
+                <div class="bg-yellow-50 p-6 rounded-2xl text-center border-t-4 border-yellow-500 shadow-sm scale-pop delay-200">
+                    <h3 class="text-4xl font-black text-yellow-500 mb-2">I</h3>
+                    <p class="font-bold text-lg text-gray-700">Interest</p>
+                    <p class="text-sm text-gray-500">إثارة الاهتمام بالمعلومات.</p>
+                </div>
+                <div class="bg-blue-50 p-6 rounded-2xl text-center border-t-4 border-blue-500 shadow-sm scale-pop delay-300">
+                    <h3 class="text-4xl font-black text-blue-500 mb-2">D</h3>
+                    <p class="font-bold text-lg text-gray-700">Desire</p>
+                    <p class="text-sm text-gray-500">خلق الرغبة بعرض الفوائد.</p>
+                </div>
+                <div class="bg-green-50 p-6 rounded-2xl text-center border-t-4 border-green-500 shadow-sm scale-pop delay-400">
+                    <h3 class="text-4xl font-black text-green-500 mb-2">A</h3>
+                    <p class="font-bold text-lg text-gray-700">Action</p>
+                    <p class="text-sm text-gray-500">الدعوة للعمل (CTA).</p>
+                </div>
+            </div>
+            
+            <div class="bg-slate-50 p-6 rounded-2xl border border-gray-200 fade-up delay-500">
+                <p class="font-bold text-gray-700 mb-2"><i class="fas fa-edit text-[#3b82f6]"></i> مثال تطبيقي (خدمة تنظيف سيارات):</p>
+                <p class="mb-1"><span class="font-bold text-red-500">[A]</span> هل رائحة سيارتك تزعجك كلما ركبتها في الصباح؟</p>
+                <p class="mb-1"><span class="font-bold text-yellow-500">[I]</span> الغسيل العادي لا يزيل البكتيريا المتراكمة في المقاعد والمكيف.</p>
+                <p class="mb-1"><span class="font-bold text-blue-500">[D]</span> خدمة التنظيف العميق بالبخار تعيد سيارتك كالجديدة وتقضي على 99% من الروائح، لتركب سيارتك براحة وانتعاش.</p>
+                <p><span class="font-bold text-green-500">[A]</span> احجز موعدك اليوم واحصل على تعطير مجاني. اضغط الرابط هنا 👇</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 16: Content Writing Formulas (PAS & FAB) -->
+    <div class="slide">
+        <div class="w-full max-w-6xl mx-auto">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-10 text-center fade-up">المزيد من صيغ الكتابة: PAS و FAB</h2>
+            <div class="grid grid-cols-2 gap-8">
+                <!-- PAS -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-orange-500 fade-left delay-100">
+                    <h3 class="text-3xl font-bold text-orange-600 mb-6 text-center">صيغة PAS</h3>
+                    <ul class="space-y-4 text-lg">
+                        <li><span class="font-bold text-gray-800">P - Problem (المشكلة):</span> حدد ألم العميل. <br><em class="text-sm text-gray-500">"هل تعاني من تساقط الشعر؟"</em></li>
+                        <li><span class="font-bold text-gray-800">A - Agitate (التهييج):</span> اضغط على الألم واذكر توابعه. <br><em class="text-sm text-gray-500">"الفراغات في الرأس تجعلك تبدو أكبر سناً وتفقدك ثقتك."</em></li>
+                        <li><span class="font-bold text-gray-800">S - Solution (الحل):</span> قدم منتجك كمنقذ. <br><em class="text-sm text-gray-500">"تركيبتنا الطبيعية توقف التساقط في 14 يوماً."</em></li>
+                    </ul>
+                </div>
+                <!-- FAB -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-teal-500 fade-right delay-200">
+                    <h3 class="text-3xl font-bold text-teal-600 mb-6 text-center">صيغة FAB</h3>
+                    <ul class="space-y-4 text-lg">
+                        <li><span class="font-bold text-gray-800">F - Feature (الميزة):</span> ماذا يمتلك المنتج؟ <br><em class="text-sm text-gray-500">"جوال ببطارية 5000 مللي أمبير."</em></li>
+                        <li><span class="font-bold text-gray-800">A - Advantage (المنفعة):</span> ماذا تفعل هذه الميزة؟ <br><em class="text-sm text-gray-500">"البطارية تدوم ليومين دون شحن."</em></li>
+                        <li><span class="font-bold text-gray-800">B - Benefit (الفائدة العاطفية):</span> كيف تحسن حياته؟ <br><em class="text-sm text-gray-500">"استمتع برحلاتك وصور كل اللحظات دون قلق من انطفاء الجوال."</em></li>
+                    </ul>
+                </div>
+            </div>
+            <p class="text-center mt-8 text-xl font-bold text-[#3b82f6] fade-up delay-300">"العميل لا يشتري الميزة (Feature)، بل يشتري الفائدة (Benefit)"</p>
+        </div>
+    </div>
+    
+    <!-- Slide 17: Hook & CTA -->
+    <div class="slide bg-slate-50">
+        <div class="w-full max-w-5xl mx-auto text-center">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-12 fade-up">عنصران يحددان نجاح المحتوى</h2>
+            
+            <div class="flex flex-col gap-8">
+                <!-- The Hook -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border-r-8 border-red-500 text-right fade-up delay-100 flex items-center gap-6">
+                    <div class="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center shrink-0"><i class="fas fa-fish text-4xl text-red-500"></i></div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">1. الخطّاف (The Hook) - السطر الأول</h3>
+                        <p class="text-gray-600 mb-2">وظيفته إيقاف تصفح العميل (Scroll) في أول 3 ثوانٍ.</p>
+                        <p class="text-sm bg-gray-100 p-2 rounded"><strong>أمثلة:</strong> سؤال مثير، رقم صادم، وعد بكشف سر، تحدي للعميل.</p>
+                    </div>
+                </div>
+                
+                <!-- The CTA -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border-l-8 border-green-500 text-right fade-up delay-200 flex items-center gap-6 flex-row-reverse">
+                    <div class="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center shrink-0"><i class="fas fa-hand-pointer text-4xl text-green-500"></i></div>
+                    <div class="text-left">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">2. الدعوة للعمل (CTA - Call To Action)</h3>
+                        <p class="text-gray-600 mb-2">الطلب الواضح والمباشر في نهاية المنشور.</p>
+                        <p class="text-sm bg-gray-100 p-2 rounded text-right"><strong>أمثلة قوية:</strong> "اضغط الرابط للحجز"، "أرسل 'مهتم' على الواتساب"، "شارك المنشور مع صديق".</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 18: Practical Examples of Hooks -->
+    <div class="slide">
+        <div class="w-full max-w-5xl mx-auto">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-10 text-center fade-up">أمثلة عملية لـ Hooks توقف التمرير</h2>
+            <div class="grid grid-cols-2 gap-6">
+                <div class="bg-slate-50 p-6 rounded-xl border-t-4 border-blue-500 fade-up delay-100">
+                    <p class="font-bold text-blue-600 mb-2">Hook المشكلة:</p>
+                    <p class="text-xl">"تصرف مئات الدولارات على الإعلانات ولا تبيع شيئاً؟ هذا المنشور لك."</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-xl border-t-4 border-purple-500 fade-up delay-200">
+                    <p class="font-bold text-purple-600 mb-2">Hook الرقم أو الإحصائية:</p>
+                    <p class="text-xl">"7 أخطاء تقتل مبيعاتك على فيسبوك (الخطأ الخامس يفعله 90% منا)."</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-xl border-t-4 border-green-500 fade-up delay-300">
+                    <p class="font-bold text-green-600 mb-2">Hook السر/الوعد:</p>
+                    <p class="text-xl">"السر البسيط الذي نستخدمه لمضاعفة المبيعات دون زيادة الميزانية."</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-xl border-t-4 border-orange-500 fade-up delay-400">
+                    <p class="font-bold text-orange-600 mb-2">Hook القصة:</p>
+                    <p class="text-xl">"قبل سنة كانت صفحتي ميتة.. اليوم تحقق 50 طلب يومياً. إليك ما فعلته."</p>
+                </div>
+            </div>
+            <p class="text-center mt-10 text-xl font-bold bg-yellow-100 p-4 rounded-xl inline-block mx-auto fade-up delay-500">تذكر: Hook ضعيف = لا أحد سيقرأ باقي المحتوى مهما كان مفيداً.</p>
+        </div>
+    </div>
+
+    <!-- ======================= SECTION 4: TYPES OF CUSTOMERS & HOW TO DEAL WITH THEM ======================= -->
+    <!-- Slide 19: Customer Psychology Intro -->
+    <div class="slide bg-[#0f172a] text-white !border-none">
+        <div class="max-w-5xl mx-auto text-center">
+            <i class="fas fa-brain text-8xl text-[#3b82f6] mb-8 float-slow fade-up"></i>
+            <h2 class="text-6xl font-black mb-8 fade-up delay-100">سيكولوجية العملاء والمبيعات</h2>
+            <p class="text-3xl font-light leading-relaxed fade-up delay-200">
+                في عالم المبيعات، <span class="font-bold text-[#3b82f6]">"لا توجد مقاسات تناسب الجميع"</span>.<br>
+                كل عميل هو عالم بحد ذاته، ونجاحك يعتمد على سرعة تحليل شخصيته وتكييف أسلوبك معه.
+            </p>
+            <div class="w-32 h-1 bg-[#3b82f6] mx-auto mt-10 fade-up delay-300"></div>
+        </div>
+    </div>
+
+    <!-- Slide 20: 12 Types of Customers (Overview) -->
+    <div class="slide bg-slate-50">
+        <div class="w-full max-w-6xl mx-auto text-center">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-10 fade-up">أنماط العملاء الشائعة</h2>
+            <div class="grid grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-blue-400 scale-pop delay-100"><i class="fas fa-users text-2xl text-blue-500 mb-2 block"></i><span class="font-bold">1. الجدد</span></div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-orange-400 scale-pop delay-150"><i class="fas fa-search text-2xl text-orange-500 mb-2 block"></i><span class="font-bold">2. المحتملون/المستكشفون</span></div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-red-400 scale-pop delay-200"><i class="fas fa-angry text-2xl text-red-500 mb-2 block"></i><span class="font-bold">3. الغاضبون</span></div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-green-400 scale-pop delay-250"><i class="fas fa-heart text-2xl text-green-500 mb-2 block"></i><span class="font-bold">4. الأوفياء</span></div>
+                
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-yellow-400 scale-pop delay-300"><i class="fas fa-question-circle text-2xl text-yellow-500 mb-2 block"></i><span class="font-bold">5. المترددون</span></div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-purple-400 scale-pop delay-350"><i class="fas fa-comments text-2xl text-purple-500 mb-2 block"></i><span class="font-bold">6. الثرثارون</span></div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-indigo-400 scale-pop delay-400"><i class="fas fa-user-shield text-2xl text-indigo-500 mb-2 block"></i><span class="font-bold">7. الواثقون/العارفون</span></div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-pink-400 scale-pop delay-450"><i class="fas fa-eye text-2xl text-pink-500 mb-2 block"></i><span class="font-bold">8. المشاهدون (المتجولون)</span></div>
+                
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-teal-400 scale-pop delay-500"><i class="fas fa-tags text-2xl text-teal-500 mb-2 block"></i><span class="font-bold">9. صائدو الخصومات</span></div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-rose-400 scale-pop delay-550"><i class="fas fa-bolt text-2xl text-rose-500 mb-2 block"></i><span class="font-bold">10. المندفعون</span></div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-cyan-400 scale-pop delay-600"><i class="fas fa-user-secret text-2xl text-cyan-500 mb-2 block"></i><span class="font-bold">11. الشكاكون</span></div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border-b-4 border-gray-400 scale-pop delay-650"><i class="fas fa-smile text-2xl text-gray-500 mb-2 block"></i><span class="font-bold">12. الودودون</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 21: Dealing with specific customers (Part 1) -->
+    <div class="slide">
+        <div class="w-full max-w-6xl mx-auto">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-10 text-center fade-up">كيف تتعامل معهم؟ (الجزء 1)</h2>
+            <div class="grid grid-cols-2 gap-8">
+                <!-- Hesitant -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-yellow-400 hover-card fade-up delay-100">
+                    <div class="flex items-center gap-4 mb-4"><i class="fas fa-question-circle text-4xl text-yellow-500"></i><h3 class="text-3xl font-bold">العميل المتردد</h3></div>
+                    <p class="text-gray-600 mb-4">لا يستطيع اتخاذ القرار ويخشى الندم.</p>
+                    <div class="bg-yellow-50 p-4 rounded-xl">
+                        <p class="font-bold text-yellow-700 mb-2">كيف تتعامل معه؟</p>
+                        <ul class="text-sm space-y-2 list-disc list-inside">
+                            <li>كن حازماً وواثقاً لتبث فيه الثقة.</li>
+                            <li>قلل الخيارات المتاحة أمامه (خيارين فقط).</li>
+                            <li>ركز على الضمانات وسياسة الاسترجاع لتقليل مخاوفه.</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Discount Hunter -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-teal-400 hover-card fade-up delay-200">
+                    <div class="flex items-center gap-4 mb-4"><i class="fas fa-tags text-4xl text-teal-500"></i><h3 class="text-3xl font-bold">عميل العروض والخصومات</h3></div>
+                    <p class="text-gray-600 mb-4">يبحث دائماً عن التوفير و"الصفقة الرابحة".</p>
+                    <div class="bg-teal-50 p-4 rounded-xl">
+                        <p class="font-bold text-teal-700 mb-2">كيف تتعامل معه؟</p>
+                        <ul class="text-sm space-y-2 list-disc list-inside">
+                            <li>أظهر السعر قبل الخصم ليلمس قيمة التوفير.</li>
+                            <li>إذا لم يكن هناك خصم، بيّن التوفير على المدى الطويل.</li>
+                            <li>احذر من تخفيض سعرك بسهولة فتفقد قيمة منتجك.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 22: Dealing with specific customers (Part 2) -->
+    <div class="slide">
+        <div class="w-full max-w-6xl mx-auto">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-10 text-center fade-up">كيف تتعامل معهم؟ (الجزء 2)</h2>
+            <div class="grid grid-cols-2 gap-8">
+                <!-- Skeptical -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-cyan-500 hover-card fade-up delay-100">
+                    <div class="flex items-center gap-4 mb-4"><i class="fas fa-user-secret text-4xl text-cyan-600"></i><h3 class="text-3xl font-bold">العميل الشكاك</h3></div>
+                    <p class="text-gray-600 mb-4">يشك في جودة المنتج ونواياك، ويطلب إثباتات لكل شيء.</p>
+                    <div class="bg-cyan-50 p-4 rounded-xl">
+                        <p class="font-bold text-cyan-700 mb-2">كيف تتعامل معه؟</p>
+                        <ul class="text-sm space-y-2 list-disc list-inside">
+                            <li>قدم أدلة ملموسة، أرقام، وحقائق لا آراء.</li>
+                            <li>استخدم "الدليل الاجتماعي" (Social Proof) كآراء عملاء سابقين.</li>
+                            <li>حافظ على هدوئك ولا تأخذ تشكيكه بشكل شخصي.</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Angry -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-t-8 border-red-500 hover-card fade-up delay-200">
+                    <div class="flex items-center gap-4 mb-4"><i class="fas fa-fire text-4xl text-red-600"></i><h3 class="text-3xl font-bold">العميل الغاضب</h3></div>
+                    <p class="text-gray-600 mb-4">واجه مشكلة أو تجربة سيئة وهو في حالة انفعال.</p>
+                    <div class="bg-red-50 p-4 rounded-xl">
+                        <p class="font-bold text-red-700 mb-2">كيف تتعامل معه؟</p>
+                        <ul class="text-sm space-y-2 list-disc list-inside">
+                            <li>استمع بصمت تام (دعه يفرغ شحنته السلبية).</li>
+                            <li>أظهر التعاطف وتفهم الموقف.</li>
+                            <li>اعتذر عن التجربة (حتى لو لم يكن خطأك) وقدم حلاً فورياً.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 23: Retention and Loyalty -->
+    <div class="slide bg-slate-50">
+        <div class="w-full max-w-5xl mx-auto text-center">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-8 fade-up">قاعدة ذهبية في المبيعات</h2>
+            <div class="bg-white p-10 rounded-3xl shadow-md border-2 border-[#3b82f6] fade-up delay-100">
+                <i class="fas fa-heart text-6xl text-red-500 mb-6 pulse-accent"></i>
+                <h3 class="text-4xl font-bold text-gray-800 mb-6">العملاء الأوفياء (Loyal Customers)</h3>
+                <p class="text-2xl text-gray-600 mb-6 leading-relaxed">
+                    تكلفة جذب عميل جديد <strong>أكبر بـ 5 إلى 25 مرة</strong> من تكلفة الحفاظ على عميل حالي.<br>
+                    العميل المخلص لا يشتري فقط، بل يصبح <strong>سفيراً مجانياً</strong> لعلامتك التجارية.
+                </p>
+                <div class="flex justify-center gap-4 mt-8">
+                    <span class="bg-green-100 text-green-800 px-4 py-2 rounded-full font-bold">خدمة عملاء راقية</span>
+                    <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-bold">برامج ولاء</span>
+                    <span class="bg-purple-100 text-purple-800 px-4 py-2 rounded-full font-bold">تواصل مستمر</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================= SECTION 5: PRACTICAL APPLICATIONS (SOCIAL MEDIA) ======================= -->
+    <!-- Slide 24: Social Media Intro -->
+    <div class="slide bg-[#0f172a] text-white !border-none">
+        <div class="max-w-5xl mx-auto text-center">
+            <i class="fas fa-hashtag text-8xl text-[#3b82f6] mb-8 float-slow fade-up"></i>
+            <h2 class="text-6xl font-black mb-8 fade-up delay-100">تطبيقات عملية على السوشيال ميديا</h2>
+            <p class="text-3xl font-light leading-relaxed fade-up delay-200">
+                كيف نترجم كل ما تعلمناه إلى منشورات وإعلانات تجلب تفاعلاً ومبيعات حقيقية؟
+            </p>
+        </div>
+    </div>
+
+    <!-- Slide 25: Social Media Strategy 1 -->
+    <div class="slide">
+        <div class="w-full max-w-6xl mx-auto">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-12 text-center fade-up">كيف تكتب منشوراً ناجحاً (التشريح)</h2>
+            <div class="flex items-center gap-10">
+                <!-- Example -->
+                <div class="w-1/2 bg-gray-100 p-6 rounded-2xl border border-gray-300 shadow-sm fade-right delay-100">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-blue-600 rounded-full"></div>
+                        <div><p class="font-bold text-sm">صفحة المتجر</p><p class="text-xs text-gray-500">منذ ساعتين</p></div>
+                    </div>
+                    <p class="text-sm bg-yellow-200 inline-block px-2 rounded mb-2">الخطّاف (Hook)</p>
+                    <p class="mb-4 font-bold">🚨 90% من كاميرات المراقبة تفشل وقت الحاجة الحقيقية!</p>
+                    
+                    <p class="text-sm bg-blue-200 inline-block px-2 rounded mb-2">المحتوى/المشكلة</p>
+                    <p class="mb-4 text-gray-700">تشتري كاميرا رخيصة، وعندما تحتاج الرجوع لتسجيل مهم، تجد الصورة مشوشة أو التسجيل ممسوح.</p>
+                    
+                    <p class="text-sm bg-green-200 inline-block px-2 rounded mb-2">الحل/الفوائد</p>
+                    <p class="mb-4 text-gray-700">كاميرات X-Pro الذكية تضمن لك:<br>✅ رؤية ليلية واضحة كالنهار.<br>✅ تخزين سحابي آمن لا يضيع.<br>✅ تنبيهات فورية لجوالك لأي حركة غريبة.</p>
+                    
+                    <p class="text-sm bg-red-200 inline-block px-2 rounded mb-2">الدعوة للعمل (CTA)</p>
+                    <p class="font-bold text-blue-600">احمِ بيتك اليوم. اضغط هنا لطلب المعاينة المجانية 👇<br>www.link.com</p>
+                </div>
+                <!-- Explanation -->
+                <div class="w-1/2 space-y-6 fade-left delay-200">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-r-4 border-[#3b82f6]"><h4 class="font-bold text-lg mb-1">1. تجنب الكليشيهات</h4><p class="text-sm text-gray-600">لا تبدأ بـ "نعلن لزبائننا الكرام"، ابدأ بالمشكلة أو الفائدة.</p></div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-r-4 border-[#3b82f6]"><h4 class="font-bold text-lg mb-1">2. التنسيق البصري</h4><p class="text-sm text-gray-600">استخدم الإيموجي (Emojis) باعتدال لتقسيم النص وجعله مريحاً للعين.</p></div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-r-4 border-[#3b82f6]"><h4 class="font-bold text-lg mb-1">3. رابط واحد فقط</h4><p class="text-sm text-gray-600">لا تضع خيارات كثيرة في الـ CTA (اتصل، أو راسلنا، أو زورنا، أو الموقع). حدد إجراءً واحداً واضحاً.</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 26: Rule of 70-20-10 -->
+    <div class="slide bg-slate-50">
+        <div class="w-full max-w-5xl mx-auto text-center">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-8 fade-up">قاعدة المحتوى الذهبية: 70-20-10</h2>
+            <p class="text-xl text-gray-600 mb-10 fade-up delay-100">إذا كانت كل منشوراتك بيعاً مباشراً، سيمل الجمهور ويغادر.</p>
+            
+            <div class="flex justify-center items-end gap-6 mb-8">
+                <!-- 70% -->
+                <div class="w-1/3 fade-up delay-200">
+                    <div class="bg-blue-500 h-64 rounded-t-2xl flex flex-col items-center justify-center text-white">
+                        <span class="text-5xl font-black">70%</span>
+                        <span class="text-xl font-bold mt-2">محتوى قيّم</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-b-2xl shadow-sm">
+                        <p class="text-sm text-gray-600">تعليمي، تثقيفي، ترفيهي. (مثال: كيف تختار نوع البن المناسب لك؟)</p>
+                    </div>
+                </div>
+                <!-- 20% -->
+                <div class="w-1/3 fade-up delay-300">
+                    <div class="bg-orange-400 h-32 rounded-t-2xl flex flex-col items-center justify-center text-white">
+                        <span class="text-4xl font-black">20%</span>
+                        <span class="text-lg font-bold mt-2">محتوى تفاعلي</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-b-2xl shadow-sm">
+                        <p class="text-sm text-gray-600">مشاركة، آراء، اقتباسات. (مثال: تقييم عميل سعيد بتجربته).</p>
+                    </div>
+                </div>
+                <!-- 10% -->
+                <div class="w-1/3 fade-up delay-400">
+                    <div class="bg-red-500 h-16 rounded-t-2xl flex flex-col items-center justify-center text-white">
+                        <span class="text-3xl font-black">10%</span>
+                        <span class="text-md font-bold mt-1">ترويجي</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-b-2xl shadow-sm">
+                        <p class="text-sm text-gray-600">بيع مباشر، عروض، إعلانات. (مثال: خصم 20% لفترة محدودة).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 27: Ad Formats & Creative -->
+    <div class="slide">
+        <div class="w-full max-w-6xl mx-auto">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-12 text-center fade-up">أنواع الإعلانات وتأثيرها (Ad Creatives)</h2>
+            <div class="grid grid-cols-3 gap-6">
+                <!-- Image -->
+                <div class="bg-white p-6 rounded-3xl shadow-md text-center hover-card fade-up delay-100 border border-gray-100">
+                    <i class="fas fa-image text-5xl text-blue-500 mb-4 block"></i>
+                    <h3 class="text-2xl font-bold mb-2">الصورة الثابتة</h3>
+                    <p class="text-sm text-gray-600 mb-4">ممتازة للعروض المباشرة، التخفيضات، وتوضيح منتج محدد بوضوح.</p>
+                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded text-xs font-bold">نسبة التحويل: متوسطة</span>
+                </div>
+                <!-- Carousel -->
+                <div class="bg-white p-6 rounded-3xl shadow-md text-center hover-card fade-up delay-200 border border-gray-100">
+                    <i class="fas fa-images text-5xl text-orange-500 mb-4 block"></i>
+                    <h3 class="text-2xl font-bold mb-2">الصور المتعددة (Carousel)</h3>
+                    <p class="text-sm text-gray-600 mb-4">مثالية لسرد قصة خطوة بخطوة، أو عرض مجموعة منتجات مختلفة (كتالوج).</p>
+                    <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded text-xs font-bold">نسبة التحويل: جيدة</span>
+                </div>
+                <!-- Video/Reels -->
+                <div class="bg-white p-6 rounded-3xl shadow-md text-center hover-card fade-up delay-300 border border-gray-100">
+                    <i class="fas fa-video text-5xl text-red-500 mb-4 block"></i>
+                    <h3 class="text-2xl font-bold mb-2">الفيديو / Reels</h3>
+                    <p class="text-sm text-gray-600 mb-4">الأقوى حالياً! ممتاز لإثبات الفعالية، والشرح العملي، وبناء الثقة.</p>
+                    <span class="bg-red-100 text-red-800 px-3 py-1 rounded text-xs font-bold">نسبة التحويل: عالية جداً</span>
+                </div>
+            </div>
+            <p class="text-center mt-8 text-gray-500 text-sm fade-up delay-400">ملاحظة: المنصات الحالية (انستجرام، تيك توك، فيسبوك) تعطي أولوية قصوى لانتشار الفيديوهات القصيرة (Short-form Videos).</p>
+        </div>
+    </div>
+
+    <!-- Slide 28: Metrics and Analytics -->
+    <div class="slide bg-slate-50">
+        <div class="w-full max-w-5xl mx-auto">
+            <h2 class="text-5xl font-black text-[#0f172a] mb-10 text-center fade-up">ما لا يمكن قياسه، لا يمكن تحسينه!</h2>
+            <div class="grid grid-cols-2 gap-8">
+                <div class="space-y-4 fade-right delay-100">
+                    <h3 class="text-2xl font-bold text-gray-800 border-b-2 border-blue-500 pb-2 inline-block">مقاييس الوعي (Awareness)</h3>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-r-4 border-blue-400">
+                        <p class="font-bold">الوصول (Reach):</p><p class="text-sm text-gray-600">عدد الأشخاص الفريدين الذين رأوا إعلانك.</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-r-4 border-blue-400">
+                        <p class="font-bold">الظهور (Impressions):</p><p class="text-sm text-gray-600">عدد مرات عرض الإعلان (قد يراه الشخص أكثر من مرة).</p>
+                    </div>
+                </div>
+                <div class="space-y-4 fade-left delay-200">
+                    <h3 class="text-2xl font-bold text-gray-800 border-b-2 border-green-500 pb-2 inline-block">مقاييس التفاعل والبيع (Conversion)</h3>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-r-4 border-green-400">
+                        <p class="font-bold">معدل النقر (CTR - Click Through Rate):</p><p class="text-sm text-gray-600">نسبة من نقروا على الرابط من إجمالي من رأوا الإعلان (يقيس قوة الـ Hook والصورة).</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-r-4 border-green-400">
+                        <p class="font-bold">تكلفة التحويل (CPA / Cost Per Action):</p><p class="text-sm text-gray-600">كم كلفك الحصول على العميل الواحد (شراء، أو رسالة).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 29: AI in Content Creation (Bonus) -->
+    <div class="slide">
+        <div class="w-full max-w-5xl mx-auto text-center">
+            <div class="w-24 h-24 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6 float-slow fade-up">
+                <i class="fas fa-robot text-5xl text-white"></i>
+            </div>
+            <h2 class="text-5xl font-black text-[#0f172a] mb-8 fade-up delay-100">استخدام الذكاء الاصطناعي (AI) في المحتوى</h2>
+            <p class="text-xl text-gray-600 mb-8 fade-up delay-200">الـ AI لن يأخذ وظيفتك، لكن الشخص الذي يستخدم الـ AI سيأخذها!</p>
+            
+            <div class="bg-slate-50 p-8 rounded-3xl border border-gray-200 text-right fade-up delay-300">
+                <p class="font-bold text-xl text-purple-700 mb-4">أمثلة لاستخدام أدوات مثل ChatGPT أو Claude:</p>
+                <ul class="space-y-4 text-lg">
+                    <li><i class="fas fa-magic text-pink-500 ml-2"></i> <strong>العصف الذهني:</strong> "أعطني 10 أفكار لمقاطع ريلز لعيادة أسنان."</li>
+                    <li><i class="fas fa-pencil-alt text-pink-500 ml-2"></i> <strong>كتابة المسودات:</strong> "اكتب لي منشوراً بأسلوب PAS لبيع كورس تسويق."</li>
+                    <li><i class="fas fa-sync text-pink-500 ml-2"></i> <strong>إعادة الصياغة:</strong> "أعد صياغة هذه الفقرة لتكون أكثر حماساً وإقناعاً."</li>
+                </ul>
+                <p class="mt-6 text-sm text-gray-500 bg-white p-3 rounded border-r-2 border-red-400">⚠️ تحذير: لا تنسخ وتلصق مباشرة. استخدم الـ AI كمساعد، وأضف لمستك الإنسانية وروح علامتك التجارية.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================= SECTION 6: CONCLUSION ======================= -->
+    <!-- Slide 30: Summary & Conclusion -->
+    <div class="slide bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-white !border-none">
+        <div class="text-center max-w-4xl mx-auto">
+            <div class="w-32 h-32 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-8 pulse-accent fade-up">
+                <i class="fas fa-check-circle text-6xl text-[#3b82f6]"></i>
+            </div>
+            <h2 class="text-6xl font-black mb-6 fade-up delay-100">الخلاصة للنجاح</h2>
+            <ul class="text-right space-y-6 text-2xl font-light mx-auto inline-block fade-up delay-200">
+                <li><i class="fas fa-star text-[#d4af37] ml-3"></i> افهم عميلك أكثر مما تفهم منتجك.</li>
+                <li><i class="fas fa-star text-[#d4af37] ml-3"></i> اكتب للعميل بأسلوب الفوائد (كيف تحل مشكلته).</li>
+                <li><i class="fas fa-star text-[#d4af37] ml-3"></i> نوع المحتوى (70-20-10) لتبني علاقة وثقة.</li>
+                <li><i class="fas fa-star text-[#d4af37] ml-3"></i> استمر في القياس والتحسين (A/B Testing).</li>
+            </ul>
+            <div class="mt-12 text-3xl font-bold accent-text-gradient fade-up delay-400">
+                المبيعات العظيمة تبدأ بمحتوى عظيم 🚀
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Logic for Navigation and Progress
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const progressFill = document.getElementById('progressFill');
+    const totalSlides = slides.length; 
+
+    document.getElementById('slideCounter').innerText = '1 / ' + totalSlides;
+    document.getElementById('gotoSlide').setAttribute('max', totalSlides);
+
+    function updateSlideCounter() {
+        document.getElementById('slideCounter').innerText = (currentSlide + 1) + ' / ' + totalSlides;
+        document.getElementById('gotoSlide').value = currentSlide + 1;
+    }
+
+    function goToSlide() {
+        let slideNum = parseInt(document.getElementById('gotoSlide').value);
+        if (slideNum >= 1 && slideNum <= totalSlides) {
+            currentSlide = slideNum - 1;
+            updateSlides();
+            updateSlideCounter();
+        } else {
+            alert('رقم الشريحة من 1 إلى ' + totalSlides);
+        }
+    }
+
+    function updateSlides() {
+        slides.forEach((slide, idx) => {
+            slide.classList.remove('active', 'prev');
+            if (idx === currentSlide) {
+                slide.classList.add('active');
+            } else if (idx < currentSlide) {
+                slide.classList.add('prev');
+            }
+        });
+        const percent = ((currentSlide + 1) / totalSlides) * 100;
+        progressFill.style.width = percent + '%';
+        updateSlideCounter();
+    }
+
+    window.nextSlide = () => {
+        if (currentSlide < totalSlides - 1) {
+            currentSlide++;
+            updateSlides();
+        }
+    };
+
+    window.prevSlide = () => {
+        if (currentSlide > 0) {
+            currentSlide--;
+            updateSlides();
+        }
+    };
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') nextSlide();
+        else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') prevSlide();
+    });
+
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('.btn-nav') || e.target.closest('#draggableControls')) return;
+        const x = e.clientX;
+        if (x < window.innerWidth * 0.3) nextSlide();
+        else if (x > window.innerWidth * 0.7) prevSlide();
+    });
+
+    updateSlides();
+
+    // Drag and Drop Logic for Controls
+    const draggableMenu = document.getElementById('draggableControls');
+    let isDragging = false;
+    let startX, startY;
+
+    draggableMenu.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('mouseup', dragEnd);
+
+    draggableMenu.addEventListener('touchstart', dragStart, {passive: false});
+    document.addEventListener('touchmove', dragMove, {passive: false});
+    document.addEventListener('touchend', dragEnd);
+
+    function dragStart(e) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+        isDragging = true;
+        draggableMenu.classList.add('dragging');
+        let clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        let clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        startX = clientX;
+        startY = clientY;
+        const rect = draggableMenu.getBoundingClientRect();
+        draggableMenu.style.transform = 'none'; 
+        draggableMenu.style.bottom = 'auto'; 
+        draggableMenu.style.left = rect.left + 'px';
+        draggableMenu.style.top = rect.top + 'px';
+    }
+
+    function dragMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        let clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        let clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        let dx = clientX - startX;
+        let dy = clientY - startY;
+        let currentLeft = parseInt(draggableMenu.style.left) || 0;
+        let currentTop = parseInt(draggableMenu.style.top) || 0;
+        draggableMenu.style.left = (currentLeft + dx) + 'px';
+        draggableMenu.style.top = (currentTop + dy) + 'px';
+        startX = clientX;
+        startY = clientY;
+    }
+
+    function dragEnd() {
+        isDragging = false;
+        draggableMenu.classList.remove('dragging');
+    }
+</script>
+</body>
+</html>
