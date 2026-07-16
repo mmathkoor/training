@@ -748,7 +748,7 @@
         }
 
         // Map generic raw JSON into structured Application state objects
-        function mapRawDataToApp(rawRows) {
+         function mapRawDataToApp(rawRows) {
             let newData = [];
             rawRows.forEach((row, index) => {
                 const keys = Object.keys(row);
@@ -776,6 +776,15 @@
 
                 let subTasks = parseTasksIntoChecklist(tasksStr);
                 if(subTasks.length === 0) subTasks.push({ title: mainGoal, done: false }); 
+
+                // --- التعديل هنا: تحديد المهام كـ "منجزة" تلقائياً بناءً على النسبة القادمة من الإكسل ---
+                if (existingProgress > 0) {
+                    let tasksToComplete = Math.round((existingProgress / 100) * subTasks.length);
+                    for (let i = 0; i < tasksToComplete; i++) {
+                        if (subTasks[i]) subTasks[i].done = true;
+                    }
+                }
+                // --------------------------------------------------------------------------
 
                 newData.push({
                     id: parseInt(id),
