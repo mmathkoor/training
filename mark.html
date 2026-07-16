@@ -582,7 +582,7 @@
         <div class="modal-content bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border border-gray-200">
             <div class="bg-gradient-to-r from-emerald-600 to-emerald-800 p-5 text-white flex justify-between items-center shadow-md">
                 <h3 class="font-black text-lg flex items-center gap-3 tracking-wide">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4-4m0 0l-4-4m4 4V4"></path></svg>
                     تصدير تقرير الإنجاز
                 </h3>
                 <button onclick="closeModal('exportModal')" class="text-white hover:text-gray-200 bg-white/10 hover:bg-white/20 rounded-full p-1.5 transition-colors">
@@ -736,7 +736,7 @@
             localStorage.setItem('kuraimiGoalsData', JSON.stringify(appData));
         }
 
-        // Extremely robust split function to handle edge cases from Google Sheets (Numbers, blanks, single words)
+        // Extremely robust split function to handle edge cases from Google Sheets
         function parseTasksIntoChecklist(tasksStr) {
             if (tasksStr === null || tasksStr === undefined) return [];
             let safeStr = String(tasksStr).trim();
@@ -747,14 +747,14 @@
             return items.map(title => ({ title: title, done: false }));
         }
 
-        // Map generic raw JSON into structured Application state objects
-         function mapRawDataToApp(rawRows) {
+        // --- MAP RAW DATA TO APP (Robust version handling missing data and percentages correctly) ---
+        function mapRawDataToApp(rawRows) {
             let newData = [];
             rawRows.forEach((row, index) => {
                 try {
                     const keys = Object.keys(row);
                     
-                    // دالة بحث ذكية تستثني أعمدة معينة لتفادي تداخل عمود (المهام) مع (الإنجاز)
+                    // Smart finder to exclude specific words (like 'المهام' from 'الإنجاز')
                     const val = (possibleNames, excludeNames = []) => {
                         const key = keys.find(k => {
                             const matchPossible = possibleNames.some(pn => k.includes(pn));
@@ -764,28 +764,37 @@
                         return key ? row[key] : '';
                     };
 
-                    // فلتر تنظيف قوي للأرقام والنسب المئوية لحل مشكلة NaN
-                    const safeNum = (v) => {
-                        if (v === null || v === undefined || v === '') return 0;
-                        let num = parseFloat(String(v).replace(/[%]/g, '').trim());
-                        return isNaN(num) ? 0 : num;
-                    };
-
                     let id = val(['م', 'id', 'رقم']) || (index + 1);
                     let mainGoal = val(['الهدف الفرعي', 'الهدف الرئيسي', 'الهدف']) || 'بدون عنوان';
                     let tasksStr = val(['المهام', 'تفاصيل']);
                     let isExtra = val(['النوع', 'نوع']) === 'مبادرة إضافية';
                     
-                    // استخدام دالة الاستثناء لتجاهل عمود المهام تماماً عند البحث عن أرقام الإنجاز
-                    let progressVal = safeNum(val(['الإنجاز'], ['المهام']));
-                    let weightVal = safeNum(val(['الوزن']));
-                    let targetVal = safeNum(val(['المستهدف']));
-                    let achievedVal = safeNum(val(['المنجز']));
-                    let scoreVal = safeNum(val(['التقييم']));
+                    // Clean progress values coming from excel (removing %, handling empty strings)
+                    let rawProgress = val(['الإنجاز'], ['المهام']); // Explicitly exclude 'المهام'
+                    let progressVal = 0;
+                    if (rawProgress !== null && rawProgress !== undefined && rawProgress !== '') {
+                        let cleanedStr = String(rawProgress).replace(/%/g, '').trim();
+                        let parsedNum = parseFloat(cleanedStr);
+                        if (!isNaN(parsedNum)) {
+                            progressVal = parsedNum;
+                        }
+                    }
+
+                    // Parse other numbers safely
+                    const safeNum = (v, defaultV) => {
+                        if (v === null || v === undefined || v === '') return defaultV;
+                        let n = parseFloat(String(v).replace(/[^0-9.-]+/g,""));
+                        return isNaN(n) ? defaultV : n;
+                    };
+
+                    let weightVal = safeNum(val(['الوزن']), 1);
+                    let targetVal = safeNum(val(['المستهدف']), 1);
+                    let achievedVal = safeNum(val(['المنجز']), 0);
+                    let scoreVal = safeNum(val(['التقييم']), 0);
 
                     let subTasks = parseTasksIntoChecklist(tasksStr);
                     
-                    // التوزيع التلقائي لعلامات الصح (✓) بناءً على النسبة القادمة من الإكسل
+                    // Calculate automatic Checkboxes based on percentage from Excel
                     if (subTasks.length > 0) {
                         if (progressVal >= 100) {
                             subTasks.forEach(st => st.done = true);
@@ -818,6 +827,179 @@
                 }
             });
             return newData;
+        }
+
+        /**
+         * ==========================================
+         * GOOGLE SHEETS API OPERATIONS
+         * ==========================================
+         */
+         
+        // --- Fetch from Google Sheets ---
+        async function fetchFromGoogleSheets(isAuto = false) {
+            let btnText, spinner, errorMsg;
+            
+            if (!isAuto) {
+                btnText = document.getElementById('text-sync-gs');
+                spinner = document.getElementById('spinner-gs');
+                errorMsg = document.getElementById('sync-error-msg');
+                btnText.textContent = 'جاري الاتصال...';
+                spinner.style.display = 'block';
+                errorMsg.classList.add('hidden');
+            } else {
+                showToast('جاري تحديث الخطة تلقائياً بالخلفية...');
+                document.getElementById('sync-status').classList.remove('hidden');
+            }
+            
+            try {
+                const response = await fetch(GOOGLE_SHEETS_API_URL);
+                if (!response.ok) throw new Error('خطأ في الاتصال بالشبكة (CORS) أو الرابط غير صحيح.');
+                
+                const text = await response.text();
+                let rawData;
+                try {
+                    rawData = JSON.parse(text);
+                } catch (e) {
+                    throw new Error('الرابط لا يعيد بيانات JSON صالحة. تأكد من إعدادات النشر (Deploy).');
+                }
+
+                if (rawData.error) {
+                    throw new Error('خطأ برمجي من جوجل: ' + rawData.error);
+                }
+
+                if (!Array.isArray(rawData) || rawData.length === 0) {
+                     throw new Error('تم الاتصال بنجاح ولكن ملف الإكسل فارغ (تأكد من اسم الورقة).');
+                }
+
+                // 1. Fetch fresh data (Excel is the Source of Truth)
+                const newPlannedData = mapRawDataToApp(rawData);
+                
+                // 2. Keep extra tasks that were added locally but not pushed yet
+                const localExtraTasks = appData.filter(g => g.isExtra);
+                
+                // 3. Merge: We trust newPlannedData fully, only append extra local tasks not present in sheet.
+                const uniqueLocalExtras = localExtraTasks.filter(lt => !newPlannedData.some(md => md.id === lt.id));
+                appData = [...newPlannedData, ...uniqueLocalExtras];
+                
+                saveData();
+                updateAllUI();
+                
+                if (!isAuto) {
+                    closeModal('importModal');
+                    showToast('تم مزامنة الخطة من Google Sheets بنجاح!');
+                }
+                
+            } catch (error) {
+                console.error("Fetch error: ", error);
+                if (!isAuto && errorMsg) {
+                    errorMsg.textContent = error.message;
+                    errorMsg.classList.remove('hidden');
+                } else if(isAuto) {
+                    document.getElementById('sync-status').classList.add('hidden');
+                }
+            } finally {
+                if (!isAuto && btnText && spinner) {
+                    btnText.textContent = 'بدء المزامنة الذكية الآن';
+                    spinner.style.display = 'none';
+                }
+            }
+        }
+
+        // --- Push Progress Update to Google Sheets ---
+        async function pushUpdateToGoogleSheets(goalData) {
+            const btnText = document.getElementById('text-save-sub');
+            const spinner = document.getElementById('spinner-save-sub');
+            btnText.textContent = 'جاري الحفظ بالخادم...';
+            spinner.style.display = 'block';
+
+            try {
+                const response = await fetch(GOOGLE_SHEETS_API_URL, {
+                    method: 'POST',
+                    redirect: "follow",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({
+                        action: 'update_progress',
+                        id: goalData.id,
+                        achieved: goalData.achieved,
+                        progress: goalData.progress,
+                        finalScore: goalData.finalScore
+                    })
+                });
+                const result = await response.json();
+                if(result.status === 'success') {
+                    showToast('تم تحديث الإنجاز في الإكسل بنجاح ✓');
+                } else {
+                    console.error("Sheet update error:", result.error);
+                    showToast('تم الحفظ محلياً (حدث خطأ في الإكسل: ' + result.error + ')');
+                }
+            } catch (error) {
+                console.error("Push error:", error);
+                showToast('تم الحفظ محلياً (تعذر الوصول لجوجل شيت)');
+            } finally {
+                btnText.textContent = 'حفظ التحديث وإغلاق';
+                spinner.style.display = 'none';
+                closeModal('subTaskModal');
+            }
+        }
+
+        // --- Push New Extra Task to Google Sheets ---
+        async function pushNewExtraTaskToGoogleSheets(taskData) {
+            const btnText = document.getElementById('text-save-extra');
+            const spinner = document.getElementById('spinner-save-extra');
+            btnText.textContent = 'جاري الإرسال...';
+            spinner.style.display = 'block';
+
+            try {
+                const response = await fetch(GOOGLE_SHEETS_API_URL, {
+                    method: 'POST',
+                    redirect: "follow",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({
+                        action: 'add_extra',
+                        ...taskData
+                    })
+                });
+                const result = await response.json();
+                if(result.status === 'success') {
+                    showToast('تمت إضافة المبادرة للإكسل بنجاح ✓');
+                } else {
+                    console.error("Add row error:", result.error);
+                    showToast('تم الحفظ محلياً (خطأ في الإكسل: ' + result.error + ')');
+                }
+            } catch (error) {
+                console.error("Push error:", error);
+                showToast('تم الحفظ محلياً (تعذر الاتصال بالخادم)');
+            } finally {
+                btnText.textContent = 'حفظ وتوثيق المبادرة';
+                spinner.style.display = 'none';
+                closeModal('addTaskModal');
+                document.getElementById('extraTaskForm').reset();
+            }
+        }
+
+        // --- Delete Extra Task from Google Sheets ---
+        async function deleteExtraTaskFromGoogleSheets(taskId) {
+            try {
+                const response = await fetch(GOOGLE_SHEETS_API_URL, {
+                    method: 'POST',
+                    redirect: "follow",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({
+                        action: 'delete_extra',
+                        id: taskId
+                    })
+                });
+                const result = await response.json();
+                if(result.status === 'success') {
+                    showToast('تم الحذف من الإكسل بنجاح ✓');
+                } else {
+                    console.error("Delete row error:", result.error);
+                    showToast('تم الحذف محلياً فقط (خطأ في الإكسل: ' + result.error + ')');
+                }
+            } catch (error) {
+                console.error("Delete error:", error);
+                showToast('تم الحذف محلياً فقط (تعذر الاتصال بالخادم)');
+            }
         }
 
         /**
@@ -1031,7 +1213,7 @@
                         <td class="px-3 py-4 text-center font-bold border-l border-gray-100">${goal.target}</td>
                         <td class="px-5 py-4 text-center border-l border-gray-100 bg-yellow-50/20">
                             <button onclick="openSubTaskModal(${goal.id})" class="text-xs font-black px-4 py-2.5 rounded-xl ${completedCount === totalCount ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border border-emerald-200' : 'bg-primary text-white hover:bg-primaryDark shadow-md'} transition-all w-full flex items-center justify-center gap-1">
-                                ${completedCount === totalCount ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> مكتمل 100%' : `تحديث (${totalCount}/${completedCount})`}
+                                ${completedCount === totalCount ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> مكتمل 100%' : `تحديث (${completedCount} من ${totalCount})`}
                             </button>
                         </td>
                         <td class="px-3 py-4 text-center border-l border-gray-100">
@@ -1119,7 +1301,14 @@
                 `;
             });
             document.getElementById('subtasks-checklist').innerHTML = checklistHtml;
-            document.getElementById('modal-calc-progress').textContent = goal.progress + '%';
+            
+            // Initial coloring for modal progress
+            const progElement = document.getElementById('modal-calc-progress');
+            progElement.textContent = goal.progress + '%';
+            if(goal.progress >= 100) progElement.className = "font-black text-emerald-500 text-2xl drop-shadow-sm";
+            else if(goal.progress >= 50) progElement.className = "font-black text-goldDark text-2xl drop-shadow-sm";
+            else progElement.className = "font-black text-primary text-2xl drop-shadow-sm";
+
             openModal('subTaskModal');
         }
 
