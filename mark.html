@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة الأهداف - بنك الكريمي الإسلامي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#7a1b22', gold: '#d4af37', lightGold: '#f4e9cd' },
+                    fontFamily: { sans: ['Tajawal', 'Cairo', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f1f5f9; color: #1a1a1a; margin: 0; overflow: hidden; }
+        .tab-content { display: none; animation: fadeIn 0.4s ease-out; }
+        .tab-content.active { display: block; }
+        .modal { display: none; opacity: 0; transition: opacity 0.3s ease; }
+        .modal.active { display: flex; opacity: 1; z-index: 100;}
+        .modal-content { transform: scale(0.95); transition: transform 0.3s ease; }
+        .modal.active .modal-content { transform: scale(1); }
+        
+        /* Login Screen Overlay */
+        #login-screen { position: fixed; inset: 0; background-color: #f1f5f9; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
+        #login-screen.hidden { opacity: 0; pointer-events: none; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .toast { animation: slideUp 0.3s ease-out; }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .kuraimi-checkbox:checked { background-color: #7a1b22; border-color: #7a1b22; }
+        
+        /* Spinner */
+        .spinner { border: 3px solid rgba(212, 175, 55, 0.3); border-radius: 50%; border-top: 3px solid #d4af37; width: 24px; height: 24px; animation: spin 1s linear infinite; display: none; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Login Screen -->
+    <div id="login-screen">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-sm w-full mx-4 text-center border-t-4 border-gold">
+            <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-lightGold flex items-center justify-center border-4 border-gold shadow-sm overflow-hidden">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUIEjuNeKPxjlno3TAiyi8ChJaeKSS4XcbqC_8IPoHXa5SImOeE6YlKEs&s=10" alt="بنك الكريمي الإسلامي" class="w-16 h-16 object-contain" />
+            </div>
+            <h2 class="text-xl font-bold text-primary mb-1">بنك الكريمي الإسلامي</h2>
+            <p class="text-sm text-gray-500 mb-6">نظام إدارة الأهداف - قطاع الشركات</p>
+            
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <input type="password" id="passwordInput" placeholder="أدخل كلمة المرور..." required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-center text-lg tracking-widest" />
+                </div>
+                <button type="submit" class="w-full bg-primary text-white font-bold py-3 rounded-xl hover:bg-[#5a1318] transition-colors shadow-md">
+                    تسجيل الدخول
+                </button>
+                <p id="loginError" class="text-red-500 text-sm hidden">كلمة المرور غير صحيحة!</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sidebar (Desktop) -->
+    <aside class="w-64 bg-white shadow-xl z-20 hidden md:flex flex-col relative">
+        <div class="p-6 flex flex-col items-center border-b border-gray-100">
+            <div class="w-24 h-24 mb-4 rounded-full bg-lightGold flex items-center justify-center border-4 border-gold shadow-sm overflow-hidden">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUIEjuNeKPxjlno3TAiyi8ChJaeKSS4XcbqC_8IPoHXa5SImOeE6YlKEs&s=10" alt="بنك الكريمي الإسلامي" class="w-16 h-16 object-contain" />
+            </div>
+            <h1 class="text-lg font-bold text-primary text-center leading-tight">بنك الكريمي الإسلامي</h1>
+            <p class="text-xs text-gold font-semibold mt-1">قطاع الشركات والأعمال</p>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+            <button onclick="switchTab('dashboard')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all active-nav" data-target="dashboard">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 3h7v7H3z M14 3h7v7h-7z M14 14h7v7h-7z M3 14h7v7H3z"/></svg>
+                <span class="font-semibold">لوحة القيادة</span>
+            </button>
+            <button onclick="switchTab('tasks')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-gray-600 hover:bg-red-50 hover:text-primary" data-target="tasks">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01"/></svg>
+                <span class="font-semibold">تحديث الإنجاز</span>
+            </button>
+            <button onclick="switchTab('extra-tasks')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-gray-600 hover:bg-red-50 hover:text-primary" data-target="extra-tasks">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8 M8 12h8"/></svg>
+                <span class="font-semibold">المهام الإضافية</span>
+            </button>
+            
+            <div class="pt-6 mt-4 border-t border-gray-100 space-y-2">
+                <button onclick="openModal('exportModal')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all bg-green-50 text-green-700 hover:bg-green-100 border border-green-200 shadow-sm">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M8 13h8 M8 17h8 M12 13v8"/></svg>
+                    <span class="font-semibold text-sm">تصدير إلى Excel</span>
+                </button>
+                <button onclick="openModal('importModal')" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-gray-600 hover:bg-gray-100 border border-dashed border-gray-300">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242 M12 12v9 M8 16l4-4 4 4"/></svg>
+                    <span class="font-semibold text-sm">استيراد الخطة</span>
+                </button>
+                <button onclick="logout()" class="w-full flex items-center justify-center gap-2 mt-4 text-xs text-gray-400 hover:text-red-500 transition-colors">
+                    تسجيل الخروج
+                </button>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-full overflow-hidden w-full relative">
+        <!-- Mobile Header -->
+        <div class="md:hidden bg-white shadow-sm p-4 flex justify-between items-center z-20 shrink-0">
+            <div class="flex items-center gap-2">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUIEjuNeKPxjlno3TAiyi8ChJaeKSS4XcbqC_8IPoHXa5SImOeE6YlKEs&s=10" alt="Logo" class="w-8 h-8 rounded-full border border-gold" />
+                <span class="font-bold text-primary text-sm">الكريمي الإسلامي</span>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="openModal('exportModal')" class="bg-green-100 text-green-700 p-2 rounded-lg" title="تصدير للإكسل">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M8 13h8 M8 17h8 M12 13v8"/></svg>
+                </button>
+                <select id="mobile-nav" onchange="switchTab(this.value)" class="bg-gray-50 border border-gray-200 text-sm rounded-lg focus:ring-primary focus:border-primary block p-2 outline-none">
+                    <option value="dashboard">لوحة القيادة</option>
+                    <option value="tasks">تحديث الإنجاز</option>
+                    <option value="extra-tasks">المهام الإضافية</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth" id="main-scroll-area">
+            
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-primary flex items-center gap-2">
+                            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 6l-9.5 9.5-5-5L1 18 M17 6h6v6"/></svg>
+                            ملخص الأداء الشهري
+                        </h2>
+                        <p class="text-gray-500 mt-1">نظرة عامة على تقدم أهداف القسم</p>
+                    </div>
+                    <div class="flex items-center gap-2 bg-white p-2 rounded-xl shadow-sm border border-gray-100">
+                        <label class="text-sm font-bold text-gray-700 px-2">عرض شهر:</label>
+                        <select id="dashboard-month-filter" onchange="setMonthFilter(this.value)" class="bg-gray-50 border border-gray-200 text-sm rounded-lg focus:ring-primary focus:border-primary block p-2 outline-none font-bold text-primary cursor-pointer transition-colors hover:bg-gray-100">
+                            <option value="all">كل الأشهر</option>
+                            <option value="1">1 - يناير</option>
+                            <option value="2">2 - فبراير</option>
+                            <option value="3">3 - مارس</option>
+                            <option value="4">4 - أبريل</option>
+                            <option value="5">5 - مايو</option>
+                            <option value="6">6 - يونيو</option>
+                            <option value="7">7 - يوليو</option>
+                            <option value="8">8 - أغسطس</option>
+                            <option value="9">9 - سبتمبر</option>
+                            <option value="10">10 - أكتوبر</option>
+                            <option value="11">11 - نوفمبر</option>
+                            <option value="12">12 - ديسمبر</option>
+                        </select>
+                    </div>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-16 h-16 bg-primary opacity-5 rounded-bl-full transition-transform group-hover:scale-110"></div>
+                        <span class="text-gray-500 text-sm font-medium mb-1 block">نسبة الإنجاز الكلية (مخطط)</span>
+                        <div class="flex items-end gap-2">
+                            <span class="text-4xl font-bold text-primary" id="stat-overall">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mt-4 overflow-hidden">
+                            <div class="bg-primary h-2 rounded-full transition-all duration-1000" id="stat-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex justify-between items-center">
+                        <div>
+                            <span class="text-gray-500 text-sm font-medium block">أهداف خطة مكتملة</span>
+                            <div class="text-3xl font-bold text-gray-800 mt-1"><span id="stat-completed">0</span> <span class="text-lg text-gray-400">/ <span id="stat-total">0</span></span></div>
+                        </div>
+                        <div class="p-3 bg-green-50 rounded-xl text-green-600">
+                            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex justify-between items-center">
+                        <div>
+                            <span class="text-gray-500 text-sm font-medium block">مبادرات إضافية (مُنجزة)</span>
+                            <div class="text-3xl font-bold text-gray-800 mt-1" id="stat-extra">0</div>
+                        </div>
+                        <div class="p-3 bg-yellow-50 rounded-xl text-gold">
+                            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8 M8 12h8"/></svg>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-primary rounded-2xl p-6 shadow-md text-white relative overflow-hidden flex flex-col justify-center">
+                        <div class="absolute -right-4 -top-4 opacity-10">
+                            <svg width="100" height="100" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 3h7v7H3z M14 3h7v7h-7z M14 14h7v7h-7z M3 14h7v7H3z"/></svg>
+                        </div>
+                        <div class="relative z-10">
+                            <span class="text-white/80 text-sm font-medium block">تقييم الأداء العام</span>
+                            <div class="text-2xl font-bold mt-1" id="stat-rating">...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                        <h3 class="text-lg font-bold text-gray-800 mb-6 border-b pb-2">مستوى إنجاز الأهداف (حسب الوزن)</h3>
+                        <div class="flex flex-col h-64 w-full pt-4" id="bar-chart-container"></div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center">
+                        <h3 class="text-lg font-bold text-gray-800 mb-6 border-b pb-2 w-full text-right">توزيع الأهداف والمهام</h3>
+                        <div id="pie-chart-container" class="relative w-40 h-40 rounded-full shadow-md flex items-center justify-center transition-all hover:scale-105" style="background: conic-gradient(#e2e8f0 0deg 360deg)">
+                            <div class="w-24 h-24 bg-white rounded-full shadow-inner flex flex-col items-center justify-center z-10">
+                                <span class="text-2xl font-bold text-gray-800" id="pie-total">0</span>
+                                <span class="text-[10px] font-semibold text-gray-400">إجمالي الأهداف</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 w-full space-y-3" id="pie-legend"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasks Tab -->
+            <div id="tasks" class="tab-content">
+                <header class="mb-6 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-primary flex items-center gap-2">
+                            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01"/></svg>
+                            تحديث الإنجاز للأهداف المخططة
+                        </h2>
+                        <p class="text-gray-500 mt-1">انقر على "تحديث المهام" لتحديد المهام الفرعية المنجزة لكل هدف.</p>
+                    </div>
+                    <!-- Status indicator for auto-sync -->
+                    <div id="sync-status" class="hidden text-xs px-3 py-1 bg-green-50 text-green-600 rounded-full border border-green-200 items-center gap-1 font-bold">
+                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        متصل ومحدث
+                    </div>
+                </header>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-4">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-right text-gray-500 min-w-[900px]">
+                            <thead class="text-xs text-white uppercase bg-primary">
+                                <tr>
+                                    <th class="px-4 py-4 rounded-tr-xl">م</th>
+                                    <th class="px-4 py-4 w-1/4">الهدف الفرعي / الرئيسي</th>
+                                    <th class="px-4 py-4 w-1/3">المهام</th>
+                                    <th class="px-2 py-4 text-center">المؤشر</th>
+                                    <th class="px-2 py-4 text-center">الوزن</th>
+                                    <th class="px-2 py-4 text-center">المستهدف</th>
+                                    <th class="px-4 py-4 text-center">تحديث الإنجاز</th>
+                                    <th class="px-2 py-4 text-center">الإنجاز %</th>
+                                    <th class="px-4 py-4 rounded-tl-xl text-center bg-[#8c2229]">التقييم</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tasks-table-body">
+                                <!-- Injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Extra Tasks Tab -->
+            <div id="extra-tasks" class="tab-content">
+                <header class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-primary flex items-center gap-2">
+                            <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8 M8 12h8"/></svg>
+                            المبادرات والمهام الإضافية
+                        </h2>
+                        <p class="text-gray-500 mt-1">توثيق المهام المنجزة خارج الخطة (للاستعراض فقط ولا تدخل في نسبة الإنجاز).</p>
+                    </div>
+                    <button onclick="openModal('addTaskModal')" class="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-[#5a1318] transition-colors shadow-md font-semibold">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8 M8 12h8"/></svg>
+                        إضافة مبادرة منجزة
+                    </button>
+                </header>
+
+                <div id="extra-tasks-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    
+    <!-- Sub-Tasks Checklist Modal -->
+    <div id="subTaskModal" class="modal fixed inset-0 bg-black/50 backdrop-blur-sm items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="bg-primary p-4 text-white flex justify-between items-center">
+                <h3 class="font-bold text-lg flex items-center gap-2">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                    تحديث المهام الفرعية
+                </h3>
+                <button onclick="closeModal('subTaskModal')" class="text-white hover:text-gray-300 text-2xl leading-none">&times;</button>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <h4 id="modal-goal-title" class="font-bold text-gray-800 mb-4 pb-2 border-b border-gray-100 text-lg"></h4>
+                <div id="subtasks-checklist" class="space-y-3">
+                    <!-- Checkboxes Injected Here -->
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-100 bg-gray-50 flex justify-between items-center rounded-b-2xl">
+                <div class="text-sm font-bold text-gray-600">نسبة الإنجاز المحتسبة: <span id="modal-calc-progress" class="text-primary text-lg">0%</span></div>
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeModal('subTaskModal')" class="px-4 py-2 rounded-xl text-gray-600 font-semibold hover:bg-gray-200 transition-colors">إلغاء</button>
+                    <button type="button" onclick="saveSubTasks()" class="px-6 py-2 rounded-xl bg-gold text-gray-900 font-bold hover:bg-[#c4a133] transition-colors shadow-md flex items-center gap-2">
+                        <span id="text-save-sub">حفظ وإغلاق</span>
+                        <div id="spinner-save-sub" class="spinner !border-gray-900 !border-t-white" style="width: 18px; height: 18px; display: none;"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Extra Task Modal (Simplified for Employee Name) -->
+    <div id="addTaskModal" class="modal fixed inset-0 bg-black/50 backdrop-blur-sm items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col">
+            <div class="bg-gold p-4 text-[#1a1a1a] flex justify-between items-center">
+                <h3 class="font-bold text-lg">إضافة مبادرة أو مهمة إضافية</h3>
+                <button onclick="closeModal('addTaskModal')" class="text-gray-800 text-2xl leading-none hover:text-red-700">&times;</button>
+            </div>
+            <div class="p-6">
+                <form id="extraTaskForm" onsubmit="handleAddExtraTask(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">اسم الموظف <span class="text-red-500">*</span></label>
+                        <input type="text" id="new-employeeName" required class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none bg-gray-50 font-bold text-primary" placeholder="اسم الموظف المنفذ" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">اسم المبادرة / الإنجاز <span class="text-red-500">*</span></label>
+                        <input type="text" id="new-mainGoal" required class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none" placeholder="مثال: مبادرة تحسين بيئة العمل" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">تفاصيل الأعمال المنجزة <span class="text-red-500">*</span></label>
+                        <textarea id="new-tasks" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none resize-none" placeholder="اشرح باختصار الأعمال التي تم إنجازها..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="p-4 border-t border-gray-100 bg-gray-50 flex gap-3 justify-end rounded-b-2xl">
+                <button type="button" onclick="closeModal('addTaskModal')" class="px-6 py-2 rounded-xl text-gray-600 font-semibold hover:bg-gray-200 transition-colors">إلغاء</button>
+                <button type="submit" form="extraTaskForm" class="px-6 py-2 rounded-xl bg-primary text-white font-bold hover:bg-[#5a1318] transition-colors shadow-md flex items-center gap-2">
+                    <span id="text-save-extra">حفظ المبادرة</span>
+                    <div id="spinner-save-extra" class="spinner !border-white !border-t-primary" style="width: 18px; height: 18px; display: none;"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="exportModal" class="modal fixed inset-0 bg-black/50 backdrop-blur-sm items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div class="bg-green-700 p-4 text-white flex justify-between items-center">
+                <h3 class="font-bold flex items-center gap-2">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M8 13h8 M8 17h8 M12 13v8"/></svg>
+                    تصدير تقرير الإنجاز
+                </h3>
+                <button onclick="closeModal('exportModal')" class="text-white/70 hover:text-white text-xl leading-none">&times;</button>
+            </div>
+            <div class="p-6 space-y-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">اختر نوع البيانات المراد تصديرها:</label>
+                <select id="exportFilter" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 outline-none mb-4 bg-gray-50">
+                    <option value="all">كافة المهام (المخططة والإضافية)</option>
+                    <option value="completed">المهام المنجزة فقط (الخطة)</option>
+                    <option value="pending">المهام المتبقية (الخطة)</option>
+                    <option value="extra">المهام الإضافية (المبادرات)</option>
+                </select>
+                
+                <button onclick="executeExport()" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 transition-colors shadow-sm">
+                    تنزيل التقرير (.xlsx)
+                </button>
+                <button onclick="closeModal('exportModal')" class="w-full bg-gray-100 text-gray-600 font-bold py-3 rounded-xl hover:bg-gray-200 transition-colors">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Modal (Google Sheets & Local File) -->
+    <div id="importModal" class="modal fixed inset-0 bg-black/50 backdrop-blur-sm items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+            <div class="bg-primary p-4 text-white flex justify-between items-center">
+                <h3 class="font-bold flex items-center gap-2">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242 M12 12v9 M8 16l4-4 4 4"/></svg>
+                    استيراد الخطة الشهرية
+                </h3>
+                <button onclick="closeModal('importModal')" class="text-white/70 hover:text-white text-xl leading-none">&times;</button>
+            </div>
+            <div class="p-6 space-y-6">
+                <!-- Option 1: Google Sheets -->
+                <div class="border border-gray-200 rounded-xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
+                    <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+                        مزامنة عبر الإنترنت (Google Sheets)
+                    </h4>
+                    <p class="text-xs text-gray-500 mb-3">سيتم جلب البيانات مباشرة وتحديثها مع الاحتفاظ بإنجازاتك.</p>
+                    <button onclick="fetchFromGoogleSheets(false)" id="btn-sync-gs" class="w-full bg-gold text-gray-900 font-bold py-2 rounded-lg hover:bg-[#c4a133] transition-colors flex items-center justify-center gap-2">
+                        <span id="text-sync-gs">مزامنة الآن</span>
+                        <div id="spinner-gs" class="spinner !border-gray-900 !border-t-white" style="width: 18px; height: 18px; display: none;"></div>
+                    </button>
+                    <!-- Error container for detailed GAS errors -->
+                    <p id="sync-error-msg" class="text-red-500 text-xs mt-2 hidden text-center font-bold"></p>
+                </div>
+                
+                <div class="relative flex py-2 items-center">
+                    <div class="flex-grow border-t border-gray-300"></div>
+                    <span class="flex-shrink-0 mx-4 text-gray-400 text-sm font-semibold">أو</span>
+                    <div class="flex-grow border-t border-gray-300"></div>
+                </div>
+
+                <!-- Option 2: Local File -->
+                <div class="border border-gray-200 rounded-xl p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
+                    <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M17 8l-5-5-5 5 M12 3v12"/></svg>
+                        رفع ملف من الكمبيوتر (Excel / CSV)
+                    </h4>
+                    <p class="text-xs text-gray-500 mb-3">اختر ملف بصيغة xlsx, xls, csv لقراءة الخطة.</p>
+                    <input type="file" id="localFileInput" accept=".xlsx, .xls, .csv" class="hidden" onchange="handleLocalFileUpload(event)" />
+                    <button onclick="document.getElementById('localFileInput').click()" class="w-full bg-white border-2 border-primary text-primary font-bold py-2 rounded-lg hover:bg-red-50 transition-colors">
+                        اختيار ملف
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast" class="toast fixed bottom-4 left-4 right-4 md:right-auto md:left-4 bg-gray-900 text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3 z-50" style="display: none;">
+        <svg width="20" height="20" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+        <span class="font-medium text-sm" id="toast-msg"></span>
+    </div>
+
+    <script>
+        // --- Authentication Logic ---
+        const PWD = "kib@markting"; // كلمة المرور المطلوبة
+        
+        // The URL provided by the user for Google Apps Script
+        const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycby_HT8PJ_PTXwkyLEdtgu0fsIM2FFGJfPStNnudLXzD6MEowh8_qPigyLwfTgTforKd9w/exec";
+
+        let appData = JSON.parse(localStorage.getItem('kuraimiGoalsData')) || [];
+        let currentEditingGoalId = null;
+        let globalMonthFilter = 'all'; // المتغير المسؤول عن فلترة الشهر
+
+        function setMonthFilter(month) {
+            globalMonthFilter = month;
+            updateAllUI();
+        }
+
+        function checkAuth() {
+            if(sessionStorage.getItem('kuraimiAuth') === 'true') {
+                document.getElementById('login-screen').classList.add('hidden');
+                updateAllUI();
+            }
+        }
+        
+        function handleLogin(e) {
+            e.preventDefault();
+            const input = document.getElementById('passwordInput').value;
+            if(input === PWD) {
+                sessionStorage.setItem('kuraimiAuth', 'true');
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('loginError').classList.add('hidden');
+                
+                // بدء المزامنة التلقائية بصمت فور تسجيل الدخول بنجاح
+                fetchFromGoogleSheets(true);
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        }
+        
+        function logout() {
+            sessionStorage.removeItem('kuraimiAuth');
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        checkAuth(); // Run on load
+
+        function saveData() {
+            localStorage.setItem('kuraimiGoalsData', JSON.stringify(appData));
+        }
+
+        // Parse Text into Checklist items
+        function parseTasksIntoChecklist(tasksStr) {
+            if(!tasksStr) return [];
+            let items = tasksStr.split(/\n|-/).map(s => s.trim()).filter(s => s.length > 0);
+            return items.map(title => ({ title: title, done: false }));
+        }
+
+        // Map Raw Data to App Structure (with Employee Name handling)
+        function mapRawDataToApp(rawRows) {
+            let newData = [];
+            rawRows.forEach((row, index) => {
+                const keys = Object.keys(row);
+                const val = (possibleNames) => {
+                    const key = keys.find(k => possibleNames.some(pn => k.includes(pn)));
+                    return key ? row[key] : '';
+                };
+
+                let id = val(['م', 'id', 'رقم']) || (index + 1);
+                let mainGoal = val(['الهدف الفرعي', 'الهدف الرئيسي', 'الهدف']) || 'بدون عنوان';
+                let tasksStr = val(['المهام', 'تفاصيل']);
+                let indicator = val(['المؤشر']) || 'نسبة';
+                let month = val(['الشهر']) || new Date().getMonth() + 1;
+                let weight = parseFloat(val(['الوزن'])) || 1;
+                let target = parseFloat(val(['المستهدف'])) || 1;
+                let isExtra = val(['النوع', 'نوع']) === 'مبادرة إضافية';
+                let employeeName = val(['اسم الموظف', 'الموظف']) || '';
+                let existingProgress = val(['الإنجاز']) ? parseFloat(val(['الإنجاز'])) : 0;
+                let existingAchieved = val(['المنجز']) ? parseFloat(val(['المنجز'])) : 0;
+
+                let subTasks = parseTasksIntoChecklist(tasksStr);
+                if(subTasks.length === 0) subTasks.push({ title: mainGoal, done: false }); 
+
+                newData.push({
+                    id: parseInt(id),
+                    mainGoal: mainGoal,
+                    subTasks: subTasks,
+                    indicator: indicator,
+                    month: parseInt(month),
+                    weight: weight,
+                    target: target,
+                    achieved: existingAchieved,
+                    progress: existingProgress,
+                    finalScore: 0,
+                    isExtra: isExtra,
+                    employeeName: employeeName
+                });
+            });
+            return newData;
+        }
+
+        // --- Fetch from Google Sheets ---
+        async function fetchFromGoogleSheets(isAuto = false) {
+            let btnText, spinner, errorMsg;
+            
+            if (!isAuto) {
+                btnText = document.getElementById('text-sync-gs');
+                spinner = document.getElementById('spinner-gs');
+                errorMsg = document.getElementById('sync-error-msg');
+                btnText.textContent = 'جاري الاتصال...';
+                spinner.style.display = 'block';
+                errorMsg.classList.add('hidden');
+            } else {
+                showToast('جاري تحديث الخطة تلقائياً بالخلفية...');
+                document.getElementById('sync-status').classList.remove('hidden');
+            }
+            
+            try {
+                const response = await fetch(GOOGLE_SHEETS_API_URL);
+                if (!response.ok) throw new Error('خطأ في الاتصال بالشبكة (CORS) أو الرابط غير صحيح.');
+                
+                const text = await response.text();
+                let rawData;
+                try {
+                    rawData = JSON.parse(text);
+                } catch (e) {
+                    throw new Error('الرابط لا يعيد بيانات JSON صالحة. تأكد من إعدادات النشر (Deploy).');
+                }
+
+                if (rawData.error) {
+                    throw new Error('خطأ برمجي من جوجل: ' + rawData.error);
+                }
+
+                if (!Array.isArray(rawData) || rawData.length === 0) {
+                     throw new Error('تم الاتصال بنجاح ولكن ملف الإكسل فارغ (تأكد من اسم الورقة).');
+                }
+
+                // 1. جلب الخطة من جوجل
+                const newPlannedData = mapRawDataToApp(rawData);
+                
+                // 2. الاحتفاظ بالمهام التي تمت إضافتها محلياً إذا لم تكن موجودة في جوجل
+                const localExtraTasks = appData.filter(g => g.isExtra);
+                
+                // 3. الدمج الذكي: التحديث مع الاحتفاظ بحالة المهام المنجزة (Checklist)
+                const mergedData = newPlannedData.map(newGoal => {
+                    const existingGoal = appData.find(g => g.id === newGoal.id);
+                    if (existingGoal) {
+                        const mergedSubTasks = newGoal.subTasks.map((newSub, idx) => {
+                             const existingSub = existingGoal.subTasks[idx];
+                             return { ...newSub, done: existingSub ? existingSub.done : false };
+                        });
+                        return { 
+                            ...newGoal, 
+                            subTasks: mergedSubTasks,
+                            // لا نكتب فوق الإنجاز إذا كان الإنجاز المحلي أكبر
+                            progress: existingGoal.progress > newGoal.progress ? existingGoal.progress : newGoal.progress,
+                            achieved: existingGoal.achieved > newGoal.achieved ? existingGoal.achieved : newGoal.achieved,
+                            finalScore: existingGoal.finalScore > newGoal.finalScore ? existingGoal.finalScore : newGoal.finalScore
+                        };
+                    }
+                    return newGoal; 
+                });
+
+                // دمج الخطة المحدثة مع المهام المحلية
+                const uniqueLocalExtras = localExtraTasks.filter(lt => !mergedData.some(md => md.id === lt.id));
+                appData = [...mergedData, ...uniqueLocalExtras];
+                
+                saveData();
+                updateAllUI();
+                
+                if (!isAuto) {
+                    closeModal('importModal');
+                    showToast('تم مزامنة الخطة من Google Sheets بنجاح!');
+                }
+                
+            } catch (error) {
+                console.error("Fetch error: ", error);
+                if (!isAuto && errorMsg) {
+                    errorMsg.textContent = error.message;
+                    errorMsg.classList.remove('hidden');
+                } else if(isAuto) {
+                    document.getElementById('sync-status').classList.add('hidden');
+                }
+            } finally {
+                if (!isAuto && btnText && spinner) {
+                    btnText.textContent = 'مزامنة الآن';
+                    spinner.style.display = 'none';
+                }
+            }
+        }
+
+        // --- Push Progress Update to Google Sheets ---
+        async function pushUpdateToGoogleSheets(goalData) {
+            const btnText = document.getElementById('text-save-sub');
+            const spinner = document.getElementById('spinner-save-sub');
+            btnText.textContent = 'جاري الحفظ...';
+            spinner.style.display = 'block';
+
+            try {
+                const response = await fetch(GOOGLE_SHEETS_API_URL, {
+                    method: 'POST',
+                    redirect: "follow",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({
+                        action: 'update_progress',
+                        id: goalData.id,
+                        achieved: goalData.achieved,
+                        progress: goalData.progress,
+                        finalScore: goalData.finalScore
+                    })
+                });
+                const result = await response.json();
+                if(result.status === 'success') {
+                    showToast('تم تحديث الإنجاز في الإكسل بنجاح ✓');
+                } else {
+                    console.error("Sheet update error:", result.error);
+                    showToast('تم الحفظ محلياً (حدث خطأ في الإكسل: ' + result.error + ')');
+                }
+            } catch (error) {
+                console.error("Push error:", error);
+                showToast('تم الحفظ محلياً (تعذر الوصول لجوجل شيت)');
+            } finally {
+                btnText.textContent = 'حفظ وإغلاق';
+                spinner.style.display = 'none';
+                closeModal('subTaskModal');
+            }
+        }
+
+        // --- Push New Extra Task to Google Sheets ---
+        async function pushNewExtraTaskToGoogleSheets(taskData) {
+            const btnText = document.getElementById('text-save-extra');
+            const spinner = document.getElementById('spinner-save-extra');
+            btnText.textContent = 'جاري الإرسال...';
+            spinner.style.display = 'block';
+
+            try {
+                const response = await fetch(GOOGLE_SHEETS_API_URL, {
+                    method: 'POST',
+                    redirect: "follow",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({
+                        action: 'add_extra',
+                        ...taskData
+                    })
+                });
+                const result = await response.json();
+                if(result.status === 'success') {
+                    showToast('تمت الإضافة للإكسل بنجاح ✓');
+                } else {
+                    console.error("Add row error:", result.error);
+                    showToast('تم الحفظ محلياً (خطأ في الإكسل: ' + result.error + ')');
+                }
+            } catch (error) {
+                console.error("Push error:", error);
+                showToast('تم الحفظ محلياً (تعذر الاتصال بالخادم)');
+            } finally {
+                btnText.textContent = 'حفظ المبادرة';
+                spinner.style.display = 'none';
+                closeModal('addTaskModal');
+                document.getElementById('extraTaskForm').reset();
+            }
+        }
+
+        // --- Local Upload ---
+        function handleLocalFileUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                try {
+                    const bstr = evt.target.result;
+                    const wb = XLSX.read(bstr, { type: 'binary' });
+                    const wsname = wb.SheetNames[0];
+                    const ws = wb.Sheets[wsname];
+                    const rawData = XLSX.utils.sheet_to_json(ws);
+                    
+                    if(rawData.length === 0) {
+                        showToast('الملف فارغ أو التنسيق غير مدعوم.');
+                        return;
+                    }
+
+                    appData = mapRawDataToApp(rawData);
+                    saveData();
+                    updateAllUI();
+                    closeModal('importModal');
+                    showToast('تم قراءة الملف المحلي بنجاح!');
+                } catch(error) {
+                    showToast('حدث خطأ. تأكد أنه ملف Excel صالح.');
+                }
+            };
+            reader.readAsBinaryString(file);
+            e.target.value = ''; 
+        }
+
+        // --- UI Rendering ---
+        function renderDashboard() {
+            // تطبيق الفلتر على البيانات قبل معالجتها
+            const currentData = globalMonthFilter === 'all' ? appData : appData.filter(g => parseInt(g.month) === parseInt(globalMonthFilter));
+            
+            const planned = currentData.filter(g => !g.isExtra);
+            const extra = currentData.filter(g => g.isExtra);
+            
+            const totalPlanned = planned.length;
+            const completedPlanned = planned.filter(g => g.progress >= 100).length;
+            const totalWeight = planned.reduce((sum, g) => sum + parseFloat(g.weight), 0);
+            
+            let overallProgress = 0;
+            if (totalWeight > 0) {
+                overallProgress = planned.reduce((sum, g) => sum + (parseFloat(g.progress) * (parseFloat(g.weight) / totalWeight)), 0);
+            }
+            overallProgress = Math.round(overallProgress);
+
+            document.getElementById('stat-overall').textContent = overallProgress + '%';
+            document.getElementById('stat-bar').style.width = overallProgress + '%';
+            document.getElementById('stat-completed').textContent = completedPlanned;
+            document.getElementById('stat-total').textContent = totalPlanned;
+            document.getElementById('stat-extra').textContent = extra.length;
+            
+            let rating = 'يحتاج تحسين ⚠️';
+            if(overallProgress >= 90) rating = 'ممتاز 🌟';
+            else if(overallProgress >= 75) rating = 'جيد جداً 📈';
+            else if(overallProgress >= 60) rating = 'جيد 👍';
+            
+            if(totalPlanned === 0) rating = 'لا توجد بيانات';
+            document.getElementById('stat-rating').textContent = rating;
+
+            // Bar Chart
+            const barContainer = document.getElementById('bar-chart-container');
+            let barsHtml = `
+                <div class="flex justify-end gap-4 mb-4 text-xs font-semibold">
+                    <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-sm bg-[#7a1b22]"></span> الإنجاز %</div>
+                    <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-sm bg-[#d4af37]"></span> الوزن</div>
+                </div>
+                <div class="flex-1 flex items-end justify-between gap-2 border-b border-gray-200 pb-1">
+            `;
+            if(planned.length === 0) barsHtml += `<div class="w-full text-center text-gray-400 py-10">الرجاء استيراد الخطة</div>`;
+            
+            planned.forEach(g => {
+                const hProg = Math.max(g.progress, 2);
+                const hWeight = Math.max(Math.min(g.weight * 5, 100), 2); 
+                barsHtml += `
+                    <div class="flex-1 flex items-end justify-center gap-1 h-full relative group">
+                        <div class="absolute -top-12 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs p-2 rounded shadow-lg pointer-events-none z-10 whitespace-nowrap text-center">
+                            هـ ${g.id}<br/>الإنجاز: ${g.progress}% | الوزن: ${g.weight}
+                        </div>
+                        <div class="w-1/2 bg-[#7a1b22] rounded-t-md hover:brightness-110 transition-all max-w-[30px]" style="height: ${hProg}%"></div>
+                        <div class="w-1/2 bg-[#d4af37] rounded-t-md hover:brightness-110 transition-all max-w-[30px]" style="height: ${hWeight}%"></div>
+                    </div>
+                `;
+            });
+            barsHtml += `</div><div class="flex justify-between mt-2 px-1 overflow-hidden">`;
+            planned.forEach(g => barsHtml += `<span class="text-[9px] md:text-xs text-gray-500 w-full text-center truncate">هـ ${g.id}</span>`);
+            barsHtml += `</div>`;
+            barContainer.innerHTML = barsHtml;
+
+            // Pie Chart
+            const totalItems = totalPlanned + extra.length;
+            const inProgress = totalPlanned - completedPlanned;
+            const p1 = totalItems > 0 ? (completedPlanned / totalItems) * 360 : 0;
+            const p2 = totalItems > 0 ? (inProgress / totalItems) * 360 : 0;
+            const deg1 = p1;
+            const deg2 = deg1 + p2;
+            
+            const gradient = totalItems > 0 ? `conic-gradient(#28a745 0deg ${deg1}deg, #d4af37 ${deg1}deg ${deg2}deg, #7a1b22 ${deg2}deg 360deg)` : 'conic-gradient(#e2e8f0 0deg 360deg)';
+            document.getElementById('pie-chart-container').style.background = gradient;
+            document.getElementById('pie-total').textContent = totalItems;
+            
+            document.getElementById('pie-legend').innerHTML = `
+                <div class="flex justify-between items-center text-sm"><div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#28a745]"></span> <span class="text-gray-600">مكتملة (خطة)</span></div><span class="font-bold">${completedPlanned}</span></div>
+                <div class="flex justify-between items-center text-sm"><div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#d4af37]"></span> <span class="text-gray-600">قيد التنفيذ (خطة)</span></div><span class="font-bold">${inProgress}</span></div>
+                <div class="flex justify-between items-center text-sm"><div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#7a1b22]"></span> <span class="text-gray-600">مبادرات إضافية</span></div><span class="font-bold">${extra.length}</span></div>
+            `;
+        }
+
+        function renderTasksTable() {
+            const tbody = document.getElementById('tasks-table-body');
+            
+            // تطبيق الفلتر
+            const currentData = globalMonthFilter === 'all' ? appData : appData.filter(g => parseInt(g.month) === parseInt(globalMonthFilter));
+            const planned = currentData.filter(g => !g.isExtra);
+            
+            if(planned.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="px-4 py-12 text-center text-gray-500 font-bold">لا توجد مهام مخطط لها في هذا الشهر.</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            planned.forEach((goal, index) => {
+                const bgClass = index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50';
+                const completedCount = goal.subTasks.filter(st => st.done).length;
+                const totalCount = goal.subTasks.length;
+                
+                let tasksPreview = `<ul class="list-disc list-inside text-[11px] text-gray-600 space-y-1">`;
+                goal.subTasks.forEach(st => {
+                    tasksPreview += `<li class="${st.done ? 'line-through text-gray-400' : ''}">${st.title}</li>`;
+                });
+                tasksPreview += `</ul>`;
+
+                html += `
+                    <tr class="border-b hover:bg-gray-50 ${bgClass}">
+                        <td class="px-4 py-4 font-bold text-gray-900">${goal.id}</td>
+                        <td class="px-4 py-4 font-semibold text-primary max-w-[200px] truncate" title="${goal.mainGoal}">${goal.mainGoal}</td>
+                        <td class="px-4 py-4">${tasksPreview}</td>
+                        <td class="px-2 py-4 text-center text-xs bg-gray-100/50">${goal.indicator}</td>
+                        <td class="px-2 py-4 text-center font-bold text-gray-700">${goal.weight}</td>
+                        <td class="px-2 py-4 text-center">${goal.target}</td>
+                        <td class="px-4 py-3 text-center border-r border-gray-200">
+                            <button onclick="openSubTaskModal(${goal.id})" class="text-xs font-bold px-3 py-2 rounded-lg ${completedCount === totalCount ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-primary text-white hover:bg-[#5a1318]'} transition-colors whitespace-nowrap shadow-sm">
+                                ${completedCount === totalCount ? '✓ مكتمل' : `تحديث (${completedCount}/${totalCount})`}
+                            </button>
+                        </td>
+                        <td class="px-2 py-4 text-center">
+                            <span class="font-bold ${goal.progress >= 100 ? 'text-green-600' : 'text-gold'}">${goal.progress}%</span>
+                        </td>
+                        <td class="px-4 py-4 text-center font-black text-gray-900 bg-gray-50">${goal.finalScore}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function renderExtraTasks() {
+            const container = document.getElementById('extra-tasks-container');
+            
+            // تطبيق الفلتر
+            const currentData = globalMonthFilter === 'all' ? appData : appData.filter(g => parseInt(g.month) === parseInt(globalMonthFilter));
+            const extra = currentData.filter(g => g.isExtra);
+            
+            if (extra.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-white rounded-2xl p-12 text-center shadow-sm border border-gray-100 flex flex-col items-center">
+                        <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-gray-300 mb-4">
+                            <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8 M8 12h8"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-700 mb-2">لا توجد مبادرات إضافية</h3>
+                    </div>`;
+                return;
+            }
+
+            let html = '';
+            extra.forEach(task => {
+                html += `
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 border-t-4 border-t-gold flex flex-col hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-yellow-100 text-primary text-xs px-2 py-1 rounded-md font-bold">مبادرة استعراضية</span>
+                            <button onclick="deleteExtraTask(${task.id})" class="text-gray-400 hover:text-red-600 transition-colors p-1" title="حذف">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M3 6h18 M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2 M10 11v6 M14 11v6"/></svg>
+                            </button>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">${task.mainGoal}</h3>
+                        <p class="text-sm text-gray-600 flex-1 bg-gray-50 p-4 rounded-xl border border-gray-100 leading-relaxed whitespace-pre-line">${task.subTasks[0].title}</p>
+                        <div class="mt-4 pt-3 border-t border-gray-100 flex items-center gap-2 text-xs text-gray-500 font-bold">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2 M12 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
+                            الموظف: <span class="text-primary">${task.employeeName || 'غير محدد'}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function updateAllUI() {
+            renderDashboard();
+            renderTasksTable();
+            renderExtraTasks();
+        }
+
+        // --- Checklists & Actions ---
+        function openSubTaskModal(goalId) {
+            currentEditingGoalId = goalId;
+            const goal = appData.find(g => g.id === goalId);
+            document.getElementById('modal-goal-title').textContent = goal.mainGoal;
+            
+            let checklistHtml = '';
+            goal.subTasks.forEach((st, idx) => {
+                checklistHtml += `
+                    <label class="flex items-start gap-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors ${st.done ? 'bg-gray-50 border-gray-300 opacity-70' : ''}">
+                        <div class="pt-0.5">
+                            <input type="checkbox" data-index="${idx}" onchange="recalculateModalProgress()" class="kuraimi-checkbox w-5 h-5 rounded text-primary cursor-pointer" ${st.done ? 'checked' : ''} />
+                        </div>
+                        <span class="text-sm font-medium ${st.done ? 'line-through text-gray-500' : 'text-gray-800'}">${st.title}</span>
+                    </label>
+                `;
+            });
+            document.getElementById('subtasks-checklist').innerHTML = checklistHtml;
+            document.getElementById('modal-calc-progress').textContent = goal.progress + '%';
+            openModal('subTaskModal');
+        }
+
+        function recalculateModalProgress() {
+            const checkboxes = document.querySelectorAll('#subtasks-checklist input[type="checkbox"]');
+            let completed = 0;
+            checkboxes.forEach(cb => {
+                if(cb.checked) completed++;
+                const textSpan = cb.parentElement.nextElementSibling;
+                if(cb.checked) textSpan.classList.add('line-through', 'text-gray-500');
+                else textSpan.classList.remove('line-through', 'text-gray-500');
+            });
+            const progress = checkboxes.length > 0 ? Math.round((completed / checkboxes.length) * 100) : 0;
+            document.getElementById('modal-calc-progress').textContent = progress + '%';
+        }
+
+        function saveSubTasks() {
+            if(!currentEditingGoalId) return;
+            const checkboxes = document.querySelectorAll('#subtasks-checklist input[type="checkbox"]');
+            
+            let updatedGoalObj = null;
+
+            appData = appData.map(goal => {
+                if(goal.id === currentEditingGoalId) {
+                    let completed = 0;
+                    const newSubTasks = goal.subTasks.map((st, idx) => {
+                        const isDone = checkboxes[idx].checked;
+                        if(isDone) completed++;
+                        return { ...st, done: isDone };
+                    });
+                    
+                    const progress = newSubTasks.length > 0 ? Math.round((completed / newSubTasks.length) * 100) : 0;
+                    const finalScore = ((progress * goal.weight) / 100).toFixed(2);
+                    
+                    let newAchieved = 0;
+                    if(goal.indicator === 'نسبة') {
+                        newAchieved = progress;
+                    } else {
+                        newAchieved = (progress / 100) * goal.target;
+                    }
+
+                    updatedGoalObj = { ...goal, subTasks: newSubTasks, progress: progress, achieved: newAchieved, finalScore: parseFloat(finalScore) };
+                    return updatedGoalObj;
+                }
+                return goal;
+            });
+            
+            saveData();
+            updateAllUI();
+            
+            if (updatedGoalObj && !updatedGoalObj.isExtra) {
+                pushUpdateToGoogleSheets(updatedGoalObj);
+            } else {
+                closeModal('subTaskModal');
+            }
+        }
+
+        function handleAddExtraTask(e) {
+            e.preventDefault();
+            const mainGoal = document.getElementById('new-mainGoal').value;
+            const taskDesc = document.getElementById('new-tasks').value;
+            const empName = document.getElementById('new-employeeName').value;
+            
+            const newId = appData.length === 0 ? 1 : Math.max(...appData.map(g => g.id)) + 1;
+            
+            const newTask = {
+                id: newId, 
+                employeeName: empName,
+                mainGoal: mainGoal, 
+                subTasks: [{ title: taskDesc, done: true }],
+                tasks: taskDesc, // for sheets
+                indicator: '-', month: new Date().getMonth() + 1, weight: 0, target: 0, achieved: 0, progress: 100, finalScore: 0, isExtra: true
+            };
+            
+            appData.push(newTask);
+            saveData();
+            updateAllUI();
+            
+            pushNewExtraTaskToGoogleSheets(newTask);
+        }
+
+        function deleteExtraTask(id) {
+            if(confirm('هل أنت متأكد من حذف هذه المبادرة؟')) {
+                appData = appData.filter(g => g.id !== id);
+                saveData();
+                updateAllUI();
+                showToast('تم الحذف بنجاح');
+            }
+        }
+
+        function executeExport() {
+            if(appData.length === 0) {
+                showToast('لا توجد بيانات للتصدير!');
+                return;
+            }
+
+            const filterType = document.getElementById('exportFilter').value;
+            let dataToExport = [];
+
+            if (filterType === 'all') dataToExport = appData;
+            else if (filterType === 'completed') dataToExport = appData.filter(d => !d.isExtra && d.progress >= 100);
+            else if (filterType === 'pending') dataToExport = appData.filter(d => !d.isExtra && d.progress < 100);
+            else if (filterType === 'extra') dataToExport = appData.filter(d => d.isExtra);
+
+            if (globalMonthFilter !== 'all') {
+                dataToExport = dataToExport.filter(d => parseInt(d.month) === parseInt(globalMonthFilter));
+            }
+
+            if(dataToExport.length === 0) {
+                showToast('لا توجد بيانات مطابقة للفلتر المحدد.');
+                return;
+            }
+
+            const exportFormatted = dataToExport.map(item => {
+                let subTasksStr = item.subTasks.map(st => (st.done ? '[✓] ' : '[ ] ') + st.title).join('\n');
+                return {
+                    'م': item.id,
+                    'اسم الموظف': item.employeeName || '-',
+                    'الهدف الفرعي / الرئيسي': item.mainGoal,
+                    'المهام': subTasksStr,
+                    'المؤشر': item.indicator,
+                    'الشهر': item.month,
+                    'الوزن': item.weight,
+                    'المستهدف': item.target,
+                    'المنجز': item.achieved,
+                    'نسبة الإنجاز': item.progress + '%',
+                    'التقييم النهائي': item.finalScore,
+                    'النوع': item.isExtra ? 'مبادرة إضافية' : 'ضمن الخطة'
+                };
+            });
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(exportFormatted);
+            ws['!cols'] = [{wch:5}, {wch:20}, {wch:40}, {wch:60}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:10}, {wch:15}, {wch:15}, {wch:15}];
+            
+            const sheetName = filterType === 'extra' ? "المهام الإضافية" : "تقرير الخطة";
+            XLSX.utils.book_append_sheet(wb, ws, sheetName);
+
+            const dateStr = new Date().toLocaleDateString('ar-YE').replace(/\//g, '-');
+            XLSX.writeFile(wb, `تقرير_الكريمي_${filterType}_${dateStr}.xlsx`);
+            
+            closeModal('exportModal');
+            showToast('تم تحميل التقرير بصيغة Excel');
+        }
+
+        // --- Navigation & Utils ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.dataset.target === tabId) {
+                    btn.classList.add('bg-primary', 'text-white', 'shadow-md');
+                    btn.classList.remove('text-gray-600', 'hover:bg-red-50', 'hover:text-primary');
+                } else {
+                    btn.classList.remove('bg-primary', 'text-white', 'shadow-md');
+                    btn.classList.add('text-gray-600', 'hover:bg-red-50', 'hover:text-primary');
+                }
+            });
+            document.getElementById('mobile-nav').value = tabId;
+            document.getElementById('main-scroll-area').scrollTop = 0;
+        }
+
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        window.onclick = function(event) { if (event.target.classList.contains('modal')) event.target.classList.remove('active'); }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            toast.style.display = 'flex';
+            toast.style.animation = 'none'; 
+            void toast.offsetWidth; 
+            toast.style.animation = 'slideUp 0.3s ease-out';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => { toast.style.display = 'none'; toast.style.opacity = '1'; }, 500);
+            }, 3500);
+        }
+
+        window.onload = function() {
+            if(sessionStorage.getItem('kuraimiAuth') === 'true') {
+                const monthDropdown = document.getElementById('dashboard-month-filter');
+                if(monthDropdown) monthDropdown.value = globalMonthFilter;
+                
+                updateAllUI();
+            }
+        };
+    </script>
+</body>
+</html>
