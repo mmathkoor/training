@@ -748,120 +748,104 @@
         }
 
         // Map generic raw JSON into structured Application state objects
-        function mapRawDataToApp(rawRows) {
-            let newData = [];
-            rawRows.forEach((row, index) => {
-                const keys = Object.keys(row);
-                
-                // Helper to find column by possible names
-                const val = (possibleNames) => {
-                    const key = keys.find(k => possibleNames.some(pn => k.includes(pn)));
-                    return key ? row[key] : '';
-                };
+function mapRawDataToApp(rawRows) {
+    let newData = [];
+    rawRows.forEach((row, index) => {
+        const keys = Object.keys(row);
+        const val = (possibleNames) => {
+            const key = keys.find(k => possibleNames.some(pn => k.includes(pn)));
+            return key ? row[key] : '';
+        };
 
-                let id = val(['م', 'id', 'رقم']) || (index + 1);
-                let mainGoal = val(['الهدف الفرعي', 'الهدف الرئيسي', 'الهدف']) || 'بدون عنوان';
-                let tasksStr = val(['المهام', 'تفاصيل']);
-                let indicator = val(['المؤشر']) || 'نسبة';
-                let month = val(['الشهر']) || new Date().getMonth() + 1;
-                let weight = parseFloat(val(['الوزن'])) || 1;
-                let target = parseFloat(val(['المستهدف'])) || 1;
-                let isExtra = val(['النوع', 'نوع']) === 'مبادرة إضافية';
-                let employeeName = val(['اسم الموظف', 'الموظف']) || '';
-                
-                // Exclude 'المهام' when checking for Progress column
-                const progressKey = keys.find(k => k.includes('الإنجاز') && !k.includes('المهام'));
-                let existingProgress = progressKey ? parseFloat(row[progressKey]) || 0 : 0;
-                let existingAchieved = val(['المنجز']) ? parseFloat(val(['المنجز'])) : 0;
-
-                let subTasks = parseTasksIntoChecklist(tasksStr);
-                if(subTasks.length === 0) subTasks.push({ title: mainGoal, done: false }); 
-
-                // --- التعديل هنا: تحديد المهام كـ "منجزة" تلقائياً بناءً على النسبة القادمة من الإكسل ---
-                if (existingProgress > 0) {
-                    let tasksToComplete = Math.round((existingProgress / 100) * subTasks.length);
-                    for (let i = 0; i < tasksToComplete; i++) {
-                        if (subTasks[i]) subTasks[i].done = true;
-                    }
-                }
-                // --------------------------------------------------------------------------
-
-                newData.push({
-                    id: parseInt(id),
-                    mainGoal: mainGoal,
-                    subTasks: subTasks,
-                    indicator: indicator,
-                    month: parseInt(month),
-                    weight: weight,
-                    target: target,
-                    achieved: existingAchieved,
-                    progress: existingProgress,
-                    finalScore: 0, // Recalculated dynamically later
-                    isExtra: isExtra,
-                    employeeName: employeeName
-                });
-            });
-            return newData;
+        let id = val(['م', 'id', 'رقم']) || (index + 1);
+        let mainGoal = val(['الهدف الفرعي', 'الهدف الرئيسي', 'الهدف']) || 'بدون عنوان';
+        let tasksStr = val(['المهام', 'تفاصيل']);
+        let progressVal = val(['الإنجاز']) ? parseFloat(val(['الإنجاز']).toString().replace('%', '')) : 0;
+        let isExtra = val(['النوع', 'نوع']) === 'مبادرة إضافية';
+        
+        let subTasks = parseTasksIntoChecklist(tasksStr);
+        // التعديل هنا: تفعيل المهام إذا كان الإنجاز أكبر من 0
+        if (progressVal > 0) {
+            let tasksToComplete = Math.round((progressVal / 100) * subTasks.length);
+            subTasks.forEach((st, i) => { if (i < tasksToComplete) st.done = true; });
         }
 
+        newData.push({
+            id: parseInt(id),
+            mainGoal: mainGoal,
+            subTasks: subTasks,
+            indicator: val(['المؤشر']) || 'نسبة',
+            month: parseInt(val(['الشهر'])) || new Date().getMonth() + 1,
+            weight: parseFloat(val(['الوزن'])) || 1,
+            target: parseFloat(val(['المستهدف'])) || 1,
+            achieved: parseFloat(val(['المنجز'])) || 0,
+            progress: progressVal,
+            finalScore: parseFloat(val(['التقييم'])) || 0,
+            isExtra: isExtra,
+            employeeName: val(['اسم الموظف', 'الموظف']) || ''
+        });
+    });
+    return newData;
+}
         /**
          * ==========================================
          * GOOGLE SHEETS API OPERATIONS
          * ==========================================
          */
          
-        // 1. FETCH & SMART MERGE
+      // --- Fetch from Google Sheets ---
         async function fetchFromGoogleSheets(isAuto = false) {
-            let btnText = document.getElementById('text-sync-gs');
-            let spinner = document.getElementById('spinner-gs');
-            let errorMsg = document.getElementById('sync-error-msg');
+            let btnText, spinner, errorMsg;
             
             if (!isAuto) {
-                btnText.textContent = 'جاري الاتصال بقاعدة البيانات...';
+                btnText = document.getElementById('text-sync-gs');
+                spinner = document.getElementById('spinner-gs');
+                errorMsg = document.getElementById('sync-error-msg');
+                btnText.textContent = 'جاري الاتصال...';
                 spinner.style.display = 'block';
                 errorMsg.classList.add('hidden');
             } else {
+                showToast('جاري تحديث الخطة تلقائياً بالخلفية...');
                 document.getElementById('sync-status').classList.remove('hidden');
             }
             
             try {
                 const response = await fetch(GOOGLE_SHEETS_API_URL);
-                if (!response.ok) throw new Error('خطأ في الاتصال. تأكد من اتصالك بالإنترنت ورابط المزامنة.');
+                if (!response.ok) throw new Error('خطأ في الاتصال بالشبكة (CORS) أو الرابط غير صحيح.');
                 
                 const text = await response.text();
                 let rawData;
                 try {
                     rawData = JSON.parse(text);
                 } catch (e) {
-                    throw new Error('البيانات الواردة غير صالحة. تأكد من نشر كود Google Apps Script بشكل صحيح.');
+                    throw new Error('الرابط لا يعيد بيانات JSON صالحة. تأكد من إعدادات النشر (Deploy).');
                 }
 
-                if (rawData.error) throw new Error('خطأ برمجي من الخادم: ' + rawData.error);
-                if (!Array.isArray(rawData) || rawData.length === 0) throw new Error('تم الاتصال ولكن ملف الإكسل فارغ.');
+                if (rawData.error) {
+                    throw new Error('خطأ برمجي من جوجل: ' + rawData.error);
+                }
 
+                if (!Array.isArray(rawData) || rawData.length === 0) {
+                     throw new Error('تم الاتصال بنجاح ولكن ملف الإكسل فارغ (تأكد من اسم الورقة).');
+                }
+
+                // 1. جلب الخطة من جوجل (حيث يتم وضع علامات الصح تلقائياً بناءً على نسبة الإنجاز)
                 const newPlannedData = mapRawDataToApp(rawData);
+                
+                // 2. الاحتفاظ بالمهام الإضافية التي تمت إضافتها محلياً إذا لم تكن موجودة في جوجل
                 const localExtraTasks = appData.filter(g => g.isExtra);
                 
-                // Smart Merge Logic: Keep user's checked subtasks and highest scores
+                // 3. الدمج الذكي: الاعتماد على البيانات القادمة من الإكسل كمصدر أساسي
                 const mergedData = newPlannedData.map(newGoal => {
                     const existingGoal = appData.find(g => g.id === newGoal.id);
-                    if (existingGoal && !newGoal.isExtra) {
-                        const mergedSubTasks = newGoal.subTasks.map((newSub, idx) => {
-                             const existingSub = existingGoal.subTasks[idx];
-                             return { ...newSub, done: existingSub ? existingSub.done : false };
-                        });
-                        return { 
-                            ...newGoal, 
-                            subTasks: mergedSubTasks,
-                            progress: existingGoal.progress > newGoal.progress ? existingGoal.progress : newGoal.progress,
-                            achieved: existingGoal.achieved > newGoal.achieved ? existingGoal.achieved : newGoal.achieved,
-                            finalScore: existingGoal.finalScore > newGoal.finalScore ? existingGoal.finalScore : newGoal.finalScore
-                        };
+                    if (existingGoal) {
+                        // نعتمد بيانات الإكسل (بما فيها المهام المفعلة تلقائياً) لتنعكس في كل الأجهزة
+                        return { ...newGoal, subTasks: newGoal.subTasks };
                     }
                     return newGoal; 
                 });
 
-                // Append local extra tasks that might not be synced yet
+                // دمج الخطة المحدثة مع المهام المحلية الإضافية
                 const uniqueLocalExtras = localExtraTasks.filter(lt => !mergedData.some(md => md.id === lt.id));
                 appData = [...mergedData, ...uniqueLocalExtras];
                 
@@ -870,7 +854,7 @@
                 
                 if (!isAuto) {
                     closeModal('importModal');
-                    showToast('عملية ناجحة: تم مزامنة الخطة بذكاء مع الاحتفاظ بإنجازاتك.');
+                    showToast('تم مزامنة الخطة من Google Sheets بنجاح!');
                 }
                 
             } catch (error) {
@@ -883,107 +867,11 @@
                 }
             } finally {
                 if (!isAuto && btnText && spinner) {
-                    btnText.textContent = 'بدء المزامنة الذكية الآن';
+                    btnText.textContent = 'مزامنة الآن';
                     spinner.style.display = 'none';
                 }
             }
         }
-
-        // 2. PUSH UPDATE
-        async function pushUpdateToGoogleSheets(goalData) {
-            const btnText = document.getElementById('text-save-sub');
-            const spinner = document.getElementById('spinner-save-sub');
-            btnText.textContent = 'جاري توثيق التحديث في السيرفر...';
-            spinner.style.display = 'block';
-
-            try {
-                const response = await fetch(GOOGLE_SHEETS_API_URL, {
-                    method: 'POST',
-                    redirect: "follow",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({
-                        action: 'update_progress',
-                        id: goalData.id,
-                        achieved: goalData.achieved,
-                        progress: goalData.progress,
-                        finalScore: goalData.finalScore
-                    })
-                });
-                const result = await response.json();
-                if(result.status === 'success') {
-                    showToast('تم التحديث في النظام المركزي بنجاح ✓');
-                } else {
-                    console.error("Sheet update error:", result.error);
-                    showToast('تنبيه: تم الحفظ في جهازك فقط (تعذر تحديث السيرفر).');
-                }
-            } catch (error) {
-                console.error("Push error:", error);
-                showToast('تنبيه: تم الحفظ في جهازك فقط (تأكد من اتصال الإنترنت).');
-            } finally {
-                btnText.textContent = 'حفظ التحديث وإغلاق';
-                spinner.style.display = 'none';
-                closeModal('subTaskModal');
-            }
-        }
-
-        // 3. PUSH ADD EXTRA
-        async function pushNewExtraTaskToGoogleSheets(taskData) {
-            const btnText = document.getElementById('text-save-extra');
-            const spinner = document.getElementById('spinner-save-extra');
-            btnText.textContent = 'جاري إنشاء المبادرة في السيرفر...';
-            spinner.style.display = 'block';
-
-            try {
-                const response = await fetch(GOOGLE_SHEETS_API_URL, {
-                    method: 'POST',
-                    redirect: "follow",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({
-                        action: 'add_extra',
-                        ...taskData
-                    })
-                });
-                const result = await response.json();
-                if(result.status === 'success') {
-                    showToast('تم اعتماد المبادرة في النظام المركزي بنجاح ✓');
-                } else {
-                    console.error("Add row error:", result.error);
-                    showToast('تنبيه: تم الحفظ محلياً (خطأ في السيرفر).');
-                }
-            } catch (error) {
-                console.error("Push error:", error);
-                showToast('تنبيه: تم الحفظ محلياً (تعذر الوصول للسيرفر).');
-            } finally {
-                btnText.textContent = 'حفظ وتوثيق المبادرة';
-                spinner.style.display = 'none';
-                closeModal('addTaskModal');
-                document.getElementById('extraTaskForm').reset();
-            }
-        }
-
-        // 4. DELETE EXTRA
-        async function deleteExtraTaskFromGoogleSheets(taskId) {
-            try {
-                const response = await fetch(GOOGLE_SHEETS_API_URL, {
-                    method: 'POST',
-                    redirect: "follow",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({
-                        action: 'delete_extra',
-                        id: taskId
-                    })
-                });
-                const result = await response.json();
-                if(result.status === 'success') {
-                    showToast('تم حذف المبادرة من النظام المركزي بنجاح ✓');
-                } else {
-                    console.error("Delete row error:", result.error);
-                }
-            } catch (error) {
-                console.error("Delete error:", error);
-            }
-        }
-
         /**
          * ==========================================
          * LOCAL FILE IMPORT
