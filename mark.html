@@ -748,125 +748,78 @@
         }
 
         // Map generic raw JSON into structured Application state objects
-        function mapRawDataToApp(rawRows) {
+         function mapRawDataToApp(rawRows) {
             let newData = [];
             rawRows.forEach((row, index) => {
-                const keys = Object.keys(row);
-                const val = (possibleNames) => {
-                    const key = keys.find(k => possibleNames.some(pn => k.includes(pn)));
-                    return key ? row[key] : '';
-                };
+                try {
+                    const keys = Object.keys(row);
+                    
+                    // دالة بحث ذكية تستثني أعمدة معينة لتفادي تداخل عمود (المهام) مع (الإنجاز)
+                    const val = (possibleNames, excludeNames = []) => {
+                        const key = keys.find(k => {
+                            const matchPossible = possibleNames.some(pn => k.includes(pn));
+                            const matchExclude = excludeNames.some(en => k.includes(en));
+                            return matchPossible && !matchExclude;
+                        });
+                        return key ? row[key] : '';
+                    };
 
-                // فلتر مدرع لتنظيف أي أرقام قادمة من الإكسل (فارغة، أخطاء، نصوص)
-                const safeNum = (v) => {
-                    if (v === null || v === undefined || v === '') return 0;
-                    let num = parseFloat(String(v).replace(/[%]/g, '').trim());
-                    return isNaN(num) ? 0 : num;
-                };
+                    // فلتر تنظيف قوي للأرقام والنسب المئوية لحل مشكلة NaN
+                    const safeNum = (v) => {
+                        if (v === null || v === undefined || v === '') return 0;
+                        let num = parseFloat(String(v).replace(/[%]/g, '').trim());
+                        return isNaN(num) ? 0 : num;
+                    };
 
-                let id = val(['م', 'id', 'رقم']) || (index + 1);
-                let mainGoal = val(['الهدف الفرعي', 'الهدف الرئيسي', 'الهدف']) || 'بدون عنوان';
-                let tasksStr = val(['المهام', 'تفاصيل']);
-                let isExtra = val(['النوع', 'نوع']) === 'مبادرة إضافية';
-                
-                let progressVal = safeNum(val(['الإنجاز']));
-                let weightVal = safeNum(val(['الوزن']));
-                let targetVal = safeNum(val(['المستهدف']));
-                let achievedVal = safeNum(val(['المنجز']));
-                let scoreVal = safeNum(val(['التقييم']));
+                    let id = val(['م', 'id', 'رقم']) || (index + 1);
+                    let mainGoal = val(['الهدف الفرعي', 'الهدف الرئيسي', 'الهدف']) || 'بدون عنوان';
+                    let tasksStr = val(['المهام', 'تفاصيل']);
+                    let isExtra = val(['النوع', 'نوع']) === 'مبادرة إضافية';
+                    
+                    // استخدام دالة الاستثناء لتجاهل عمود المهام تماماً عند البحث عن أرقام الإنجاز
+                    let progressVal = safeNum(val(['الإنجاز'], ['المهام']));
+                    let weightVal = safeNum(val(['الوزن']));
+                    let targetVal = safeNum(val(['المستهدف']));
+                    let achievedVal = safeNum(val(['المنجز']));
+                    let scoreVal = safeNum(val(['التقييم']));
 
-                let subTasks = parseTasksIntoChecklist(tasksStr);
-                
-                // إجبار وضع علامات الصح (✓) بناءً على النسبة المئوية الموثوقة
-                if (subTasks.length > 0) {
-                    let tasksToComplete = Math.round((progressVal / 100) * subTasks.length);
-                    subTasks.forEach((st, i) => { st.done = (i < tasksToComplete); });
-                } else {
-                    subTasks.push({ title: mainGoal, done: progressVal >= 100 }); 
+                    let subTasks = parseTasksIntoChecklist(tasksStr);
+                    
+                    // التوزيع التلقائي لعلامات الصح (✓) بناءً على النسبة القادمة من الإكسل
+                    if (subTasks.length > 0) {
+                        if (progressVal >= 100) {
+                            subTasks.forEach(st => st.done = true);
+                        } else if (progressVal > 0) {
+                            let tasksToComplete = Math.round((progressVal / 100) * subTasks.length);
+                            subTasks.forEach((st, i) => { st.done = (i < tasksToComplete); });
+                        } else {
+                            subTasks.forEach(st => st.done = false);
+                        }
+                    } else {
+                        subTasks.push({ title: mainGoal, done: progressVal >= 100 }); 
+                    }
+
+                    newData.push({
+                        id: parseInt(id) || (index + 1),
+                        mainGoal: mainGoal,
+                        subTasks: subTasks,
+                        indicator: val(['المؤشر'], ['المهام']) || 'نسبة',
+                        month: parseInt(val(['الشهر'])) || new Date().getMonth() + 1,
+                        weight: weightVal,
+                        target: targetVal,
+                        achieved: achievedVal,
+                        progress: progressVal,
+                        finalScore: scoreVal,
+                        isExtra: isExtra,
+                        employeeName: val(['اسم الموظف', 'الموظف']) || ''
+                    });
+                } catch (e) {
+                    console.error("خطأ في قراءة الصف: ", row, e);
                 }
-
-                newData.push({
-                    id: parseInt(id) || (index + 1),
-                    mainGoal: mainGoal,
-                    subTasks: subTasks,
-                    indicator: val(['المؤشر']) || 'نسبة',
-                    month: parseInt(val(['الشهر'])) || new Date().getMonth() + 1,
-                    weight: weightVal,
-                    target: targetVal,
-                    achieved: achievedVal,
-                    progress: progressVal,
-                    finalScore: scoreVal,
-                    isExtra: isExtra,
-                    employeeName: val(['اسم الموظف', 'الموظف']) || ''
-                });
             });
             return newData;
         }
-               
-        /**
-         * ==========================================
-         * GOOGLE SHEETS API OPERATIONS
-         * ==========================================
-         */
-         
-      // --- Fetch from Google Sheets ---
-async function fetchFromGoogleSheets(isAuto = false) {
-            let btnText, spinner, errorMsg;
-            if (!isAuto) {
-                btnText = document.getElementById('text-sync-gs');
-                spinner = document.getElementById('spinner-gs');
-                errorMsg = document.getElementById('sync-error-msg');
-                btnText.textContent = 'جاري الاتصال...';
-                spinner.style.display = 'block';
-                errorMsg.classList.add('hidden');
-            } else {
-                showToast('جاري تحديث الخطة تلقائياً بالخلفية...');
-                document.getElementById('sync-status').classList.remove('hidden');
-            }
-            
-            try {
-                const response = await fetch(GOOGLE_SHEETS_API_URL);
-                if (!response.ok) throw new Error('خطأ في الاتصال بالشبكة.');
-                
-                const text = await response.text();
-                let rawData;
-                try { rawData = JSON.parse(text); } 
-                catch (e) { throw new Error('تأكد من إعدادات النشر (Deploy) في جوجل.'); }
 
-                if (rawData.error) throw new Error('خطأ برمجي من جوجل: ' + rawData.error);
-                if (!Array.isArray(rawData) || rawData.length === 0) throw new Error('ملف الإكسل فارغ.');
-
-                // 1. جلب الخطة النقية من جوجل (هي المصدر الأساسي للحقيقة)
-                const newPlannedData = mapRawDataToApp(rawData);
-                
-                // 2. جلب المهام الإضافية المحلية التي لم ترفع بعد
-                const localExtraTasks = appData.filter(g => g.isExtra);
-                
-                // 3. الدمج: استبدال بيانات المتصفح القديمة ببيانات الإكسل الموثوقة 100%
-                const uniqueLocalExtras = localExtraTasks.filter(lt => !newPlannedData.some(md => md.id === lt.id));
-                appData = [...newPlannedData, ...uniqueLocalExtras];
-                
-                saveData();
-                updateAllUI();
-                
-                if (!isAuto) {
-                    closeModal('importModal');
-                    showToast('تمت مزامنة الخطة بنجاح!');
-                }
-                
-            } catch (error) {
-                console.error("Fetch error: ", error);
-                if (!isAuto && errorMsg) {
-                    errorMsg.textContent = error.message;
-                    errorMsg.classList.remove('hidden');
-                }
-            } finally {
-                if (!isAuto && btnText && spinner) {
-                    btnText.textContent = 'بدء المزامنة الذكية الآن';
-                    spinner.style.display = 'none';
-                }
-            }
-        }
         /**
          * ==========================================
          * LOCAL FILE IMPORT
