@@ -481,8 +481,12 @@
 
         // Parse Text into Checklist items
         function parseTasksIntoChecklist(tasksStr) {
-            if(!tasksStr) return [];
-            let items = tasksStr.split(/\n|-/).map(s => s.trim()).filter(s => s.length > 0);
+            if(tasksStr === null || tasksStr === undefined || tasksStr === '') return [];
+            
+            // التعديل هنا: تحويل القيمة إلى نص إجبارياً لتفادي خطأ (split is not a function)
+            let safeStr = String(tasksStr); 
+            
+            let items = safeStr.split(/\n|-/).map(s => s.trim()).filter(s => s.length > 0);
             return items.map(title => ({ title: title, done: false }));
         }
 
@@ -688,6 +692,31 @@
                 spinner.style.display = 'none';
                 closeModal('addTaskModal');
                 document.getElementById('extraTaskForm').reset();
+            }
+        }
+
+        // --- Delete Extra Task from Google Sheets ---
+        async function deleteExtraTaskFromGoogleSheets(taskId) {
+            try {
+                const response = await fetch(GOOGLE_SHEETS_API_URL, {
+                    method: 'POST',
+                    redirect: "follow",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({
+                        action: 'delete_extra',
+                        id: taskId
+                    })
+                });
+                const result = await response.json();
+                if(result.status === 'success') {
+                    showToast('تم الحذف من قاعدة البيانات (الإكسل) بنجاح ✓');
+                } else {
+                    console.error("Delete row error:", result.error);
+                    showToast('تم الحذف محلياً فقط (خطأ في الإكسل: ' + result.error + ')');
+                }
+            } catch (error) {
+                console.error("Delete error:", error);
+                showToast('تم الحذف محلياً فقط (تعذر الاتصال بالخادم)');
             }
         }
 
@@ -1001,7 +1030,10 @@
                 appData = appData.filter(g => g.id !== id);
                 saveData();
                 updateAllUI();
-                showToast('تم الحذف بنجاح');
+                showToast('جاري حذف المبادرة من قاعدة البيانات...');
+                
+                // استدعاء دالة الحذف من جوجل شيت
+                deleteExtraTaskFromGoogleSheets(id);
             }
         }
 
