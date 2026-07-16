@@ -748,45 +748,61 @@
         }
 
         // Map generic raw JSON into structured Application state objects
-function mapRawDataToApp(rawRows) {
-    let newData = [];
-    rawRows.forEach((row, index) => {
-        const keys = Object.keys(row);
-        const val = (possibleNames) => {
-            const key = keys.find(k => possibleNames.some(pn => k.includes(pn)));
-            return key ? row[key] : '';
-        };
+     function mapRawDataToApp(rawRows) {
+            let newData = [];
+            rawRows.forEach((row, index) => {
+                const keys = Object.keys(row);
+                const val = (possibleNames) => {
+                    const key = keys.find(k => possibleNames.some(pn => k.includes(pn)));
+                    return key ? row[key] : '';
+                };
 
-        let id = val(['م', 'id', 'رقم']) || (index + 1);
-        let mainGoal = val(['الهدف الفرعي', 'الهدف الرئيسي', 'الهدف']) || 'بدون عنوان';
-        let tasksStr = val(['المهام', 'تفاصيل']);
-        let progressVal = val(['الإنجاز']) ? parseFloat(val(['الإنجاز']).toString().replace('%', '')) : 0;
-        let isExtra = val(['النوع', 'نوع']) === 'مبادرة إضافية';
-        
-        let subTasks = parseTasksIntoChecklist(tasksStr);
-        // التعديل هنا: تفعيل المهام إذا كان الإنجاز أكبر من 0
-        if (progressVal > 0) {
-            let tasksToComplete = Math.round((progressVal / 100) * subTasks.length);
-            subTasks.forEach((st, i) => { if (i < tasksToComplete) st.done = true; });
+                let id = val(['م', 'id', 'رقم']) || (index + 1);
+                let mainGoal = val(['الهدف الفرعي', 'الهدف الرئيسي', 'الهدف']) || 'بدون عنوان';
+                let tasksStr = val(['المهام', 'تفاصيل']);
+                let isExtra = val(['النوع', 'نوع']) === 'مبادرة إضافية';
+                
+                // --- التعديل الجوهري لحل مشكلة NaN و null ---
+                let rawProgress = val(['الإنجاز']);
+                let progressVal = 0;
+                if (rawProgress !== null && rawProgress !== undefined && rawProgress !== '') {
+                    // إزالة علامة % وأي مسافات ثم تحويلها لرقم
+                    let cleanedStr = String(rawProgress).replace(/%/g, '').trim();
+                    let parsedNum = parseFloat(cleanedStr);
+                    if (!isNaN(parsedNum)) {
+                        progressVal = parsedNum;
+                    }
+                }
+                // ----------------------------------------------
+                
+                let subTasks = parseTasksIntoChecklist(tasksStr);
+                
+                // تفعيل المهام بناءً على نسبة الإنجاز النظيفة
+                if (progressVal > 0 && subTasks.length > 0) {
+                    let tasksToComplete = Math.round((progressVal / 100) * subTasks.length);
+                    subTasks.forEach((st, i) => { if (i < tasksToComplete) st.done = true; });
+                }
+                if(subTasks.length === 0) subTasks.push({ title: mainGoal, done: progressVal >= 100 }); 
+
+                newData.push({
+                    id: parseInt(id),
+                    mainGoal: mainGoal,
+                    subTasks: subTasks,
+                    indicator: val(['المؤشر']) || 'نسبة',
+                    month: parseInt(val(['الشهر'])) || new Date().getMonth() + 1,
+                    weight: parseFloat(val(['الوزن'])) || 1,
+                    target: parseFloat(val(['المستهدف'])) || 1,
+                    achieved: parseFloat(val(['المنجز'])) || 0,
+                    progress: progressVal, // الآن نضمن أن هذه القيمة رقم صحيح دائماً
+                    finalScore: parseFloat(val(['التقييم'])) || 0,
+                    isExtra: isExtra,
+                    employeeName: val(['اسم الموظف', 'الموظف']) || ''
+                });
+            });
+            return newData;
         }
-
-        newData.push({
-            id: parseInt(id),
-            mainGoal: mainGoal,
-            subTasks: subTasks,
-            indicator: val(['المؤشر']) || 'نسبة',
-            month: parseInt(val(['الشهر'])) || new Date().getMonth() + 1,
-            weight: parseFloat(val(['الوزن'])) || 1,
-            target: parseFloat(val(['المستهدف'])) || 1,
-            achieved: parseFloat(val(['المنجز'])) || 0,
-            progress: progressVal,
-            finalScore: parseFloat(val(['التقييم'])) || 0,
-            isExtra: isExtra,
-            employeeName: val(['اسم الموظف', 'الموظف']) || ''
-        });
-    });
-    return newData;
-}
+                    return newGoal; 
+                });
         /**
          * ==========================================
          * GOOGLE SHEETS API OPERATIONS
