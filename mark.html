@@ -174,24 +174,10 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                    <!-- Bar Chart -->
-                    <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-100 overflow-x-auto">
                         <h3 class="text-lg font-bold text-gray-800 mb-6 border-b pb-2">مستوى إنجاز الأهداف (حسب الوزن)</h3>
-                        <div class="flex flex-col h-64 w-full pt-4">
-                            <div class="flex justify-end gap-4 mb-4 text-xs font-bold">
-                                <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-sm bg-[#7a1b22]"></span> الإنجاز %</div>
-                                <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-sm bg-[#d4af37]"></span> الوزن</div>
-                            </div>
-                            <div class="flex-1 flex items-end justify-between gap-1 md:gap-2 border-b border-gray-200 pb-1" id="bar-chart-container">
-                                <!-- Bars populated by JS -->
-                            </div>
-                            <div class="flex justify-between mt-2 px-1 text-[10px] md:text-xs text-gray-500 overflow-hidden" id="bar-chart-labels">
-                                <!-- Labels populated by JS -->
-                            </div>
-                        </div>
+                        <div class="flex flex-col w-full pt-2 min-w-[500px]" id="bar-chart-container"></div>
                     </div>
-
-                    <!-- Pie Chart -->
                     <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center">
                         <h3 class="text-lg font-bold text-gray-800 mb-6 border-b pb-2 w-full text-right">توزيع الأهداف والمهام</h3>
                         <div id="pie-chart" class="relative w-40 h-40 rounded-full shadow-md flex items-center justify-center transition-all hover:scale-105" style="background: conic-gradient(#e2e8f0 0deg 360deg)">
@@ -383,24 +369,25 @@
     </div>
 
     <!-- Export Modal -->
-    <div id="exportModal" class="modal fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center p-4">
-        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden text-center p-6">
-            <h3 class="font-black text-xl text-gray-800 mb-2">تصدير إلى Excel</h3>
-            <p class="text-sm text-gray-500 mb-6 font-bold">سيتم تصدير بيانات شهر <span id="export-month-label" class="kuraimi-primary-text"></span></p>
-            <div class="space-y-3">
-                <button onclick="exportToExcel('all')" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700">تصدير كل أهداف الشهر</button>
-                <button onclick="exportToExcel('completed')" class="w-full bg-gray-100 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-200">تصدير الأهداف المكتملة فقط</button>
-                <button onclick="exportToExcel('extra')" class="w-full bg-yellow-100 text-yellow-800 font-bold py-3 rounded-xl hover:bg-yellow-200">تصدير المبادرات الإضافية</button>
+    <div id="exportModal" class="modal fixed inset-0 bg-black/50 backdrop-blur-sm items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div class="bg-green-700 p-4 text-white flex justify-between items-center">
+                <h3 class="font-bold flex items-center gap-2">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M8 13h8 M8 17h8 M12 13v8"/></svg>
+                    تصدير تقرير الإنجاز
+                </h3>
+                <button onclick="closeModal('exportModal')" class="text-white/70 hover:text-white text-xl leading-none">&times;</button>
             </div>
-            <button onclick="closeModal('exportModal')" class="mt-4 text-gray-400 hover:text-red-500 font-bold text-sm">إلغاء</button>
-        </div>
-    </div>
-
-    <!-- Toast -->
-    <div id="toast" class="toast fixed bottom-4 left-4 right-4 md:right-auto md:left-4 bg-gray-900 text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3 z-50" style="display: none;">
-        <span id="toast-icon">✅</span>
-        <span id="toast-msg" class="font-bold text-sm">تمت العملية بنجاح</span>
-    </div>
+            <div class="p-6 space-y-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">اختر نوع البيانات المراد تصديرها:</label>
+                <select id="exportFilter" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 outline-none mb-4 bg-gray-50">
+                    <option value="all">كافة المهام (المخططة والإضافية)</option>
+                    <option value="completed">المهام المنجزة فقط (الخطة)</option>
+                    <option value="pending">المهام غير المنجزة (المتبقية)</option>
+                    <option value="extra">المهام الإضافية (المبادرات)</option>
+                </select>
+                
+                <button onclick="executeExport()" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 transition-colors shadow-sm">
 
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby_HT8PJ_PTXwkyLEdtgu0fsIM2FFGJfPStNnudLXzD6MEowh8_qPigyLwfTgTforKd9w/exec";
@@ -632,31 +619,37 @@
 
             document.getElementById('stat-progress').innerText = overallProgress + '%';
             document.getElementById('stat-progress-bar').style.width = overallProgress + '%';
-            document.getElementById('stat-completed').innerText = completedPlanned;
-            document.getElementById('stat-total').innerText = planned.length;
-            document.getElementById('stat-extra').innerText = extra.length;
-
-            let ratingDiv = document.getElementById('stat-rating');
-            let bgDiv = document.getElementById('stat-rating-bg');
-            if(overallProgress >= 90) { ratingDiv.innerHTML = 'ممتاز 🌟'; bgDiv.className = 'kuraimi-primary rounded-2xl p-6 shadow-md text-white flex flex-col justify-center'; }
-            else if(overallProgress >= 75) { ratingDiv.innerHTML = 'جيد جداً 📈'; bgDiv.className = 'bg-blue-600 rounded-2xl p-6 shadow-md text-white flex flex-col justify-center'; }
-            else if(overallProgress >= 60) { ratingDiv.innerHTML = 'جيد 👍'; bgDiv.className = 'bg-yellow-500 rounded-2xl p-6 shadow-md text-white flex flex-col justify-center'; }
-            else { ratingDiv.innerHTML = 'يحتاج تحسين ⚠️'; bgDiv.className = 'bg-gray-600 rounded-2xl p-6 shadow-md text-white flex flex-col justify-center'; }
-
             // Bar Chart
-            let barContainer = document.getElementById('bar-chart-container');
-            let barLabels = document.getElementById('bar-chart-labels');
-            barContainer.innerHTML = ''; barLabels.innerHTML = '';
+            const barContainer = document.getElementById('bar-chart-container');
+            let barsHtml = `
+                <div class="flex justify-end gap-4 mb-4 text-xs font-semibold">
+                    <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-sm bg-[#7a1b22]"></span> الإنجاز %</div>
+                    <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-sm bg-[#d4af37]"></span> الوزن</div>
+                </div>
+                <div class="flex flex-col gap-3">
+            `;
+            if(planned.length === 0) barsHtml += `<div class="w-full text-center text-gray-400 py-10">الرجاء استيراد الخطة</div>`;
+            
             planned.forEach(g => {
-                let hProg = Math.max(g.progress, 2);
-                let hWeight = Math.max(Math.min(g.weight * 5, 100), 2);
-                barContainer.innerHTML += `
-                    <div class="flex-1 flex items-end justify-center gap-1 h-full relative group cursor-pointer" title="${g.mainGoal}\nالإنجاز: ${g.progress}%\nالوزن: ${g.weight}">
-                        <div class="w-1/2 bg-[#7a1b22] rounded-t-sm max-w-[20px] transition-all hover:brightness-110" style="height: ${hProg}%"></div>
-                        <div class="w-1/2 bg-[#d4af37] rounded-t-sm max-w-[20px] transition-all hover:brightness-110" style="height: ${hWeight}%"></div>
-                    </div>`;
-                barLabels.innerHTML += `<span class="w-full text-center truncate">هـ ${g.id}</span>`;
+                const wProg = Math.max(g.progress, 2); // للعرض بشكل أفقي
+                const wWeight = Math.max(Math.min(g.weight * 5, 100), 2); // للعرض بشكل أفقي
+                barsHtml += `
+                    <div class="flex items-center gap-3 group relative cursor-pointer" title="الهدف: ${g.mainGoal}\nالإنجاز: ${g.progress}%\nالوزن: ${g.weight}">
+                        <div class="w-12 text-xs font-bold text-gray-500 text-right shrink-0">هـ ${g.id}</div>
+                        <div class="flex-1 flex flex-col gap-1">
+                            <div class="w-full bg-gray-100 rounded-sm h-3 overflow-hidden flex items-center">
+                                <div class="bg-[#7a1b22] h-full transition-all duration-1000" style="width: ${wProg}%"></div>
+                                ${g.progress > 0 ? `<span class="text-[8px] font-bold text-[#7a1b22] ml-1 mr-1 absolute right-12 z-10 drop-shadow-sm">${g.progress}%</span>` : ''}
+                            </div>
+                            <div class="w-full bg-gray-100 rounded-sm h-1.5 overflow-hidden">
+                                <div class="bg-[#d4af37] h-full transition-all duration-1000" style="width: ${wWeight}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
             });
+            barsHtml += `</div>`;
+            barContainer.innerHTML = barsHtml;
 
             // Pie Chart
             let inProgress = planned.length - completedPlanned;
@@ -861,6 +854,7 @@
             let dataToExport = appData.filter(g => g.month == selectedMonth);
             
             if(type === 'completed') dataToExport = dataToExport.filter(g => !g.isExtra && g.progress >= 100);
+            else if(type === 'incomplete') dataToExport = dataToExport.filter(g => !g.isExtra && g.progress < 100);
             else if(type === 'extra') dataToExport = dataToExport.filter(g => g.isExtra);
             // 'all' includes both planned and extra for this month
 
