@@ -695,7 +695,20 @@
          * SYSTEM CONFIGURATION & GLOBAL STATE
          * ==========================================
          */
-               function checkAuth() {
+        const PWD = "kib@markting"; 
+        const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycby_HT8PJ_PTXwkyLEdtgu0fsIM2FFGJfPStNnudLXzD6MEowh8_qPigyLwfTgTforKd9w/exec";
+        
+        let appData = JSON.parse(localStorage.getItem('kuraimiGoalsData')) || [];
+        let currentEditingGoalId = null;
+        let globalMonthFilter = 'all'; 
+        let tasksStatusFilter = 'all'; // فلتر مهام التحديث (الكل، منجزة، غير منجزة)
+
+        /**
+         * ==========================================
+         * AUTHENTICATION LOGIC
+         * ==========================================
+         */
+        function checkAuth() {
             if(sessionStorage.getItem('kuraimiAuth') === 'true') {
                 document.getElementById('login-screen').classList.add('hidden');
                 initApp();
@@ -705,17 +718,11 @@
         function handleLogin(e) {
             e.preventDefault();
             const input = document.getElementById('passwordInput').value;
-            
-            const obfuscatedInput = btoa(input).split('').reverse().join('');
-            
-            const targetHash = "n5Wa0tmch1GQil2a"; 
-
-            if(obfuscatedInput === targetHash) {
+            if(input === PWD) {
                 sessionStorage.setItem('kuraimiAuth', 'true');
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('loginError').classList.add('hidden');
                 initApp();
-                fetchFromGoogleSheets(true);
             } else {
                 document.getElementById('loginError').classList.remove('hidden');
             }
@@ -726,6 +733,7 @@
             document.getElementById('passwordInput').value = '';
             document.getElementById('login-screen').classList.remove('hidden');
         }
+
         /**
          * ==========================================
          * DATA PARSING & UTILITIES
