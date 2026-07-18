@@ -737,7 +737,7 @@
         }
 
         // Extremely robust split function to handle edge cases from Google Sheets
-        function parseTasksIntoChecklist(tasksStr) {
+         function parseTasksIntoChecklist(tasksStr) {
             if (tasksStr === null || tasksStr === undefined) return [];
             let safeStr = String(tasksStr).trim();
             if (safeStr === '') return [];
