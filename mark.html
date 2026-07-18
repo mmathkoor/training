@@ -460,6 +460,7 @@
                                     <th class="px-3 py-5 text-center border-l border-primaryDark">المستهدف</th>
                                     <th class="px-5 py-5 text-center border-l border-primaryDark bg-[#8c2229]">تحديث الإنجاز</th>
                                     <th class="px-3 py-5 text-center border-l border-primaryDark">الإنجاز %</th>
+                                    <th class="px-5 py-5 text-center border-l border-primaryDark">المنجز</th>
                                     <th class="px-5 py-5 text-center">التقييم</th>
                                 </tr>
                             </thead>
@@ -736,25 +737,27 @@
             localStorage.setItem('kuraimiGoalsData', JSON.stringify(appData));
         }
 
-        // Extremely robust split function to handle edge cases from Google Sheets
-         function parseTasksIntoChecklist(tasksStr) {
+        function parseTasksIntoChecklist(tasksStr) {
             if (tasksStr === null || tasksStr === undefined) return [];
             let safeStr = String(tasksStr).trim();
             if (safeStr === '') return [];
             
             // Split by newline or hyphen, trim whitespace, remove empty items
-            let items = safeStr.split(/(?:\n|-)/).map(s => s.trim()).filter(s => s.length > 0);
-            return items.map(title => ({ title: title, done: false }));
+            let items = safeStr.split(/(?:\n|- )/).map(s => s.trim()).filter(s => s.length > 0 && s !== '-');
+            
+            return items.map(item => {
+                let isDone = item.includes('[✓]') || item.includes('[تم]');
+                let cleanTitle = item.replace(/\[✓\]/g, '').replace(/\[تم\]/g, '').replace(/\[ \]/g, '').replace(/^- /g, '').trim();
+                return { title: cleanTitle, done: isDone };
+            });
         }
 
-        // --- MAP RAW DATA TO APP (Robust version handling missing data and percentages correctly) ---
-          function mapRawDataToApp(rawRows) {
+        function mapRawDataToApp(rawRows) {
             let newData = [];
             rawRows.forEach((row, index) => {
                 try {
                     const keys = Object.keys(row);
                     
-                    // دالة بحث ذكية تستثني أعمدة معينة لتفادي تداخل عمود (المهام) مع (الإنجاز)
                     const val = (possibleNames, excludeNames = []) => {
                         const key = keys.find(k => {
                             const matchPossible = possibleNames.some(pn => k.includes(pn));
@@ -764,7 +767,6 @@
                         return key ? row[key] : '';
                     };
 
-                    // فلتر تنظيف قوي للأرقام والنسب المئوية لحل مشكلة NaN
                     const safeNum = (v) => {
                         if (v === null || v === undefined || v === '') return 0;
                         let num = parseFloat(String(v).replace(/[%]/g, '').trim());
@@ -785,41 +787,18 @@
                     let scoreVal = safeNum(val(['التقييم']));
                     let empName = val(['اسم الموظف', 'الموظف']) || '';
 
-                    // العملية العكسية: تحليل المهام وقراءة علامة الصح [✓] أو [تم] من الإكسل
-                    let safeStr = String(tasksStr || '').trim();
-                    let subTasks = [];
-                    
-                    if (safeStr !== '') {
-                        // تقسيم النص بناء على الأسطر أو الشرطات
-                        let items = safeStr.split(/(?:\n|- )/).map(s => s.trim()).filter(s => s.length > 0 && s !== '-');
-                        
-                        subTasks = items.map(item => {
-                            // 1. التحقق مما إذا كانت المهمة تحتوي على علامة إنجاز من الإكسل
-                            let isDone = item.includes('[✓]') || item.includes('[تم]');
-                            
-                            // 2. تنظيف النص للعرض في الواجهة (إزالة العلامات حتى يظهر النص نظيفاً للمستخدم)
-                            let cleanTitle = item.replace(/\[✓\]/g, '')
-                                                 .replace(/\[تم\]/g, '')
-                                                 .replace(/\[ \]/g, '')
-                                                 .replace(/^- /g, '')
-                                                 .trim();
-                            
-                            return { title: cleanTitle, done: isDone };
-                        });
-                    }
+                    let subTasks = parseTasksIntoChecklist(tasksStr);
 
-                    // إذا لم توجد مهام فرعية، نعتبر الهدف الرئيسي هو المهمة
                     if (subTasks.length === 0) {
                         subTasks.push({ title: mainGoal, done: progressVal >= 100 }); 
                     }
 
-                    // 3. حساب النسبة الجديدة محلياً بناءً على عدد علامات الصح (✓) الفعلية
+                    // حساب النسبة المئوية اعتماداً على علامات الصح
                     let completedTasksCount = subTasks.filter(st => st.done).length;
                     let calculatedProgress = subTasks.length > 0 ? Math.round((completedTasksCount / subTasks.length) * 100) : 0;
                     
-                    // استخدام النسبة المحسوبة، وإذا كان المؤشر ليس نسبة مئوية والإنجاز 100% نحتفظ به
                     let finalProgress = calculatedProgress;
-                    if (indicatorVal !== 'نسبة' && progressVal === 100) finalProgress = 100;
+                    if (indicatorVal !== 'نسبة' && progressVal >= 100) finalProgress = 100;
 
                     newData.push({
                         id: parseInt(id) || (index + 1),
@@ -884,13 +863,8 @@
                      throw new Error('تم الاتصال بنجاح ولكن ملف الإكسل فارغ (تأكد من اسم الورقة).');
                 }
 
-                // 1. Fetch fresh data (Excel is the Source of Truth)
                 const newPlannedData = mapRawDataToApp(rawData);
-                
-                // 2. Keep extra tasks that were added locally but not pushed yet
                 const localExtraTasks = appData.filter(g => g.isExtra);
-                
-                // 3. Merge: We trust newPlannedData fully, only append extra local tasks not present in sheet.
                 const uniqueLocalExtras = localExtraTasks.filter(lt => !newPlannedData.some(md => md.id === lt.id));
                 appData = [...newPlannedData, ...uniqueLocalExtras];
                 
@@ -919,7 +893,7 @@
         }
 
         // --- Push Progress Update to Google Sheets ---
-      async function pushUpdateToGoogleSheets(goal) {
+        async function pushUpdateToGoogleSheets(goal) {
             const btnText = document.getElementById('text-save-sub');
             const spinner = document.getElementById('spinner-save-sub');
             
@@ -938,9 +912,9 @@
                         action: 'update_progress',
                         id: goal.id,
                         achieved: goal.achieved,
-                        progress: goal.progress,
+                        progress: goal.progress, // Sends 50, not 5000%
                         finalScore: goal.finalScore,
-                        tasksStr: goal.tasksStr // إرسال نص المهام المحدث إلى جوجل شيت
+                        tasksStr: goal.tasksStr 
                     })
                 });
                 
@@ -1202,7 +1176,7 @@
             const planned = currentData.filter(g => !g.isExtra);
             
             if(planned.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="px-5 py-16 text-center text-gray-500 font-bold bg-gray-50/50">لا توجد بيانات مخطط لها في هذا الشهر لعرضها.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="10" class="px-5 py-16 text-center text-gray-500 font-bold bg-gray-50/50">لا توجد بيانات مخطط لها في هذا الشهر لعرضها.</td></tr>`;
                 return;
             }
 
@@ -1234,6 +1208,7 @@
                         <td class="px-3 py-4 text-center border-l border-gray-100">
                             <span class="font-black text-lg ${goal.progress >= 100 ? 'text-emerald-600' : 'text-goldDark'}">${goal.progress}%</span>
                         </td>
+                        <td class="px-5 py-4 text-center font-black text-gray-900 border-l border-gray-100 text-lg">${goal.achieved}</td>
                         <td class="px-5 py-4 text-center font-black text-gray-900 bg-gray-50 text-lg">${goal.finalScore}</td>
                     </tr>
                 `;
@@ -1355,7 +1330,7 @@
             else progElement.className = "font-black text-primary text-2xl drop-shadow-sm";
         }
 
-unction saveSubTasks() {
+        function saveSubTasks() {
             if(!currentEditingGoalId) return;
             const checkboxes = document.querySelectorAll('#subtasks-checklist input[type="checkbox"]');
             
@@ -1364,19 +1339,15 @@ unction saveSubTasks() {
             appData = appData.map(goal => {
                 if(goal.id === currentEditingGoalId) {
                     let completed = 0;
-                    // تجميع نص المهام الجديد مع إضافة علامة [✓] للمنجز
                     let newTasksStrArray = []; 
                     
                     const newSubTasks = goal.subTasks.map((st, idx) => {
                         const isDone = checkboxes[idx].checked;
                         if(isDone) {
                             completed++;
-                            // تنظيف العنوان القديم من أي علامات وإضافة العلامة الجديدة
-                            let cleanTitle = st.title.replace(/\[✓\]/g, '').replace(/\[تم\]/g, '').trim();
-                            newTasksStrArray.push(`[✓] ${cleanTitle}`);
+                            newTasksStrArray.push(`[✓] ${st.title}`);
                         } else {
-                            let cleanTitle = st.title.replace(/\[✓\]/g, '').replace(/\[تم\]/g, '').trim();
-                            newTasksStrArray.push(`- ${cleanTitle}`);
+                            newTasksStrArray.push(`- ${st.title}`);
                         }
                         return { ...st, done: isDone };
                     });
@@ -1386,9 +1357,10 @@ unction saveSubTasks() {
                     
                     let newAchieved = 0;
                     if(goal.indicator === 'نسبة') {
-                        newAchieved = progress;
+                        newAchieved = progress >= 100 ? goal.target : 0; // if it's a percentage indicator, we generally don't scale it, but this keeps the logic clean.
                     } else {
-                        newAchieved = (progress / 100) * goal.target;
+                        // FIX: Calculates raw numbers properly and allows decimals
+                        newAchieved = parseFloat(((progress / 100) * goal.target).toFixed(2));
                     }
 
                     updatedGoalObj = { 
@@ -1397,7 +1369,7 @@ unction saveSubTasks() {
                         progress: progress, 
                         achieved: newAchieved, 
                         finalScore: parseFloat(finalScore),
-                        tasksStr: newTasksStrArray.join('\n') // حفظ النص المحدث للمهام
+                        tasksStr: newTasksStrArray.join('\n')
                     };
                     return updatedGoalObj;
                 }
@@ -1413,6 +1385,7 @@ unction saveSubTasks() {
                 closeModal('subTaskModal');
             }
         }
+
         function handleAddExtraTask(e) {
             e.preventDefault();
             const mainGoal = document.getElementById('new-mainGoal').value;
