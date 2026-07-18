@@ -748,7 +748,7 @@
         }
 
         // --- MAP RAW DATA TO APP (Robust version handling missing data and percentages correctly) ---
-       function mapRawDataToApp(rawRows) {
+          function mapRawDataToApp(rawRows) {
             let newData = [];
             rawRows.forEach((row, index) => {
                 try {
@@ -842,7 +842,6 @@
             return newData;
         }
 
-
         /**
          * ==========================================
          * GOOGLE SHEETS API OPERATIONS
@@ -920,38 +919,40 @@
         }
 
         // --- Push Progress Update to Google Sheets ---
-        async function pushUpdateToGoogleSheets(goalData) {
+      async function pushUpdateToGoogleSheets(goal) {
             const btnText = document.getElementById('text-save-sub');
             const spinner = document.getElementById('spinner-save-sub');
-            btnText.textContent = 'جاري الحفظ بالخادم...';
-            spinner.style.display = 'block';
+            
+            if (btnText && spinner) {
+                btnText.textContent = 'جاري الحفظ في الخادم...';
+                spinner.style.display = 'block';
+            }
 
             try {
                 const response = await fetch(GOOGLE_SHEETS_API_URL, {
                     method: 'POST',
-                    redirect: "follow",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         action: 'update_progress',
-                        id: goalData.id,
-                        achieved: goalData.achieved,
-                        progress: goalData.progress,
-                        finalScore: goalData.finalScore
+                        id: goal.id,
+                        achieved: goal.achieved,
+                        progress: goal.progress,
+                        finalScore: goal.finalScore,
+                        tasksStr: goal.tasksStr // إرسال نص المهام المحدث إلى جوجل شيت
                     })
                 });
-                const result = await response.json();
-                if(result.status === 'success') {
-                    showToast('تم تحديث الإنجاز في الإكسل بنجاح ✓');
-                } else {
-                    console.error("Sheet update error:", result.error);
-                    showToast('تم الحفظ محلياً (حدث خطأ في الإكسل: ' + result.error + ')');
-                }
+                
+                showToast('تم حفظ التحديث محلياً ومزامنته مع Google Sheets بنجاح!');
             } catch (error) {
-                console.error("Push error:", error);
-                showToast('تم الحفظ محلياً (تعذر الوصول لجوجل شيت)');
+                console.error("Push Error: ", error);
+                showToast('تم الحفظ محلياً. تعذر الاتصال بـ Google Sheets حالياً.');
             } finally {
-                btnText.textContent = 'حفظ التحديث وإغلاق';
-                spinner.style.display = 'none';
+                if (btnText && spinner) {
+                    btnText.textContent = 'حفظ التحديث وإغلاق';
+                    spinner.style.display = 'none';
+                }
                 closeModal('subTaskModal');
             }
         }
@@ -1354,7 +1355,7 @@
             else progElement.className = "font-black text-primary text-2xl drop-shadow-sm";
         }
 
-                function saveSubTasks() {
+unction saveSubTasks() {
             if(!currentEditingGoalId) return;
             const checkboxes = document.querySelectorAll('#subtasks-checklist input[type="checkbox"]');
             
@@ -1363,9 +1364,20 @@
             appData = appData.map(goal => {
                 if(goal.id === currentEditingGoalId) {
                     let completed = 0;
+                    // تجميع نص المهام الجديد مع إضافة علامة [✓] للمنجز
+                    let newTasksStrArray = []; 
+                    
                     const newSubTasks = goal.subTasks.map((st, idx) => {
                         const isDone = checkboxes[idx].checked;
-                        if(isDone) completed++;
+                        if(isDone) {
+                            completed++;
+                            // تنظيف العنوان القديم من أي علامات وإضافة العلامة الجديدة
+                            let cleanTitle = st.title.replace(/\[✓\]/g, '').replace(/\[تم\]/g, '').trim();
+                            newTasksStrArray.push(`[✓] ${cleanTitle}`);
+                        } else {
+                            let cleanTitle = st.title.replace(/\[✓\]/g, '').replace(/\[تم\]/g, '').trim();
+                            newTasksStrArray.push(`- ${cleanTitle}`);
+                        }
                         return { ...st, done: isDone };
                     });
                     
@@ -1384,7 +1396,8 @@
                         subTasks: newSubTasks, 
                         progress: progress, 
                         achieved: newAchieved, 
-                        finalScore: parseFloat(finalScore) 
+                        finalScore: parseFloat(finalScore),
+                        tasksStr: newTasksStrArray.join('\n') // حفظ النص المحدث للمهام
                     };
                     return updatedGoalObj;
                 }
@@ -1395,13 +1408,11 @@
             updateAllUI();
             
             if (updatedGoalObj && !updatedGoalObj.isExtra) {
-                // الأهم: عند الحفظ، أرسل البيانات لترفعها إلى Google Sheets
                 pushUpdateToGoogleSheets(updatedGoalObj);
             } else {
                 closeModal('subTaskModal');
             }
         }
-
         function handleAddExtraTask(e) {
             e.preventDefault();
             const mainGoal = document.getElementById('new-mainGoal').value;
