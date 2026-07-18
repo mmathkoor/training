@@ -1230,11 +1230,11 @@
             const currentData = globalMonthFilter === 'all' ? appData : appData.filter(g => parseInt(g.month) === parseInt(globalMonthFilter));
             let planned = currentData.filter(g => !g.isExtra);
             
-            // تطبيق فلتر الإنجاز (منجزة / قيد التنفيذ)
+            // Apply status filter at the Goal level
             if (tasksStatusFilter === 'completed') {
-                planned = planned.filter(g => g.progress >= 100);
+                planned = planned.filter(g => g.subTasks.some(st => st.done === true));
             } else if (tasksStatusFilter === 'pending') {
-                planned = planned.filter(g => g.progress < 100);
+                planned = planned.filter(g => g.subTasks.some(st => st.done === false));
             }
             
             if(planned.length === 0) {
@@ -1248,8 +1248,17 @@
                 const completedCount = goal.subTasks.filter(st => st.done).length;
                 const totalCount = goal.subTasks.length;
                 
+                // Deep Filtering for Sub-Tasks based on dropdown selection
                 let tasksPreview = `<ul class="list-disc list-inside text-xs text-gray-500 space-y-1.5 font-medium">`;
-                goal.subTasks.forEach(st => {
+                
+                let filteredSubTasks = goal.subTasks;
+                if (tasksStatusFilter === 'completed') {
+                    filteredSubTasks = goal.subTasks.filter(st => st.done === true);
+                } else if (tasksStatusFilter === 'pending') {
+                    filteredSubTasks = goal.subTasks.filter(st => st.done === false);
+                }
+
+                filteredSubTasks.forEach(st => {
                     tasksPreview += `<li class="${st.done ? 'line-through text-emerald-600/70' : ''}">${st.title}</li>`;
                 });
                 tasksPreview += `</ul>`;
@@ -1276,7 +1285,6 @@
             });
             tbody.innerHTML = html;
         }
-
         /**
          * ==========================================
          * EXTRA TASKS (INITIATIVES) RENDERING
