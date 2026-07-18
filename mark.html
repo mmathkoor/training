@@ -14,7 +14,6 @@
     <!-- Google Fonts: Cairo & Tajawal for professional Arabic typography -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     
-    <!-- Tailwind Custom Configuration -->
     <script>
         tailwind.config = {
             theme: {
@@ -217,7 +216,7 @@
                 <img src="Asset 1.png" alt="بنك الكريمي الإسلامي" class="w-full h-full object-contain" />
             </div>
             <h1 class="text-xl font-black text-primary text-center leading-tight">بنك الكريمي الإسلامي</h1>
-            <span class="mt-2 bg-gold/10 text-goldDark px-3 py-1 rounded-full text-xs font-bold border border-gold/20">التسويق</span>
+            <span class="mt-2 bg-gold/10 text-goldDark px-3 py-1 rounded-full text-xs font-bold border border-gold/20">قطاع الشركات والأعمال</span>
         </div>
 
         <!-- Navigation Links -->
@@ -268,7 +267,7 @@
         <div class="md:hidden bg-white shadow-sm p-4 flex justify-between items-center z-20 shrink-0 border-b border-gold/20">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-lightGold border border-gold flex items-center justify-center overflow-hidden p-1">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUIEjuNeKPxjlno3TAiyi8ChJaeKSS4XcbqC_8IPoHXa5SImOeE6YlKEs&s=10" alt="Logo" class="w-full h-full object-contain" />
+                    <img src="Asset 1.png" alt="Logo" class="w-full h-full object-contain" />
                 </div>
                 <span class="font-black text-primary text-sm tracking-tight">الكريمي الإسلامي</span>
             </div>
@@ -296,7 +295,7 @@
                             <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M23 6l-9.5 9.5-5-5L1 18 M17 6h6v6"/></svg>
                             ملخص الأداء الشهري
                         </h2>
-                        <p class="text-gray-500 mt-2 font-medium">نظرة عامة على تقدم أهداف التسويق بصورة تفاعلية.</p>
+                        <p class="text-gray-500 mt-2 font-medium">نظرة عامة على تقدم أهداف قطاع الشركات والأعمال بصورة تفاعلية.</p>
                     </div>
                     
                     <!-- Month Filter -->
@@ -428,7 +427,7 @@
 
             <!-- ===================== TAB 2: UPDATE TASKS ===================== -->
             <div id="tasks" class="tab-content">
-             <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <header class="mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <div>
                         <h2 class="text-2xl md:text-3xl font-black text-primary flex items-center gap-3">
                             <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
@@ -436,8 +435,24 @@
                         </h2>
                         <p class="text-gray-500 mt-2 font-medium">اختر "تحديث" لفتح قائمة المهام الفرعية للهدف وتحديد ما تم إنجازه.</p>
                     </div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
+                        <!-- Tasks Status Filter Dropdown -->
+                        <select id="tasks-status-filter" onchange="setTasksStatusFilter(this.value)" class="bg-gray-50 border border-gray-200 text-sm font-bold rounded-xl focus:ring-primary focus:border-primary block p-3 outline-none text-gray-700 w-full sm:w-auto shadow-sm transition-all cursor-pointer">
+                            <option value="all">عرض كافة المهام (الخطة)</option>
+                            <option value="completed">المهام المنجزة فقط (100%)</option>
+                            <option value="pending">المهام قيد التنفيذ / المتبقية</option>
+                        </select>
+                        
+                        <!-- Quick Sync Button -->
+                        <button onclick="fetchFromGoogleSheets(false)" class="flex items-center justify-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-200 px-5 py-3 rounded-xl hover:bg-emerald-100 hover:shadow-md transition-all font-bold w-full sm:w-auto shadow-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            <span>مزامنة سريعة</span>
+                        </button>
+                    </div>
+                    
                     <!-- Auto-Sync Status Indicator -->
-                    <div id="sync-status" class="hidden px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-100 flex items-center gap-2 font-bold shadow-sm">
+                    <div id="sync-status" class="hidden px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-100 flex items-center gap-2 font-bold shadow-sm w-full lg:w-auto mt-2 lg:mt-0">
                         <span class="relative flex h-3 w-3">
                           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                           <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
@@ -460,7 +475,6 @@
                                     <th class="px-3 py-5 text-center border-l border-primaryDark">المستهدف</th>
                                     <th class="px-5 py-5 text-center border-l border-primaryDark bg-[#8c2229]">تحديث الإنجاز</th>
                                     <th class="px-3 py-5 text-center border-l border-primaryDark">الإنجاز %</th>
-                                    <th class="px-5 py-5 text-center border-l border-primaryDark">المنجز</th>
                                     <th class="px-5 py-5 text-center">التقييم</th>
                                 </tr>
                             </thead>
@@ -496,7 +510,6 @@
         </div>
     </main>
 
-    
     <!-- 1. Sub-Tasks Checklist Modal -->
     <div id="subTaskModal" class="modal fixed inset-0 bg-gray-900/60 backdrop-blur-sm items-center justify-center p-4">
         <div class="modal-content bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] border border-gray-200">
@@ -678,7 +691,7 @@
 
     <script>
         /**
-          * ==========================================
+         * ==========================================
          * SYSTEM CONFIGURATION & GLOBAL STATE
          * ==========================================
          */
@@ -688,6 +701,7 @@
         let appData = JSON.parse(localStorage.getItem('kuraimiGoalsData')) || [];
         let currentEditingGoalId = null;
         let globalMonthFilter = 'all'; 
+        let tasksStatusFilter = 'all'; // فلتر مهام التحديث (الكل، منجزة، غير منجزة)
 
         /**
          * ==========================================
@@ -709,8 +723,6 @@
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('loginError').classList.add('hidden');
                 initApp();
-                // Auto-sync in background on login
-                fetchFromGoogleSheets(true);
             } else {
                 document.getElementById('loginError').classList.remove('hidden');
             }
@@ -721,6 +733,7 @@
             document.getElementById('passwordInput').value = '';
             document.getElementById('login-screen').classList.remove('hidden');
         }
+
         /**
          * ==========================================
          * DATA PARSING & UTILITIES
@@ -730,33 +743,34 @@
             const monthDropdown = document.getElementById('dashboard-month-filter');
             if(monthDropdown) monthDropdown.value = globalMonthFilter;
             updateAllUI();
+            
+            // مزامنة تلقائية وبصمت عند عمل تحديث للصفحة
+            fetchFromGoogleSheets(true);
         }
 
         function saveData() {
             localStorage.setItem('kuraimiGoalsData', JSON.stringify(appData));
         }
 
-        function parseTasksIntoChecklist(tasksStr) {
+        // Extremely robust split function to handle edge cases from Google Sheets
+         function parseTasksIntoChecklist(tasksStr) {
             if (tasksStr === null || tasksStr === undefined) return [];
             let safeStr = String(tasksStr).trim();
             if (safeStr === '') return [];
             
             // Split by newline or hyphen, trim whitespace, remove empty items
-            let items = safeStr.split(/(?:\n|- )/).map(s => s.trim()).filter(s => s.length > 0 && s !== '-');
-            
-            return items.map(item => {
-                let isDone = item.includes('[✓]') || item.includes('[تم]');
-                let cleanTitle = item.replace(/\[✓\]/g, '').replace(/\[تم\]/g, '').replace(/\[ \]/g, '').replace(/^- /g, '').trim();
-                return { title: cleanTitle, done: isDone };
-            });
+            let items = safeStr.split(/(?:\n|-)/).map(s => s.trim()).filter(s => s.length > 0);
+            return items.map(title => ({ title: title, done: false }));
         }
 
-        function mapRawDataToApp(rawRows) {
+        // --- MAP RAW DATA TO APP (Robust version handling missing data and percentages correctly) ---
+          function mapRawDataToApp(rawRows) {
             let newData = [];
             rawRows.forEach((row, index) => {
                 try {
                     const keys = Object.keys(row);
                     
+                    // دالة بحث ذكية تستثني أعمدة معينة لتفادي تداخل عمود (المهام) مع (الإنجاز)
                     const val = (possibleNames, excludeNames = []) => {
                         const key = keys.find(k => {
                             const matchPossible = possibleNames.some(pn => k.includes(pn));
@@ -766,10 +780,18 @@
                         return key ? row[key] : '';
                     };
 
-                    const safeNum = (v) => {
+                    // فلتر تنظيف قوي للأرقام والنسب المئوية لحل مشكلة NaN و 0.75
+                    const safeNum = (v, isPercentage = false) => {
                         if (v === null || v === undefined || v === '') return 0;
-                        let num = parseFloat(String(v).replace(/[%]/g, '').trim());
-                        return isNaN(num) ? 0 : num;
+                        let strVal = String(v).trim();
+                        let num = parseFloat(strVal.replace(/[%]/g, ''));
+                        if (isNaN(num)) return 0;
+                        
+                        // إذا كان العمود نسبة مئوية والرقم كسر عشري (0.75) بدلاً من 75
+                        if (isPercentage && num > 0 && num <= 1 && !strVal.includes('%')) {
+                            num = num * 100;
+                        }
+                        return num;
                     };
 
                     let id = val(['م', 'id', 'رقم']) || (index + 1);
@@ -782,22 +804,45 @@
                     let weightVal = safeNum(val(['الوزن']));
                     let targetVal = safeNum(val(['المستهدف']));
                     let achievedVal = safeNum(val(['المنجز']));
-                    let progressVal = safeNum(val(['الإنجاز'], ['المهام']));
+                    let progressVal = safeNum(val(['الإنجاز'], ['المهام']), true); // تفعيل وضع النسبة
                     let scoreVal = safeNum(val(['التقييم']));
                     let empName = val(['اسم الموظف', 'الموظف']) || '';
 
-                    let subTasks = parseTasksIntoChecklist(tasksStr);
+                    // العملية العكسية: تحليل المهام وقراءة علامة الصح [✓] أو [تم] من الإكسل
+                    let safeStr = String(tasksStr || '').trim();
+                    let subTasks = [];
+                    
+                    if (safeStr !== '') {
+                        // تقسيم النص بناء على الأسطر أو الشرطات
+                        let items = safeStr.split(/(?:\n|- )/).map(s => s.trim()).filter(s => s.length > 0 && s !== '-');
+                        
+                        subTasks = items.map(item => {
+                            // 1. التحقق مما إذا كانت المهمة تحتوي على علامة إنجاز من الإكسل
+                            let isDone = item.includes('[✓]') || item.includes('[تم]');
+                            
+                            // 2. تنظيف النص للعرض في الواجهة (إزالة العلامات حتى يظهر النص نظيفاً للمستخدم)
+                            let cleanTitle = item.replace(/\[✓\]/g, '')
+                                                 .replace(/\[تم\]/g, '')
+                                                 .replace(/\[ \]/g, '')
+                                                 .replace(/^- /g, '')
+                                                 .trim();
+                            
+                            return { title: cleanTitle, done: isDone };
+                        });
+                    }
 
+                    // إذا لم توجد مهام فرعية، نعتبر الهدف الرئيسي هو المهمة
                     if (subTasks.length === 0) {
                         subTasks.push({ title: mainGoal, done: progressVal >= 100 }); 
                     }
 
-                    // حساب النسبة المئوية اعتماداً على علامات الصح
+                    // 3. حساب النسبة الجديدة محلياً بناءً على عدد علامات الصح (✓) الفعلية
                     let completedTasksCount = subTasks.filter(st => st.done).length;
                     let calculatedProgress = subTasks.length > 0 ? Math.round((completedTasksCount / subTasks.length) * 100) : 0;
                     
+                    // استخدام النسبة المحسوبة، وإذا كان المؤشر ليس نسبة مئوية والإنجاز 100% نحتفظ به
                     let finalProgress = calculatedProgress;
-                    if (indicatorVal !== 'نسبة' && progressVal >= 100) finalProgress = 100;
+                    if (indicatorVal !== 'نسبة' && progressVal === 100) finalProgress = 100;
 
                     newData.push({
                         id: parseInt(id) || (index + 1),
@@ -827,18 +872,17 @@
          */
          
         // --- Fetch from Google Sheets ---
-                async function fetchFromGoogleSheets(isAuto = false) {
+        async function fetchFromGoogleSheets(isAuto = false) {
             let btnText, spinner, errorMsg;
             
             if (!isAuto) {
                 btnText = document.getElementById('text-sync-gs');
                 spinner = document.getElementById('spinner-gs');
                 errorMsg = document.getElementById('sync-error-msg');
-                btnText.textContent = 'جاري الاتصال...';
-                spinner.style.display = 'block';
-                errorMsg.classList.add('hidden');
+                if(btnText) btnText.textContent = 'جاري الاتصال...';
+                if(spinner) spinner.style.display = 'block';
+                if(errorMsg) errorMsg.classList.add('hidden');
             } else {
-                showToast('جاري تحديث الخطة تلقائياً بالخلفية...');
                 document.getElementById('sync-status').classList.remove('hidden');
             }
             
@@ -862,10 +906,11 @@
                      throw new Error('تم الاتصال بنجاح ولكن ملف الإكسل فارغ (تأكد من اسم الورقة).');
                 }
 
+                // 1. جلب البيانات من الإكسل (الإكسل هو المصدر الأساسي الوحيد للحقيقة)
                 const newPlannedData = mapRawDataToApp(rawData);
-                const localExtraTasks = appData.filter(g => g.isExtra);
-                const uniqueLocalExtras = localExtraTasks.filter(lt => !newPlannedData.some(md => md.id === lt.id));
-                appData = [...newPlannedData, ...uniqueLocalExtras];
+                
+                // 2. تحديث بيانات التطبيق بالكامل لتطابق الإكسل (وهذا سيحذف أي مبادرة حذفت من الإكسل)
+                appData = newPlannedData;
                 
                 saveData();
                 updateAllUI();
@@ -873,6 +918,11 @@
                 if (!isAuto) {
                     closeModal('importModal');
                     showToast('تم مزامنة الخطة من Google Sheets بنجاح!');
+                } else {
+                     setTimeout(() => {
+                        const statusEl = document.getElementById('sync-status');
+                        if(statusEl) statusEl.classList.add('hidden');
+                    }, 3000);
                 }
                 
             } catch (error) {
@@ -881,7 +931,8 @@
                     errorMsg.textContent = error.message;
                     errorMsg.classList.remove('hidden');
                 } else if(isAuto) {
-                    document.getElementById('sync-status').classList.add('hidden');
+                    const statusEl = document.getElementById('sync-status');
+                    if(statusEl) statusEl.classList.add('hidden');
                 }
             } finally {
                 if (!isAuto && btnText && spinner) {
@@ -892,7 +943,7 @@
         }
 
         // --- Push Progress Update to Google Sheets ---
-        async function pushUpdateToGoogleSheets(goal) {
+      async function pushUpdateToGoogleSheets(goal) {
             const btnText = document.getElementById('text-save-sub');
             const spinner = document.getElementById('spinner-save-sub');
             
@@ -911,9 +962,9 @@
                         action: 'update_progress',
                         id: goal.id,
                         achieved: goal.achieved,
-                        progress: goal.progress, // Sends 50, not 5000%
+                        progress: goal.progress,
                         finalScore: goal.finalScore,
-                        tasksStr: goal.tasksStr 
+                        tasksStr: goal.tasksStr // إرسال نص المهام المحدث إلى جوجل شيت
                     })
                 });
                 
@@ -989,6 +1040,7 @@
                 showToast('تم الحذف محلياً فقط (تعذر الاتصال بالخادم)');
             }
         }
+
         /**
          * ==========================================
          * LOCAL FILE IMPORT
@@ -1168,7 +1220,12 @@
          * TASKS TABLE RENDERING
          * ==========================================
          */
-       function renderTasksTable() {
+        function setTasksStatusFilter(status) {
+            tasksStatusFilter = status;
+            renderTasksTable();
+        }
+
+        function renderTasksTable() {
             const tbody = document.getElementById('tasks-table-body');
             const currentData = globalMonthFilter === 'all' ? appData : appData.filter(g => parseInt(g.month) === parseInt(globalMonthFilter));
             let planned = currentData.filter(g => !g.isExtra);
@@ -1181,7 +1238,7 @@
             }
             
             if(planned.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="px-5 py-16 text-center text-gray-500 font-bold bg-gray-50/50">لا توجد مهام مطابقة للفلتر المحدد.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" class="px-5 py-16 text-center text-gray-500 font-bold bg-gray-50/50">لا توجد بيانات مطابقة ضمن الفلتر المختار.</td></tr>`;
                 return;
             }
 
@@ -1213,14 +1270,12 @@
                         <td class="px-3 py-4 text-center border-l border-gray-100">
                             <span class="font-black text-lg ${goal.progress >= 100 ? 'text-emerald-600' : 'text-goldDark'}">${goal.progress}%</span>
                         </td>
-                        <td class="px-5 py-4 text-center font-black text-gray-900 border-l border-gray-100 text-lg">${goal.achieved}</td>
                         <td class="px-5 py-4 text-center font-black text-gray-900 bg-gray-50 text-lg">${goal.finalScore}</td>
                     </tr>
                 `;
             });
             tbody.innerHTML = html;
         }
-
 
         /**
          * ==========================================
@@ -1345,15 +1400,19 @@
             appData = appData.map(goal => {
                 if(goal.id === currentEditingGoalId) {
                     let completed = 0;
+                    // تجميع نص المهام الجديد مع إضافة علامة [✓] للمنجز
                     let newTasksStrArray = []; 
                     
                     const newSubTasks = goal.subTasks.map((st, idx) => {
                         const isDone = checkboxes[idx].checked;
                         if(isDone) {
                             completed++;
-                            newTasksStrArray.push(`[✓] ${st.title}`);
+                            // تنظيف العنوان القديم من أي علامات وإضافة العلامة الجديدة
+                            let cleanTitle = st.title.replace(/\[✓\]/g, '').replace(/\[تم\]/g, '').trim();
+                            newTasksStrArray.push(`[✓] ${cleanTitle}`);
                         } else {
-                            newTasksStrArray.push(`- ${st.title}`);
+                            let cleanTitle = st.title.replace(/\[✓\]/g, '').replace(/\[تم\]/g, '').trim();
+                            newTasksStrArray.push(`- ${cleanTitle}`);
                         }
                         return { ...st, done: isDone };
                     });
@@ -1363,10 +1422,9 @@
                     
                     let newAchieved = 0;
                     if(goal.indicator === 'نسبة') {
-                        newAchieved = progress >= 100 ? goal.target : 0; // if it's a percentage indicator, we generally don't scale it, but this keeps the logic clean.
+                        newAchieved = progress;
                     } else {
-                        // FIX: Calculates raw numbers properly and allows decimals
-                        newAchieved = parseFloat(((progress / 100) * goal.target).toFixed(2));
+                        newAchieved = (progress / 100) * goal.target;
                     }
 
                     updatedGoalObj = { 
@@ -1375,7 +1433,7 @@
                         progress: progress, 
                         achieved: newAchieved, 
                         finalScore: parseFloat(finalScore),
-                        tasksStr: newTasksStrArray.join('\n')
+                        tasksStr: newTasksStrArray.join('\n') // حفظ النص المحدث للمهام
                     };
                     return updatedGoalObj;
                 }
@@ -1391,7 +1449,6 @@
                 closeModal('subTaskModal');
             }
         }
-
         function handleAddExtraTask(e) {
             e.preventDefault();
             const mainGoal = document.getElementById('new-mainGoal').value;
@@ -1447,10 +1504,10 @@
             // Deep clone the data so we can safely modify subTasks for the export without affecting the UI
             let clonedData = JSON.parse(JSON.stringify(baseData));
 
+            // تصفية المهام بشكل دقيق وعميق بداخل كل هدف بناءً على نوع التقرير المطلوب
             if (filterType === 'all') {
                 dataToExport = clonedData;
             } else if (filterType === 'completed') {
-                // Keep only planned goals that have AT LEAST ONE completed subtask
                 clonedData.forEach(d => {
                     if (!d.isExtra) {
                         d.subTasks = d.subTasks.filter(st => st.done === true);
@@ -1458,7 +1515,6 @@
                 });
                 dataToExport = clonedData.filter(d => !d.isExtra && d.subTasks.length > 0);
             } else if (filterType === 'pending') {
-                // Keep only planned goals that have AT LEAST ONE PENDING subtask
                 clonedData.forEach(d => {
                     if (!d.isExtra) {
                         d.subTasks = d.subTasks.filter(st => st.done === false);
