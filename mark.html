@@ -428,7 +428,7 @@
 
             <!-- ===================== TAB 2: UPDATE TASKS ===================== -->
             <div id="tasks" class="tab-content">
-                <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+             <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <div>
                         <h2 class="text-2xl md:text-3xl font-black text-primary flex items-center gap-3">
                             <svg class="w-8 h-8 text-gold" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
@@ -678,7 +678,7 @@
 
     <script>
         /**
-         * ==========================================
+          * ==========================================
          * SYSTEM CONFIGURATION & GLOBAL STATE
          * ==========================================
          */
@@ -721,7 +721,6 @@
             document.getElementById('passwordInput').value = '';
             document.getElementById('login-screen').classList.remove('hidden');
         }
-
         /**
          * ==========================================
          * DATA PARSING & UTILITIES
@@ -828,7 +827,7 @@
          */
          
         // --- Fetch from Google Sheets ---
-        async function fetchFromGoogleSheets(isAuto = false) {
+                async function fetchFromGoogleSheets(isAuto = false) {
             let btnText, spinner, errorMsg;
             
             if (!isAuto) {
@@ -990,7 +989,6 @@
                 showToast('تم الحذف محلياً فقط (تعذر الاتصال بالخادم)');
             }
         }
-
         /**
          * ==========================================
          * LOCAL FILE IMPORT
@@ -1170,13 +1168,20 @@
          * TASKS TABLE RENDERING
          * ==========================================
          */
-        function renderTasksTable() {
+       function renderTasksTable() {
             const tbody = document.getElementById('tasks-table-body');
             const currentData = globalMonthFilter === 'all' ? appData : appData.filter(g => parseInt(g.month) === parseInt(globalMonthFilter));
-            const planned = currentData.filter(g => !g.isExtra);
+            let planned = currentData.filter(g => !g.isExtra);
+            
+            // تطبيق فلتر الإنجاز (منجزة / قيد التنفيذ)
+            if (tasksStatusFilter === 'completed') {
+                planned = planned.filter(g => g.progress >= 100);
+            } else if (tasksStatusFilter === 'pending') {
+                planned = planned.filter(g => g.progress < 100);
+            }
             
             if(planned.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="10" class="px-5 py-16 text-center text-gray-500 font-bold bg-gray-50/50">لا توجد بيانات مخطط لها في هذا الشهر لعرضها.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" class="px-5 py-16 text-center text-gray-500 font-bold bg-gray-50/50">لا توجد مهام مطابقة للفلتر المحدد.</td></tr>`;
                 return;
             }
 
@@ -1215,6 +1220,7 @@
             });
             tbody.innerHTML = html;
         }
+
 
         /**
          * ==========================================
