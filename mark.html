@@ -748,13 +748,13 @@
         }
 
         // --- MAP RAW DATA TO APP (Robust version handling missing data and percentages correctly) ---
-        function mapRawDataToApp(rawRows) {
+       function mapRawDataToApp(rawRows) {
             let newData = [];
             rawRows.forEach((row, index) => {
                 try {
                     const keys = Object.keys(row);
                     
-                    // Smart finder to exclude specific words (like 'المهام' from 'الإنجاز')
+                    // دالة بحث ذكية تستثني أعمدة معينة لتفادي تداخل عمود (المهام) مع (الإنجاز)
                     const val = (possibleNames, excludeNames = []) => {
                         const key = keys.find(k => {
                             const matchPossible = possibleNames.some(pn => k.includes(pn));
@@ -764,63 +764,76 @@
                         return key ? row[key] : '';
                     };
 
+                    // فلتر تنظيف قوي للأرقام والنسب المئوية لحل مشكلة NaN
+                    const safeNum = (v) => {
+                        if (v === null || v === undefined || v === '') return 0;
+                        let num = parseFloat(String(v).replace(/[%]/g, '').trim());
+                        return isNaN(num) ? 0 : num;
+                    };
+
                     let id = val(['م', 'id', 'رقم']) || (index + 1);
                     let mainGoal = val(['الهدف الفرعي', 'الهدف الرئيسي', 'الهدف']) || 'بدون عنوان';
                     let tasksStr = val(['المهام', 'تفاصيل']);
                     let isExtra = val(['النوع', 'نوع']) === 'مبادرة إضافية';
                     
-                    // Clean progress values coming from excel (removing %, handling empty strings)
-                    let rawProgress = val(['الإنجاز'], ['المهام']); // Explicitly exclude 'المهام'
-                    let progressVal = 0;
-                    if (rawProgress !== null && rawProgress !== undefined && rawProgress !== '') {
-                        let cleanedStr = String(rawProgress).replace(/%/g, '').trim();
-                        let parsedNum = parseFloat(cleanedStr);
-                        if (!isNaN(parsedNum)) {
-                            progressVal = parsedNum;
-                        }
+                    let indicatorVal = val(['المؤشر'], ['المهام']) || 'نسبة';
+                    let monthVal = parseInt(val(['الشهر'])) || new Date().getMonth() + 1;
+                    let weightVal = safeNum(val(['الوزن']));
+                    let targetVal = safeNum(val(['المستهدف']));
+                    let achievedVal = safeNum(val(['المنجز']));
+                    let progressVal = safeNum(val(['الإنجاز'], ['المهام']));
+                    let scoreVal = safeNum(val(['التقييم']));
+                    let empName = val(['اسم الموظف', 'الموظف']) || '';
+
+                    // العملية العكسية: تحليل المهام وقراءة علامة الصح [✓] أو [تم] من الإكسل
+                    let safeStr = String(tasksStr || '').trim();
+                    let subTasks = [];
+                    
+                    if (safeStr !== '') {
+                        // تقسيم النص بناء على الأسطر أو الشرطات
+                        let items = safeStr.split(/(?:\n|- )/).map(s => s.trim()).filter(s => s.length > 0 && s !== '-');
+                        
+                        subTasks = items.map(item => {
+                            // 1. التحقق مما إذا كانت المهمة تحتوي على علامة إنجاز من الإكسل
+                            let isDone = item.includes('[✓]') || item.includes('[تم]');
+                            
+                            // 2. تنظيف النص للعرض في الواجهة (إزالة العلامات حتى يظهر النص نظيفاً للمستخدم)
+                            let cleanTitle = item.replace(/\[✓\]/g, '')
+                                                 .replace(/\[تم\]/g, '')
+                                                 .replace(/\[ \]/g, '')
+                                                 .replace(/^- /g, '')
+                                                 .trim();
+                            
+                            return { title: cleanTitle, done: isDone };
+                        });
                     }
 
-                    // Parse other numbers safely
-                    const safeNum = (v, defaultV) => {
-                        if (v === null || v === undefined || v === '') return defaultV;
-                        let n = parseFloat(String(v).replace(/[^0-9.-]+/g,""));
-                        return isNaN(n) ? defaultV : n;
-                    };
-
-                    let weightVal = safeNum(val(['الوزن']), 1);
-                    let targetVal = safeNum(val(['المستهدف']), 1);
-                    let achievedVal = safeNum(val(['المنجز']), 0);
-                    let scoreVal = safeNum(val(['التقييم']), 0);
-
-                    let subTasks = parseTasksIntoChecklist(tasksStr);
-                    
-                    // Calculate automatic Checkboxes based on percentage from Excel
-                    if (subTasks.length > 0) {
-                        if (progressVal >= 100) {
-                            subTasks.forEach(st => st.done = true);
-                        } else if (progressVal > 0) {
-                            let tasksToComplete = Math.round((progressVal / 100) * subTasks.length);
-                            subTasks.forEach((st, i) => { st.done = (i < tasksToComplete); });
-                        } else {
-                            subTasks.forEach(st => st.done = false);
-                        }
-                    } else {
+                    // إذا لم توجد مهام فرعية، نعتبر الهدف الرئيسي هو المهمة
+                    if (subTasks.length === 0) {
                         subTasks.push({ title: mainGoal, done: progressVal >= 100 }); 
                     }
+
+                    // 3. حساب النسبة الجديدة محلياً بناءً على عدد علامات الصح (✓) الفعلية
+                    let completedTasksCount = subTasks.filter(st => st.done).length;
+                    let calculatedProgress = subTasks.length > 0 ? Math.round((completedTasksCount / subTasks.length) * 100) : 0;
+                    
+                    // استخدام النسبة المحسوبة، وإذا كان المؤشر ليس نسبة مئوية والإنجاز 100% نحتفظ به
+                    let finalProgress = calculatedProgress;
+                    if (indicatorVal !== 'نسبة' && progressVal === 100) finalProgress = 100;
 
                     newData.push({
                         id: parseInt(id) || (index + 1),
                         mainGoal: mainGoal,
                         subTasks: subTasks,
-                        indicator: val(['المؤشر'], ['المهام']) || 'نسبة',
-                        month: parseInt(val(['الشهر'])) || new Date().getMonth() + 1,
+                        indicator: indicatorVal,
+                        month: monthVal,
                         weight: weightVal,
                         target: targetVal,
                         achieved: achievedVal,
-                        progress: progressVal,
+                        progress: finalProgress,
                         finalScore: scoreVal,
                         isExtra: isExtra,
-                        employeeName: val(['اسم الموظف', 'الموظف']) || ''
+                        employeeName: empName
                     });
                 } catch (e) {
                     console.error("خطأ في قراءة الصف: ", row, e);
@@ -828,6 +841,7 @@
             });
             return newData;
         }
+
 
         /**
          * ==========================================
@@ -1340,7 +1354,7 @@
             else progElement.className = "font-black text-primary text-2xl drop-shadow-sm";
         }
 
-        function saveSubTasks() {
+                function saveSubTasks() {
             if(!currentEditingGoalId) return;
             const checkboxes = document.querySelectorAll('#subtasks-checklist input[type="checkbox"]');
             
@@ -1381,6 +1395,7 @@
             updateAllUI();
             
             if (updatedGoalObj && !updatedGoalObj.isExtra) {
+                // الأهم: عند الحفظ، أرسل البيانات لترفعها إلى Google Sheets
                 pushUpdateToGoogleSheets(updatedGoalObj);
             } else {
                 closeModal('subTaskModal');
