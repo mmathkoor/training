@@ -1435,15 +1435,32 @@
             const filterType = document.getElementById('exportFilter').value;
             let dataToExport = [];
 
-            // Apply specific status filters
-            if (filterType === 'all') dataToExport = appData;
-            else if (filterType === 'completed') dataToExport = appData.filter(d => !d.isExtra && d.progress >= 100);
-            else if (filterType === 'pending') dataToExport = appData.filter(d => !d.isExtra && d.progress < 100);
-            else if (filterType === 'extra') dataToExport = appData.filter(d => d.isExtra);
+            // Apply global month filter first
+            let baseData = globalMonthFilter === 'all' ? [...appData] : appData.filter(d => parseInt(d.month) === parseInt(globalMonthFilter));
 
-            // Apply global month filter
-            if (globalMonthFilter !== 'all') {
-                dataToExport = dataToExport.filter(d => parseInt(d.month) === parseInt(globalMonthFilter));
+            // Deep clone the data so we can safely modify subTasks for the export without affecting the UI
+            let clonedData = JSON.parse(JSON.stringify(baseData));
+
+            if (filterType === 'all') {
+                dataToExport = clonedData;
+            } else if (filterType === 'completed') {
+                // Keep only planned goals that have AT LEAST ONE completed subtask
+                clonedData.forEach(d => {
+                    if (!d.isExtra) {
+                        d.subTasks = d.subTasks.filter(st => st.done === true);
+                    }
+                });
+                dataToExport = clonedData.filter(d => !d.isExtra && d.subTasks.length > 0);
+            } else if (filterType === 'pending') {
+                // Keep only planned goals that have AT LEAST ONE PENDING subtask
+                clonedData.forEach(d => {
+                    if (!d.isExtra) {
+                        d.subTasks = d.subTasks.filter(st => st.done === false);
+                    }
+                });
+                dataToExport = clonedData.filter(d => !d.isExtra && d.subTasks.length > 0);
+            } else if (filterType === 'extra') {
+                dataToExport = clonedData.filter(d => d.isExtra);
             }
 
             if(dataToExport.length === 0) {
