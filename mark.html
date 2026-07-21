@@ -5,13 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام إدارة الأهداف - بنك الكريمي الإسلامي</title>
     
-    <!-- Tailwind CSS for rapid styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- SheetJS for local Excel Import/Export -->
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-    
-    <!-- Google Fonts: Cairo & Tajawal for professional Arabic typography -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     
     <script>
@@ -19,9 +14,9 @@
             theme: {
                 extend: {
                     colors: { 
-                        primary: '#7a1b22', // العنابي الخاص ببنك الكريمي
+                        primary: '#7a1b22', 
                         primaryDark: '#5a1318',
-                        gold: '#d4af37',    // الذهبي الخاص ببنك الكريمي
+                        gold: '#d4af37',    
                         goldDark: '#c4a133',
                         lightGold: '#f4e9cd',
                         surface: '#f8fafc'
@@ -39,7 +34,6 @@
     </script>
 
     <style>
-        /* Base styles */
         body { 
             background-color: #f1f5f9; 
             color: #1a1a1a; 
@@ -48,7 +42,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Tab Transitions */
         .tab-content { 
             display: none; 
             animation: fadeIn 0.5s ease-out forwards; 
@@ -59,7 +52,6 @@
             opacity: 1;
         }
 
-        /* Modal Animations */
         .modal { 
             display: none; 
             opacity: 0; 
@@ -78,7 +70,6 @@
             transform: scale(1) translateY(0); 
         }
         
-        /* Login Screen Overlay */
         #login-screen { 
             position: fixed; 
             inset: 0; 
@@ -94,7 +85,6 @@
             pointer-events: none; 
         }
         
-        /* Keyframes */
         @keyframes fadeIn { 
             from { opacity: 0; transform: translateY(15px); } 
             to { opacity: 1; transform: translateY(0); } 
@@ -103,22 +93,16 @@
             from { opacity: 0; transform: translateY(30px); } 
             to { opacity: 1; transform: translateY(0); } 
         }
-        @keyframes fillBar {
-            from { width: 0%; }
-        }
         
-        /* Custom UI Elements */
         .toast { 
             animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
         }
         
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; border: 2px solid #f1f5f9; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        /* Custom Checkbox */
         .kuraimi-checkbox {
             appearance: none;
             background-color: #fff;
@@ -152,7 +136,6 @@
             transform: scale(1);
         }
         
-        /* Loaders */
         .spinner { 
             border: 3px solid rgba(212, 175, 55, 0.3); 
             border-radius: 50%; 
@@ -163,15 +146,13 @@
             display: none; 
         }
 
-        /* Goal Tracking Custom Bars */
         .progress-track-item:hover {
             background-color: #f8fafc;
             transform: translateX(-5px);
         }
 
-        /* Gauge SVG styling */
         .gauge-path {
-            stroke-dasharray: 283; /* 2 * pi * r (r=45) */
+            stroke-dasharray: 283; 
             stroke-dashoffset: 283;
             transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -179,10 +160,8 @@
 </head>
 <body class="flex h-screen overflow-hidden text-gray-800 bg-surface">
 
-    <!-- Login Screen -->
     <div id="login-screen">
         <div class="bg-white p-10 rounded-[2rem] shadow-2xl max-w-sm w-full mx-4 text-center border-t-[6px] border-gold relative overflow-hidden">
-            <!-- Decorative background elements -->
             <div class="absolute -top-10 -right-10 w-32 h-32 bg-lightGold rounded-full opacity-50"></div>
             <div class="absolute -bottom-10 -left-10 w-24 h-24 bg-red-50 rounded-full opacity-50"></div>
             
@@ -208,9 +187,7 @@
         </div>
     </div>
 
-    <!-- Sidebar (Desktop) -->
     <aside class="w-72 bg-white shadow-2xl z-20 hidden md:flex flex-col relative border-l border-gray-100">
-        <!-- Logo Area -->
         <div class="p-8 flex flex-col items-center border-b border-gray-50 bg-gradient-to-b from-white to-gray-50/50">
             <div class="w-24 h-24 mb-5 rounded-full bg-lightGold flex items-center justify-center border-[3px] border-gold shadow-md overflow-hidden p-2 transform hover:scale-105 transition-transform duration-300">
                 <img src="Asset 1.png" alt="بنك الكريمي الإسلامي" class="w-full h-full object-contain" />
@@ -219,7 +196,6 @@
             <span class="mt-2 bg-gold/10 text-goldDark px-3 py-1 rounded-full text-xs font-bold border border-gold/20">التسويق</span>
         </div>
 
-        <!-- Navigation Links -->
         <nav class="flex-1 p-5 space-y-3 overflow-y-auto">
             <button onclick="switchTab('dashboard')" class="nav-btn w-full flex items-center gap-4 px-5 py-3.5 rounded-xl transition-all active-nav bg-primary text-white shadow-md font-bold" data-target="dashboard">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
@@ -236,7 +212,6 @@
                 <span>المبادرات الإضافية</span>
             </button>
             
-            <!-- Actions Section -->
             <div class="pt-8 mt-6 border-t border-gray-100 space-y-3">
                 <p class="text-xs font-bold text-gray-400 px-2 uppercase tracking-wider mb-2">أدوات النظام</p>
                 
@@ -252,7 +227,6 @@
             </div>
         </nav>
 
-        <!-- User Profile Area / Logout -->
         <div class="p-5 border-t border-gray-100 bg-gray-50">
             <button onclick="logout()" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-gray-500 hover:text-red-600 hover:bg-red-50 transition-all">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
@@ -263,7 +237,7 @@
 
     <main class="flex-1 flex flex-col h-full overflow-hidden w-full relative bg-[#f4f7f6]">
         
-        <!-- Mobile Header (Visible only on small screens) -->
+        <!-- Mobile Header -->
         <div class="md:hidden bg-white shadow-sm p-4 flex justify-between items-center z-20 shrink-0 border-b border-gold/20">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-lightGold border border-gold flex items-center justify-center overflow-hidden p-1">
@@ -285,10 +259,8 @@
 
         <div class="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth" id="main-scroll-area">
             
-            <!-- ===================== TAB 1: DASHBOARD ===================== -->
             <div id="dashboard" class="tab-content active">
                 
-                <!-- Dashboard Header & Filters -->
                 <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <div>
                         <h2 class="text-2xl md:text-3xl font-black text-primary flex items-center gap-3 tracking-tight">
@@ -298,7 +270,6 @@
                         <p class="text-gray-500 mt-2 font-medium">نظرة عامة على تقدم أهداف التسويق بصورة تفاعلية.</p>
                     </div>
                     
-                    <!-- Month Filter -->
                     <div class="flex items-center gap-3 bg-gray-50 p-2.5 rounded-xl border border-gray-200 shadow-inner w-full md:w-auto">
                         <div class="bg-white p-2 rounded-lg shadow-sm text-primary">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -325,15 +296,11 @@
                 </header>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    
-                    <!-- Card 1: Overall Progress (Custom SVG Semi-Circle Gauge) -->
                     <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 relative overflow-hidden flex flex-col items-center justify-center transform hover:-translate-y-1 transition-transform duration-300">
                         <span class="text-gray-500 text-sm font-bold mb-4 w-full text-right block">الإنجاز الكلي (المخطط)</span>
                         <div class="relative w-40 h-24 flex justify-center items-end">
-                            <!-- SVG Gauge Background -->
                             <svg viewBox="0 0 100 50" class="absolute inset-0 w-full h-full overflow-visible">
                                 <path d="M 10,50 A 40,40 0 0,1 90,50" fill="none" stroke="#f1f5f9" stroke-width="12" stroke-linecap="round" />
-                                <!-- SVG Gauge Value (Filled via JS) -->
                                 <path id="svg-gauge-value" d="M 10,50 A 40,40 0 0,1 90,50" fill="none" stroke="#7a1b22" stroke-width="12" stroke-linecap="round" class="gauge-path" />
                             </svg>
                             <div class="absolute bottom-0 flex flex-col items-center pb-2">
@@ -342,7 +309,6 @@
                         </div>
                     </div>
 
-                    <!-- Card 2: Completed Goals -->
                     <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between transform hover:-translate-y-1 transition-transform duration-300">
                         <div class="flex justify-between items-start w-full">
                             <span class="text-gray-500 text-sm font-bold block">أهداف خطة مكتملة</span>
@@ -356,7 +322,6 @@
                         </div>
                     </div>
 
-                    <!-- Card 3: Extra Tasks -->
                     <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between transform hover:-translate-y-1 transition-transform duration-300">
                         <div class="flex justify-between items-start w-full">
                             <span class="text-gray-500 text-sm font-bold block">مبادرات إضافية</span>
@@ -370,7 +335,6 @@
                         </div>
                     </div>
                     
-                    <!-- Card 4: Rating -->
                     <div class="bg-gradient-to-br from-primary to-primaryDark rounded-3xl p-6 shadow-lg text-white relative overflow-hidden flex flex-col justify-center transform hover:-translate-y-1 transition-transform duration-300">
                         <div class="absolute -left-6 -top-6 opacity-10 transform -rotate-12">
                             <svg width="120" height="120" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -386,8 +350,6 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-                    
-                    <!-- Replaced Complex Bar Chart with Custom Vertical Progress Track -->
                     <div class="lg:col-span-2 bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col">
                         <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
                             <h3 class="text-lg font-black text-primary flex items-center gap-2">
@@ -396,27 +358,20 @@
                             </h3>
                             <span class="text-xs font-bold text-gray-400 bg-gray-50 px-3 py-1 rounded-lg">الأهداف المخططة فقط</span>
                         </div>
-                        
-                        <!-- Scrollable list of goals with individual clear progress bars -->
                         <div class="flex-1 overflow-y-auto pr-2 space-y-4 max-h-[350px]" id="goals-progress-list">
                             <!-- Populated via JS -->
                         </div>
                     </div>
                     
-                    <!-- Task Distribution Pie/Donut Chart Area -->
                     <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col">
                         <h3 class="text-lg font-black text-primary mb-6 border-b border-gray-100 pb-4 text-center">توزيع حالة المهام</h3>
-                        
                         <div class="flex-1 flex flex-col items-center justify-center">
-                            <!-- CSS Conic Gradient Donut Chart -->
                             <div id="pie-chart-container" class="relative w-48 h-48 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 duration-500" style="background: conic-gradient(#e2e8f0 0deg 360deg)">
                                 <div class="w-32 h-32 bg-white rounded-full shadow-inner flex flex-col items-center justify-center z-10">
                                     <span class="text-3xl font-black text-gray-800" id="pie-total">0</span>
                                     <span class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-1">إجمالي المهام</span>
                                 </div>
                             </div>
-                            
-                            <!-- Custom Interactive Legend -->
                             <div class="mt-8 w-full space-y-3 bg-gray-50 p-4 rounded-2xl border border-gray-100" id="pie-legend">
                                 <!-- Populated via JS -->
                             </div>
@@ -425,7 +380,6 @@
                 </div>
             </div>
 
-            <!-- ===================== TAB 2: UPDATE TASKS ===================== -->
             <div id="tasks" class="tab-content">
                 <header class="mb-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <div>
@@ -437,21 +391,18 @@
                     </div>
                     
                     <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
-                        <!-- Tasks Status Filter Dropdown -->
                         <select id="tasks-status-filter" onchange="setTasksStatusFilter(this.value)" class="bg-gray-50 border border-gray-200 text-sm font-bold rounded-xl focus:ring-primary focus:border-primary block p-3 outline-none text-gray-700 w-full sm:w-auto shadow-sm transition-all cursor-pointer">
                             <option value="all">عرض كافة المهام (الخطة)</option>
                             <option value="completed">المهام المنجزة فقط (100%)</option>
                             <option value="pending">المهام قيد التنفيذ / المتبقية</option>
                         </select>
                         
-                        <!-- Quick Sync Button -->
                         <button onclick="fetchFromGoogleSheets(false)" class="flex items-center justify-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-200 px-5 py-3 rounded-xl hover:bg-emerald-100 hover:shadow-md transition-all font-bold w-full sm:w-auto shadow-sm">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                             <span>مزامنة سريعة</span>
                         </button>
                     </div>
                     
-                    <!-- Auto-Sync Status Indicator -->
                     <div id="sync-status" class="hidden px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl border border-emerald-100 flex items-center gap-2 font-bold shadow-sm w-full lg:w-auto mt-2 lg:mt-0">
                         <span class="relative flex h-3 w-3">
                           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -461,7 +412,6 @@
                     </div>
                 </header>
 
-                <!-- Advanced Table -->
                 <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-8">
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-right text-gray-600 min-w-[1000px]">
@@ -486,7 +436,6 @@
                 </div>
             </div>
 
-            <!-- ===================== TAB 3: EXTRA TASKS ===================== -->
             <div id="extra-tasks" class="tab-content">
                 <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                     <div>
@@ -530,7 +479,7 @@
                 </div>
                 
                 <h5 class="font-bold text-gray-700 mb-3 px-1">يرجى تحديد المهام التي تم إنجازها:</h5>
-                <div id="subtasks-checklist" class="space-y-3">
+                <div id="subtasks-checklist" class="space-y-1">
                     <!-- Checkboxes Injected Here -->
                 </div>
             </div>
@@ -538,7 +487,7 @@
             <div class="p-5 border-t border-gray-200 bg-white flex justify-between items-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-10">
                 <div class="flex flex-col">
                     <span class="text-xs font-bold text-gray-500">نسبة الإنجاز المحتسبة تلقائياً</span>
-                    <span id="modal-calc-progress" class="font-black text-primary text-2xl drop-shadow-sm">0%</span>
+                    <span id="modal-calc-progress" class="font-black text-primary text-3xl drop-shadow-sm transition-all duration-300">0%</span>
                 </div>
                 <div class="flex gap-3">
                     <button type="button" onclick="closeModal('subTaskModal')" class="px-5 py-2.5 rounded-xl text-gray-600 font-bold hover:bg-gray-100 transition-colors border border-gray-200">إلغاء</button>
@@ -620,7 +569,7 @@
             
             <div class="p-5 border-t border-gray-200 bg-white flex flex-col gap-3 shadow-inner">
                 <button onclick="executeExport()" class="w-full bg-emerald-600 text-white font-black py-3.5 rounded-xl hover:bg-emerald-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 01-2 2H5a2 2 0 01-2-2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path></svg>
                     <span>تنزيل التقرير (Excel .xlsx)</span>
                 </button>
                 <button onclick="closeModal('exportModal')" class="w-full bg-white border border-gray-200 text-gray-600 font-bold py-3 rounded-xl hover:bg-gray-50 transition-colors">إلغاء الأمر</button>
@@ -717,11 +666,7 @@
         function handleLogin(e) {
             e.preventDefault();
             const input = document.getElementById('passwordInput').value;
-            
-            // تشفير الكلمة المدخلة (Base64 + Reverse) لمقارنتها دون كشفها في المصدر
             const obfuscatedInput = btoa(input).split('').reverse().join('');
-            
-            // هذه هي البصمة المشفرة الصحيحة لكلمة (kib@markting)
             const targetHash = "n5Wa0tmch1GQil2a"; 
 
             if(obfuscatedInput === targetHash) {
@@ -729,6 +674,7 @@
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('loginError').classList.add('hidden');
                 initApp();
+                fetchFromGoogleSheets(true);
             } else {
                 document.getElementById('loginError').classList.remove('hidden');
             }
@@ -749,32 +695,17 @@
             const monthDropdown = document.getElementById('dashboard-month-filter');
             if(monthDropdown) monthDropdown.value = globalMonthFilter;
             updateAllUI();
-            
-            // مزامنة تلقائية وبصمت عند عمل تحديث للصفحة
-            fetchFromGoogleSheets(true);
         }
 
         function saveData() {
             localStorage.setItem('kuraimiGoalsData', JSON.stringify(appData));
         }
 
-         function parseTasksIntoChecklist(tasksStr) {
-            if (tasksStr === null || tasksStr === undefined) return [];
-            let safeStr = String(tasksStr).trim();
-            if (safeStr === '') return [];
-            
-            // Split by newline or hyphen, trim whitespace, remove empty items
-            let items = safeStr.split(/(?:\n|-)/).map(s => s.trim()).filter(s => s.length > 0);
-            return items.map(title => ({ title: title, done: false }));
-        }
-
-        // --- MAP RAW DATA TO APP ---
-          function mapRawDataToApp(rawRows) {
+        function mapRawDataToApp(rawRows) {
             let newData = [];
             rawRows.forEach((row, index) => {
                 try {
                     const keys = Object.keys(row);
-                    
                     const val = (possibleNames, excludeNames = []) => {
                         const key = keys.find(k => {
                             const matchPossible = possibleNames.some(pn => k.includes(pn));
@@ -789,7 +720,6 @@
                         let strVal = String(v).trim();
                         let num = parseFloat(strVal.replace(/[%]/g, ''));
                         if (isNaN(num)) return 0;
-                        
                         if (isPercentage && num > 0 && num <= 1 && !strVal.includes('%')) {
                             num = num * 100;
                         }
@@ -810,20 +740,33 @@
                     let scoreVal = safeNum(val(['التقييم']));
                     let empName = val(['اسم الموظف', 'الموظف']) || '';
 
+                    // HIERARCHICAL PARSING: Split STRICTLY by newline to keep "- task \n  ↳ subtask" intact
                     let safeStr = String(tasksStr || '').trim();
                     let subTasks = [];
                     
                     if (safeStr !== '') {
-                        let items = safeStr.split(/(?:\n|- )/).map(s => s.trim()).filter(s => s.length > 0 && s !== '-');
+                        let items = safeStr.split(/\n/);
                         
-                        subTasks = items.map(item => {
-                            let isDone = item.includes('[✓]') || item.includes('[تم]');
-                            let cleanTitle = item.replace(/\[✓\]/g, '')
+                        // Fallback: If typed manually in excel without newlines but with dashes
+                        if(items.length === 1 && items[0].includes('- ')) {
+                             items = items[0].split(/(?=- )/).map(s => s.trim()).filter(s => s.length > 0);
+                        }
+                        
+                        items.forEach(item => {
+                            let trimmed = item.trim();
+                            if(!trimmed) return;
+                            
+                            let isDone = trimmed.includes('[✓]') || trimmed.includes('[تم]');
+                            // Clean title: remove [✓], [تم], and leading hyphens. KEEP the '↳'
+                            let cleanTitle = trimmed.replace(/\[✓\]/g, '')
                                                  .replace(/\[تم\]/g, '')
-                                                 .replace(/\[ \]/g, '')
                                                  .replace(/^- /g, '')
+                                                 .replace(/^-\s*/, '')
                                                  .trim();
-                            return { title: cleanTitle, done: isDone };
+                            
+                            if(cleanTitle) {
+                                 subTasks.push({ title: cleanTitle, done: isDone });
+                            }
                         });
                     }
 
@@ -831,9 +774,32 @@
                         subTasks.push({ title: mainGoal, done: progressVal >= 100 }); 
                     }
 
-                    let completedTasksCount = subTasks.filter(st => st.done).length;
-                    let calculatedProgress = subTasks.length > 0 ? Math.round((completedTasksCount / subTasks.length) * 100) : 0;
-                    
+                    // HIERARCHICAL CALCULATION logic locally during load
+                    let parents = [];
+                    let currentParentIdx = -1;
+                    subTasks.forEach((st, idx) => {
+                        if (!st.title.startsWith('↳')) {
+                            parents.push({ idx: idx, children: [], done: st.done });
+                            currentParentIdx = parents.length - 1;
+                        } else if (currentParentIdx > -1) {
+                            parents[currentParentIdx].children.push({ done: st.done });
+                        }
+                    });
+
+                    let totalCompletedWeight = 0;
+                    let totalWeight = parents.length;
+
+                    parents.forEach(p => {
+                        if (p.children.length > 0) {
+                            let cDone = p.children.filter(c => c.done).length;
+                            let fraction = cDone / p.children.length;
+                            totalCompletedWeight += fraction;
+                        } else {
+                            if (p.done) totalCompletedWeight += 1;
+                        }
+                    });
+
+                    let calculatedProgress = totalWeight > 0 ? Math.round((totalCompletedWeight / totalWeight) * 100) : 0;
                     let finalProgress = calculatedProgress;
                     if (indicatorVal !== 'نسبة' && progressVal === 100) finalProgress = 100;
 
@@ -865,7 +831,6 @@
          */
         async function fetchFromGoogleSheets(isAuto = false) {
             let btnText, spinner, errorMsg;
-            
             if (!isAuto) {
                 btnText = document.getElementById('text-sync-gs');
                 spinner = document.getElementById('spinner-gs');
@@ -883,19 +848,9 @@
                 
                 const text = await response.text();
                 let rawData;
-                try {
-                    rawData = JSON.parse(text);
-                } catch (e) {
-                    throw new Error('الرابط لا يعيد بيانات JSON صالحة. تأكد من إعدادات النشر (Deploy).');
-                }
-
-                if (rawData.error) {
-                    throw new Error('خطأ برمجي من جوجل: ' + rawData.error);
-                }
-
-                if (!Array.isArray(rawData) || rawData.length === 0) {
-                     throw new Error('تم الاتصال بنجاح ولكن ملف الإكسل فارغ (تأكد من اسم الورقة).');
-                }
+                try { rawData = JSON.parse(text); } catch (e) { throw new Error('الرابط لا يعيد بيانات JSON صالحة.'); }
+                if (rawData.error) throw new Error('خطأ برمجي من جوجل: ' + rawData.error);
+                if (!Array.isArray(rawData) || rawData.length === 0) throw new Error('ملف الإكسل فارغ.');
 
                 const newPlannedData = mapRawDataToApp(rawData);
                 appData = newPlannedData;
@@ -912,7 +867,6 @@
                         if(statusEl) statusEl.classList.add('hidden');
                     }, 3000);
                 }
-                
             } catch (error) {
                 console.error("Fetch error: ", error);
                 if (!isAuto && errorMsg) {
@@ -933,7 +887,6 @@
         async function pushUpdateToGoogleSheets(goal) {
             const btnText = document.getElementById('text-save-sub');
             const spinner = document.getElementById('spinner-save-sub');
-            
             if (btnText && spinner) {
                 btnText.textContent = 'جاري الحفظ في الخادم...';
                 spinner.style.display = 'block';
@@ -954,10 +907,8 @@
                         tasksStr: goal.tasksStr 
                     })
                 });
-                
                 showToast('تم حفظ التحديث محلياً ومزامنته مع Google Sheets بنجاح!');
             } catch (error) {
-                console.error("Push Error: ", error);
                 showToast('تم الحفظ محلياً. تعذر الاتصال بـ Google Sheets حالياً.');
             } finally {
                 if (btnText && spinner) {
@@ -979,20 +930,12 @@
                     method: 'POST',
                     redirect: "follow",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({
-                        action: 'add_extra',
-                        ...taskData
-                    })
+                    body: JSON.stringify({ action: 'add_extra', ...taskData })
                 });
                 const result = await response.json();
-                if(result.status === 'success') {
-                    showToast('تمت إضافة المبادرة للإكسل بنجاح ✓');
-                } else {
-                    console.error("Add row error:", result.error);
-                    showToast('تم الحفظ محلياً (خطأ في الإكسل: ' + result.error + ')');
-                }
+                if(result.status === 'success') showToast('تمت إضافة المبادرة للإكسل بنجاح ✓');
+                else showToast('تم الحفظ محلياً (خطأ في الإكسل: ' + result.error + ')');
             } catch (error) {
-                console.error("Push error:", error);
                 showToast('تم الحفظ محلياً (تعذر الاتصال بالخادم)');
             } finally {
                 btnText.textContent = 'حفظ وتوثيق المبادرة';
@@ -1008,58 +951,14 @@
                     method: 'POST',
                     redirect: "follow",
                     headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({
-                        action: 'delete_extra',
-                        id: taskId
-                    })
+                    body: JSON.stringify({ action: 'delete_extra', id: taskId })
                 });
                 const result = await response.json();
-                if(result.status === 'success') {
-                    showToast('تم الحذف من الإكسل بنجاح ✓');
-                } else {
-                    console.error("Delete row error:", result.error);
-                    showToast('تم الحذف محلياً فقط (خطأ في الإكسل: ' + result.error + ')');
-                }
+                if(result.status === 'success') showToast('تم الحذف من الإكسل بنجاح ✓');
+                else showToast('تم الحذف محلياً فقط (خطأ في الإكسل: ' + result.error + ')');
             } catch (error) {
-                console.error("Delete error:", error);
                 showToast('تم الحذف محلياً فقط (تعذر الاتصال بالخادم)');
             }
-        }
-
-        /**
-         * ==========================================
-         * LOCAL FILE IMPORT
-         * ==========================================
-         */
-        function handleLocalFileUpload(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = (evt) => {
-                try {
-                    const bstr = evt.target.result;
-                    const wb = XLSX.read(bstr, { type: 'binary' });
-                    const wsname = wb.SheetNames[0];
-                    const ws = wb.Sheets[wsname];
-                    const rawData = XLSX.utils.sheet_to_json(ws);
-                    
-                    if(rawData.length === 0) {
-                        showToast('الملف فارغ أو تنسيق الجداول غير متطابق.');
-                        return;
-                    }
-
-                    appData = mapRawDataToApp(rawData);
-                    saveData();
-                    updateAllUI();
-                    closeModal('importModal');
-                    showToast('تمت قراءة البيانات من الملف المحلي بنجاح!');
-                } catch(error) {
-                    showToast('حدث خطأ. يرجى التأكد من أن الملف بصيغة Excel صالحة.');
-                }
-            };
-            reader.readAsBinaryString(file);
-            e.target.value = ''; 
         }
 
         /**
@@ -1067,7 +966,6 @@
          * USER INTERFACE RENDERING (DASHBOARD)
          * ==========================================
          */
-         
         function setMonthFilter(month) {
             globalMonthFilter = month;
             updateAllUI();
@@ -1080,9 +978,7 @@
         }
 
         function renderDashboard() {
-            // Apply Month Filter
             const currentData = globalMonthFilter === 'all' ? appData : appData.filter(g => parseInt(g.month) === parseInt(globalMonthFilter));
-            
             const planned = currentData.filter(g => !g.isExtra);
             const extra = currentData.filter(g => g.isExtra);
             
@@ -1090,25 +986,21 @@
             const completedPlanned = planned.filter(g => g.progress >= 100).length;
             const totalWeight = planned.reduce((sum, g) => sum + parseFloat(g.weight), 0);
             
-            // Calculate overall progress weighted
             let overallProgress = 0;
             if (totalWeight > 0) {
                 overallProgress = planned.reduce((sum, g) => sum + (parseFloat(g.progress) * (parseFloat(g.weight) / totalWeight)), 0);
             }
             overallProgress = Math.round(overallProgress);
 
-            // Update DOM Cards
             document.getElementById('stat-overall').textContent = overallProgress + '%';
             
-            // Update the SVG Semi-Circle Gauge
             const radius = 40;
-            const circumference = Math.PI * radius; // 125.66
+            const circumference = Math.PI * radius; 
             const offset = circumference - (overallProgress / 100) * circumference;
             const gaugePath = document.getElementById('svg-gauge-value');
             if (gaugePath) {
                 gaugePath.style.strokeDasharray = circumference;
                 gaugePath.style.strokeDashoffset = offset;
-                // Change color based on progress
                 if(overallProgress >= 90) gaugePath.style.stroke = '#28a745';
                 else if(overallProgress >= 60) gaugePath.style.stroke = '#d4af37';
                 else gaugePath.style.stroke = '#7a1b22';
@@ -1118,6 +1010,7 @@
             document.getElementById('stat-total').textContent = totalPlanned;
             document.getElementById('stat-extra').textContent = extra.length;
             
+            // التقييم الجديد 50-70-80-90
             let rating = 'يحتاج تحسين';
             let ratingBarWidth = '25%';
             if(overallProgress >= 90) { rating = 'ممتاز جداً 🌟'; ratingBarWidth = '100%'; }
@@ -1129,44 +1022,37 @@
             document.getElementById('stat-rating').textContent = rating;
             document.getElementById('rating-bar').style.width = ratingBarWidth;
 
-            // ==========================================
-            // Render the Beautiful Custom Progress Tracker
-            // ==========================================
+            // Render Custom Progress Tracker (Compact UI)
             const goalsListContainer = document.getElementById('goals-progress-list');
             if(planned.length === 0) {
-                goalsListContainer.innerHTML = `
-                    <div class="flex flex-col items-center justify-center py-10 text-gray-400">
-                        <svg class="w-16 h-16 mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                        <p class="font-bold">يرجى استيراد الخطة أو تغيير الشهر</p>
-                    </div>`;
+                goalsListContainer.innerHTML = `<div class="flex flex-col items-center justify-center py-10 text-gray-400"><svg class="w-16 h-16 mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg><p class="font-bold">يرجى استيراد الخطة أو تغيير الشهر</p></div>`;
             } else {
                 let trackerHtml = '';
-                // Sort by weight (highest priority first)
                 let sortedPlanned = [...planned].sort((a,b) => b.weight - a.weight);
                 
                 sortedPlanned.forEach(g => {
-                    // Color coding for individual progress bars
                     let barColor = 'bg-primary';
                     if (g.progress >= 100) barColor = 'bg-emerald-500';
                     else if (g.progress >= 75) barColor = 'bg-gold';
 
+                    // Compact UI Card
                     trackerHtml += `
-                        <div class="progress-track-item p-2.5 rounded-xl border border-gray-50 transition-all duration-300 bg-white shadow-sm mb-2">
-                            <div class="flex justify-between items-start mb-2">
+                        <div class="progress-track-item py-2.5 px-4 rounded-xl border border-gray-100 transition-all duration-300 bg-white shadow-sm mb-2">
+                            <div class="flex justify-between items-center mb-1.5">
                                 <div class="flex items-center gap-2 w-3/4">
-                                    <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-black text-gray-600 shrink-0">
+                                    <div class="w-6 h-6 rounded-full bg-gray-50 flex items-center justify-center text-[10px] font-black text-gray-500 shrink-0 border border-gray-100">
                                         ${g.id}
                                     </div>
-                                    <h4 class="font-bold text-gray-800 truncate text-xs leading-relaxed" title="${g.mainGoal}">${g.mainGoal}</h4>
+                                    <h4 class="font-bold text-gray-700 truncate text-xs leading-relaxed" title="${g.mainGoal}">${g.mainGoal}</h4>
                                 </div>
                                 <div class="flex flex-col items-end shrink-0">
-                                    <span class="text-[9px] text-gray-400 font-bold">الوزن التقيمي</span>
-                                    <span class="text-[11px] font-black text-goldDark bg-yellow-50 px-1.5 py-0.5 rounded border border-yellow-100">${g.weight}</span>
+                                    <span class="text-[9px] text-gray-400 font-bold mb-0.5">الوزن التقيمي</span>
+                                    <span class="text-xs font-black text-goldDark bg-yellow-50 px-1.5 py-0.5 rounded border border-yellow-100 leading-none">${g.weight}</span>
                                 </div>
                             </div>
                             <div class="flex items-center gap-3">
-                                <div class="w-full bg-gray-100 rounded-full h-2 overflow-hidden shadow-inner">
-                                    <div class="${barColor} h-2 rounded-full transition-all duration-1000 ease-out" style="width: ${g.progress}%"></div>
+                                <div class="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden shadow-inner">
+                                    <div class="${barColor} h-1.5 rounded-full transition-all duration-1000 ease-out" style="width: ${g.progress}%"></div>
                                 </div>
                                 <span class="font-black text-xs w-8 text-left ${g.progress >= 100 ? 'text-emerald-600' : 'text-primary'}">${g.progress}%</span>
                             </div>
@@ -1176,24 +1062,19 @@
                 goalsListContainer.innerHTML = trackerHtml;
             }
 
-            // ==========================================
-            // Pie Chart (Donut Logic)
-            // ==========================================
+            // Pie Chart 
             const totalItems = totalPlanned + extra.length;
             const inProgress = totalPlanned - completedPlanned;
-            
             const p1 = totalItems > 0 ? (completedPlanned / totalItems) * 360 : 0;
             const p2 = totalItems > 0 ? (inProgress / totalItems) * 360 : 0;
             const deg1 = p1;
             const deg2 = deg1 + p2;
-            
             const gradient = totalItems > 0 
                 ? `conic-gradient(#10b981 0deg ${deg1}deg, #d4af37 ${deg1}deg ${deg2}deg, #7a1b22 ${deg2}deg 360deg)` 
                 : 'conic-gradient(#f1f5f9 0deg 360deg)';
             
             document.getElementById('pie-chart-container').style.background = gradient;
             document.getElementById('pie-total').textContent = totalItems;
-            
             document.getElementById('pie-legend').innerHTML = `
                 <div class="flex justify-between items-center text-sm"><div class="flex items-center gap-3"><span class="w-3.5 h-3.5 rounded bg-emerald-500 shadow-sm"></span> <span class="text-gray-700 font-bold">مكتملة (مخطط)</span></div><span class="font-black text-lg">${completedPlanned}</span></div>
                 <div class="flex justify-between items-center text-sm"><div class="flex items-center gap-3"><span class="w-3.5 h-3.5 rounded bg-gold shadow-sm"></span> <span class="text-gray-700 font-bold">قيد التنفيذ (مخطط)</span></div><span class="font-black text-lg">${inProgress}</span></div>
@@ -1216,7 +1097,6 @@
             const currentData = globalMonthFilter === 'all' ? appData : appData.filter(g => parseInt(g.month) === parseInt(globalMonthFilter));
             let planned = currentData.filter(g => !g.isExtra);
             
-            // Apply status filter at the Goal level
             if (tasksStatusFilter === 'completed') {
                 planned = planned.filter(g => g.subTasks.some(st => st.done === true));
             } else if (tasksStatusFilter === 'pending') {
@@ -1231,10 +1111,9 @@
             let html = '';
             planned.forEach((goal, index) => {
                 const bgClass = index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30';
-                const completedCount = goal.subTasks.filter(st => st.done).length;
-                const totalCount = goal.subTasks.length;
+                const completedCount = goal.subTasks.filter(st => st.done && !st.title.startsWith('↳ ')).length;
+                const totalCount = goal.subTasks.filter(st => !st.title.startsWith('↳ ')).length;
                 
-                // Deep Filtering for Sub-Tasks based on dropdown selection
                 let tasksPreview = `<ul class="list-disc list-inside text-xs text-gray-500 space-y-1.5 font-medium">`;
                 
                 let filteredSubTasks = goal.subTasks;
@@ -1245,7 +1124,8 @@
                 }
 
                 filteredSubTasks.forEach(st => {
-                    tasksPreview += `<li class="${st.done ? 'line-through text-emerald-600/70' : ''}">${st.title}</li>`;
+                    let padding = st.title.startsWith('↳ ') ? 'pr-4 border-r-2 border-gray-200 list-none' : '';
+                    tasksPreview += `<li class="${padding} ${st.done ? 'line-through text-emerald-600/70' : ''}">${st.title}</li>`;
                 });
                 tasksPreview += `</ul>`;
 
@@ -1258,8 +1138,8 @@
                         <td class="px-3 py-4 text-center font-black text-goldDark border-l border-gray-100">${goal.weight}</td>
                         <td class="px-3 py-4 text-center font-bold border-l border-gray-100">${goal.target}</td>
                         <td class="px-5 py-4 text-center border-l border-gray-100 bg-yellow-50/20">
-                            <button onclick="openSubTaskModal(${goal.id})" class="text-xs font-black px-4 py-2.5 rounded-xl ${completedCount === totalCount ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border border-emerald-200' : 'bg-primary text-white hover:bg-primaryDark shadow-md'} transition-all w-full flex items-center justify-center gap-1">
-                                ${completedCount === totalCount ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> مكتمل 100%' : `تحديث (${completedCount} من ${totalCount})`}
+                            <button onclick="openSubTaskModal(${goal.id})" class="text-xs font-black px-4 py-2.5 rounded-xl ${goal.progress >= 100 ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border border-emerald-200' : 'bg-primary text-white hover:bg-primaryDark shadow-md'} transition-all w-full flex items-center justify-center gap-1">
+                                ${goal.progress >= 100 ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> مكتمل 100%' : `تحديث (${completedCount} من ${totalCount})`}
                             </button>
                         </td>
                         <td class="px-3 py-4 text-center border-l border-gray-100">
@@ -1274,9 +1154,238 @@
 
         /**
          * ==========================================
-         * EXTRA TASKS (INITIATIVES) RENDERING
+         * CHECKLIST LOGIC (HIERARCHICAL)
          * ==========================================
          */
+        function renderChecklistUI(goal) {
+            let checklistHtml = '';
+            
+            // First pass: identify parents that have children
+            let parentHasChildren = {};
+            for(let i=0; i<goal.subTasks.length; i++) {
+                if(!goal.subTasks[i].title.startsWith('↳ ')) {
+                    let hasChild = false;
+                    for(let j=i+1; j<goal.subTasks.length; j++) {
+                        if(goal.subTasks[j].title.startsWith('↳ ')) { hasChild = true; }
+                        else { break; }
+                    }
+                    parentHasChildren[i] = hasChild;
+                }
+            }
+
+            goal.subTasks.forEach((st, idx) => {
+                let isChild = st.title.startsWith('↳ ');
+                let displayTitle = isChild ? st.title.substring(2) : st.title;
+                let marginClass = isChild ? 'mr-10 border-r-[3px] border-r-gold bg-gradient-to-l from-yellow-50/30 to-white' : 'bg-white';
+                let hasChildren = parentHasChildren[idx];
+                
+                let parentStatusHtml = '';
+                if(hasChildren && !isChild) {
+                    let childTotal = 0; let childDone = 0;
+                    for(let j=idx+1; j<goal.subTasks.length; j++) {
+                         if(goal.subTasks[j].title.startsWith('↳ ')) { childTotal++; if(goal.subTasks[j].done) childDone++; } else { break; }
+                    }
+                    let pProg = Math.round((childDone/childTotal)*100);
+                    parentStatusHtml = `<span class="text-[10px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full mr-auto font-bold">${childDone}/${childTotal} (${pProg}%)</span>`;
+                }
+
+                checklistHtml += `
+                    <div class="relative group mb-2.5">
+                        <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-gray-300 transition-colors shadow-sm ${st.done && !hasChildren ? '!bg-emerald-50/40 !border-emerald-200' : ''} ${marginClass} ${hasChildren ? 'opacity-80' : 'cursor-pointer'}">
+                            
+                            ${!hasChildren ? `
+                            <div class="pt-0.5 shrink-0">
+                                <input type="checkbox" data-index="${idx}" onchange="recalculateModalProgress()" class="kuraimi-checkbox cursor-pointer" ${st.done ? 'checked' : ''} />
+                            </div>
+                            ` : `<div class="w-5 h-5 shrink-0 flex items-center justify-center text-gray-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></div>`}
+                            
+                            <span class="text-sm font-bold leading-relaxed flex-1 ${st.done && !hasChildren ? 'line-through text-emerald-700/60' : 'text-gray-800'}">${displayTitle}</span>
+                            ${parentStatusHtml}
+                        </label>
+                        
+                        ${!isChild ? `
+                        <button type="button" onclick="toggleSubTaskInput(${idx})" class="absolute left-2.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg bg-gray-50 hover:bg-primary hover:text-white text-gray-400 flex items-center justify-center transition-colors border border-gray-200 z-10" title="تفصيل هذه المهمة لنشاطات أصغر">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        </button>
+                        ` : ''}
+                    </div>
+                    <div id="sub-input-div-${idx}" class="hidden mr-10 mb-3 flex gap-2 transition-all">
+                        <input type="text" id="sub-input-${idx}" class="flex-1 px-3 py-2 text-xs font-bold border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" placeholder="أدخل النشاط الفرعي (مثال: المنشور الأول)...">
+                        <button type="button" onclick="confirmAddChildTask(${goal.id}, ${idx})" class="px-3 py-2 bg-primary text-white text-xs font-black rounded-lg hover:bg-primaryDark">إضافة</button>
+                    </div>
+                `;
+            });
+            document.getElementById('subtasks-checklist').innerHTML = checklistHtml;
+            setTimeout(recalculateModalProgress, 10); // Sync UI immediately
+        }
+
+        function toggleSubTaskInput(idx) {
+            const div = document.getElementById(`sub-input-div-${idx}`);
+            div.classList.toggle('hidden');
+            if(!div.classList.contains('hidden')) { document.getElementById(`sub-input-${idx}`).focus(); }
+        }
+
+        function confirmAddChildTask(goalId, parentIdx) {
+            const inputEl = document.getElementById(`sub-input-${parentIdx}`);
+            const text = inputEl.value.trim();
+            if(!text) return;
+
+            const goal = appData.find(g => g.id === goalId);
+            goal.subTasks[parentIdx].done = false; 
+
+            let insertIdx = parentIdx + 1;
+            while(insertIdx < goal.subTasks.length && goal.subTasks[insertIdx].title.startsWith('↳ ')) { insertIdx++; }
+            goal.subTasks.splice(insertIdx, 0, { title: '↳ ' + text, done: false });
+            
+            renderChecklistUI(goal);
+        }
+
+        function openSubTaskModal(goalId) {
+            currentEditingGoalId = goalId;
+            const goal = appData.find(g => g.id === goalId);
+            document.getElementById('modal-goal-title').textContent = goal.mainGoal;
+            renderChecklistUI(goal);
+            openModal('subTaskModal');
+        }
+
+        function recalculateModalProgress() {
+            const goal = appData.find(g => g.id === currentEditingGoalId);
+            if(!goal) return;
+            
+            let tempSubTasks = JSON.parse(JSON.stringify(goal.subTasks));
+            
+            // Map DOM checkboxes to temp array
+            tempSubTasks.forEach((st, idx) => {
+                let cb = document.querySelector(`input[data-index="${idx}"]`);
+                if(cb) st.done = cb.checked;
+            });
+
+            // Hierarchical Calculation
+            let parents = [];
+            let currentParentIdx = -1;
+
+            tempSubTasks.forEach((st, idx) => {
+                if (!st.title.startsWith('↳ ')) {
+                    parents.push({ idx: idx, children: [], done: st.done });
+                    currentParentIdx = parents.length - 1;
+                } else if (currentParentIdx > -1) {
+                    parents[currentParentIdx].children.push({ done: st.done });
+                }
+            });
+
+            let totalCompletedWeight = 0;
+            let totalWeight = parents.length;
+
+            parents.forEach(p => {
+                if (p.children.length > 0) {
+                    let cDone = p.children.filter(c => c.done).length;
+                    let fraction = cDone / p.children.length;
+                    totalCompletedWeight += fraction;
+                } else {
+                    if (p.done) totalCompletedWeight += 1;
+                }
+            });
+
+            let progress = totalWeight > 0 ? Math.round((totalCompletedWeight / totalWeight) * 100) : 0;
+            
+            // Update UI Number
+            const progElement = document.getElementById('modal-calc-progress');
+            progElement.textContent = progress + '%';
+            if(progress === 100) progElement.className = "font-black text-emerald-500 text-3xl drop-shadow-sm transition-all duration-300";
+            else if(progress >= 50) progElement.className = "font-black text-goldDark text-3xl drop-shadow-sm transition-all duration-300";
+            else progElement.className = "font-black text-primary text-3xl drop-shadow-sm transition-all duration-300";
+
+            // Update UI Styles (strikes)
+            const checkboxes = document.querySelectorAll('#subtasks-checklist input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                const textSpan = cb.parentElement.nextElementSibling;
+                const labelWrapper = cb.closest('label');
+                if(cb.checked) {
+                    textSpan.classList.add('line-through', 'text-emerald-700/60');
+                    textSpan.classList.remove('text-gray-800');
+                    labelWrapper.classList.add('!bg-emerald-50/40', '!border-emerald-200');
+                } else {
+                    textSpan.classList.remove('line-through', 'text-emerald-700/60');
+                    textSpan.classList.add('text-gray-800');
+                    labelWrapper.classList.remove('!bg-emerald-50/40', '!border-emerald-200');
+                }
+            });
+        }
+
+        function saveSubTasks() {
+            if(!currentEditingGoalId) return;
+            const goal = appData.find(g => g.id === currentEditingGoalId);
+            let updatedGoalObj = null;
+
+            appData = appData.map(g => {
+                if(g.id === currentEditingGoalId) {
+                    let newSubTasks = JSON.parse(JSON.stringify(g.subTasks));
+                    
+                    // Sync DOM state
+                    newSubTasks.forEach((st, idx) => {
+                        let cb = document.querySelector(`input[data-index="${idx}"]`);
+                        if(cb) st.done = cb.checked;
+                    });
+
+                    // Hierarchical Logic
+                    let parents = [];
+                    let currentParentIdx = -1;
+                    newSubTasks.forEach((st, idx) => {
+                        if (!st.title.startsWith('↳ ')) {
+                            parents.push({ idx: idx, children: [], done: st.done });
+                            currentParentIdx = parents.length - 1;
+                        } else if (currentParentIdx > -1) {
+                            parents[currentParentIdx].children.push({ done: st.done });
+                        }
+                    });
+
+                    let totalCompletedWeight = 0;
+                    let totalWeight = parents.length;
+
+                    parents.forEach(p => {
+                        if (p.children.length > 0) {
+                            let cDone = p.children.filter(c => c.done).length;
+                            let fraction = cDone / p.children.length;
+                            totalCompletedWeight += fraction;
+                            newSubTasks[p.idx].done = (fraction === 1); // Auto-check parent if children done
+                        } else {
+                            if (p.done) totalCompletedWeight += 1;
+                        }
+                    });
+
+                    let progress = totalWeight > 0 ? Math.round((totalCompletedWeight / totalWeight) * 100) : 0;
+                    
+                    // Build string for Excel strictly with newlines to keep hierarchy safe
+                    let newTasksStrArray = []; 
+                    newSubTasks.forEach(st => {
+                        let cleanTitle = st.title.replace(/\[✓\]/g, '').replace(/\[تم\]/g, '').replace(/^- /g, '').trim();
+                        let check = st.done ? '[✓] ' : '- ';
+                        if (cleanTitle.startsWith('↳')) newTasksStrArray.push(`${check}${cleanTitle}`);
+                        else newTasksStrArray.push(`${check}${cleanTitle}`);
+                    });
+                    
+                    const finalScore = ((progress * g.weight) / 100).toFixed(2);
+                    let newAchieved = g.indicator === 'نسبة' ? progress : (progress / 100) * g.target;
+
+                    updatedGoalObj = { 
+                        ...g, 
+                        subTasks: newSubTasks, 
+                        progress: progress, 
+                        achieved: newAchieved, 
+                        finalScore: parseFloat(finalScore),
+                        tasksStr: newTasksStrArray.join('\n')
+                    };
+                    return updatedGoalObj;
+                }
+                return g;
+            });
+            
+            saveData();
+            updateAllUI();
+            if (updatedGoalObj && !updatedGoalObj.isExtra) pushUpdateToGoogleSheets(updatedGoalObj);
+            else closeModal('subTaskModal');
+        }
+
         function renderExtraTasks() {
             const container = document.getElementById('extra-tasks-container');
             const currentData = globalMonthFilter === 'all' ? appData : appData.filter(g => parseInt(g.month) === parseInt(globalMonthFilter));
@@ -1323,170 +1432,6 @@
                 `;
             });
             container.innerHTML = html;
-        }
-
-        /**
-         * ==========================================
-         * CHECKLIST LOGIC & SUBTASK UPDATES
-         * ==========================================
-         */
-        function renderChecklistUI(goal) {
-            let checklistHtml = '';
-            goal.subTasks.forEach((st, idx) => {
-                // تحديد ما إذا كانت هذه مهمة فرعية مضافة يدوياً (تحتوي على سهم)
-                let isChild = st.title.startsWith('↳ ');
-                let displayTitle = isChild ? st.title.substring(2) : st.title;
-                let marginClass = isChild ? 'mr-8 border-r-4 border-r-gold bg-gray-50/50' : 'bg-white';
-                
-                checklistHtml += `
-                    <div class="relative group mb-3">
-                        <label class="flex items-start gap-4 p-3.5 rounded-xl border border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors shadow-sm ${st.done ? '!bg-emerald-50/50 !border-emerald-100' : ''} ${marginClass}">
-                            <div class="pt-0.5">
-                                <input type="checkbox" data-index="${idx}" onchange="recalculateModalProgress()" class="kuraimi-checkbox cursor-pointer" ${st.done ? 'checked' : ''} />
-                            </div>
-                            <span class="text-sm font-bold leading-relaxed flex-1 ${st.done ? 'line-through text-emerald-700/60' : 'text-gray-800'}">${displayTitle}</span>
-                        </label>
-                        ${!isChild ? `
-                        <button type="button" onclick="toggleSubTaskInput(${idx})" class="absolute left-3 top-3.5 w-7 h-7 rounded-full bg-gray-100 hover:bg-primary hover:text-white text-gray-500 flex items-center justify-center transition-colors shadow-sm border border-gray-200" title="إضافة تفصيل للمهمة">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                        </button>
-                        ` : ''}
-                    </div>
-                    <!-- حقل مخفي لإضافة مهمة تفصيلية -->
-                    <div id="sub-input-div-${idx}" class="hidden mr-8 mb-4 flex gap-2 transition-all">
-                        <input type="text" id="sub-input-${idx}" class="flex-1 px-3 py-2.5 text-sm font-bold border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none" placeholder="أدخل تفصيل المهمة (مثال: المنشور الأول)...">
-                        <button type="button" onclick="confirmAddChildTask(${goal.id}, ${idx})" class="px-4 py-2.5 bg-primary text-white text-sm font-black rounded-lg hover:bg-primaryDark shadow-md">إضافة</button>
-                    </div>
-                `;
-            });
-            document.getElementById('subtasks-checklist').innerHTML = checklistHtml;
-            recalculateModalProgress();
-        }
-
-        function toggleSubTaskInput(idx) {
-            const div = document.getElementById(`sub-input-div-${idx}`);
-            div.classList.toggle('hidden');
-            if(!div.classList.contains('hidden')) {
-                document.getElementById(`sub-input-${idx}`).focus();
-            }
-        }
-
-        function confirmAddChildTask(goalId, parentIdx) {
-            const inputEl = document.getElementById(`sub-input-${parentIdx}`);
-            const text = inputEl.value.trim();
-            if(!text) return;
-
-            const goal = appData.find(g => g.id === goalId);
-            
-            // إلغاء الصح عن المهمة الأب تلقائياً لأننا فندناها لمهام أصغر (اختياري)
-            goal.subTasks[parentIdx].done = false; 
-
-            // إيجاد المكان الصحيح لإدراج المهمة الفرعية (بعد الأب وبعد أي مهام فرعية أخرى تابعة له)
-            let insertIdx = parentIdx + 1;
-            while(insertIdx < goal.subTasks.length && goal.subTasks[insertIdx].title.startsWith('↳ ')) {
-                insertIdx++;
-            }
-
-            // إدراج المهمة مع رمز السهم لتمييزها وتخزينها للإكسل
-            goal.subTasks.splice(insertIdx, 0, { title: '↳ ' + text, done: false });
-            
-            renderChecklistUI(goal);
-        }
-
-        function openSubTaskModal(goalId) {
-            currentEditingGoalId = goalId;
-            const goal = appData.find(g => g.id === goalId);
-            document.getElementById('modal-goal-title').textContent = goal.mainGoal;
-            
-            renderChecklistUI(goal);
-            openModal('subTaskModal');
-        }
-
-        function recalculateModalProgress() {
-            const checkboxes = document.querySelectorAll('#subtasks-checklist input[type="checkbox"]');
-            let completed = 0;
-            checkboxes.forEach(cb => {
-                const textSpan = cb.parentElement.nextElementSibling;
-                const labelWrapper = cb.closest('label');
-                
-                if(cb.checked) {
-                    completed++;
-                    textSpan.classList.add('line-through', 'text-emerald-700/60');
-                    textSpan.classList.remove('text-gray-800');
-                    labelWrapper.classList.add('bg-emerald-50/50', 'border-emerald-100');
-                } else {
-                    textSpan.classList.remove('line-through', 'text-emerald-700/60');
-                    textSpan.classList.add('text-gray-800');
-                    labelWrapper.classList.remove('bg-emerald-50/50', 'border-emerald-100');
-                }
-            });
-            const progress = checkboxes.length > 0 ? Math.round((completed / checkboxes.length) * 100) : 0;
-            const progElement = document.getElementById('modal-calc-progress');
-            progElement.textContent = progress + '%';
-            
-            // Visual coloring for the progress number
-            if(progress === 100) progElement.className = "font-black text-emerald-500 text-2xl drop-shadow-sm";
-            else if(progress >= 50) progElement.className = "font-black text-goldDark text-2xl drop-shadow-sm";
-            else progElement.className = "font-black text-primary text-2xl drop-shadow-sm";
-        }
-
-        function saveSubTasks() {
-            if(!currentEditingGoalId) return;
-            const checkboxes = document.querySelectorAll('#subtasks-checklist input[type="checkbox"]');
-            
-            let updatedGoalObj = null;
-
-            appData = appData.map(goal => {
-                if(goal.id === currentEditingGoalId) {
-                    let completed = 0;
-                    // تجميع نص المهام الجديد مع إضافة علامة [✓] للمنجز
-                    let newTasksStrArray = []; 
-                    
-                    const newSubTasks = goal.subTasks.map((st, idx) => {
-                        const isDone = checkboxes[idx].checked;
-                        if(isDone) {
-                            completed++;
-                            // تنظيف العنوان القديم من أي علامات وإضافة العلامة الجديدة
-                            let cleanTitle = st.title.replace(/\[✓\]/g, '').replace(/\[تم\]/g, '').trim();
-                            newTasksStrArray.push(`[✓] ${cleanTitle}`);
-                        } else {
-                            let cleanTitle = st.title.replace(/\[✓\]/g, '').replace(/\[تم\]/g, '').trim();
-                            newTasksStrArray.push(`- ${cleanTitle}`);
-                        }
-                        return { ...st, done: isDone };
-                    });
-                    
-                    const progress = newSubTasks.length > 0 ? Math.round((completed / newSubTasks.length) * 100) : 0;
-                    const finalScore = ((progress * goal.weight) / 100).toFixed(2);
-                    
-                    let newAchieved = 0;
-                    if(goal.indicator === 'نسبة') {
-                        newAchieved = progress;
-                    } else {
-                        newAchieved = (progress / 100) * goal.target;
-                    }
-
-                    updatedGoalObj = { 
-                        ...goal, 
-                        subTasks: newSubTasks, 
-                        progress: progress, 
-                        achieved: newAchieved, 
-                        finalScore: parseFloat(finalScore),
-                        tasksStr: newTasksStrArray.join('\n') // حفظ النص المحدث للمهام
-                    };
-                    return updatedGoalObj;
-                }
-                return goal;
-            });
-            
-            saveData();
-            updateAllUI();
-            
-            if (updatedGoalObj && !updatedGoalObj.isExtra) {
-                pushUpdateToGoogleSheets(updatedGoalObj);
-            } else {
-                closeModal('subTaskModal');
-            }
         }
 
         function handleAddExtraTask(e) {
@@ -1538,27 +1483,19 @@
             const filterType = document.getElementById('exportFilter').value;
             let dataToExport = [];
 
-            // Apply global month filter first
             let baseData = globalMonthFilter === 'all' ? [...appData] : appData.filter(d => parseInt(d.month) === parseInt(globalMonthFilter));
-
-            // Deep clone the data so we can safely modify subTasks for the export without affecting the UI
             let clonedData = JSON.parse(JSON.stringify(baseData));
 
-            // تصفية المهام بشكل دقيق وعميق بداخل كل هدف بناءً على نوع التقرير المطلوب
             if (filterType === 'all') {
                 dataToExport = clonedData;
             } else if (filterType === 'completed') {
                 clonedData.forEach(d => {
-                    if (!d.isExtra) {
-                        d.subTasks = d.subTasks.filter(st => st.done === true);
-                    }
+                    if (!d.isExtra) d.subTasks = d.subTasks.filter(st => st.done === true);
                 });
                 dataToExport = clonedData.filter(d => !d.isExtra && d.subTasks.length > 0);
             } else if (filterType === 'pending') {
                 clonedData.forEach(d => {
-                    if (!d.isExtra) {
-                        d.subTasks = d.subTasks.filter(st => st.done === false);
-                    }
+                    if (!d.isExtra) d.subTasks = d.subTasks.filter(st => st.done === false);
                 });
                 dataToExport = clonedData.filter(d => !d.isExtra && d.subTasks.length > 0);
             } else if (filterType === 'extra') {
@@ -1570,7 +1507,6 @@
                 return;
             }
 
-            // Formatting for Arabic elegant excel sheet
             const exportFormatted = dataToExport.map(item => {
                 let subTasksStr = item.subTasks.map(st => (st.done ? '[تم] ' : '[ ] ') + st.title).join('\n');
                 return {
@@ -1592,20 +1528,9 @@
             const wb = XLSX.utils.book_new();
             const ws = XLSX.utils.json_to_sheet(exportFormatted);
             
-            // Adjust column widths automatically
             ws['!cols'] = [
-                {wch:5},  // ID
-                {wch:25}, // Employee
-                {wch:50}, // Main Goal
-                {wch:70}, // Tasks
-                {wch:10}, // Indicator
-                {wch:10}, // Month
-                {wch:10}, // Weight
-                {wch:12}, // Target
-                {wch:12}, // Achieved
-                {wch:15}, // Progress %
-                {wch:15}, // Score
-                {wch:20}  // Type
+                {wch:5},  {wch:25}, {wch:50}, {wch:70}, {wch:10}, {wch:10}, 
+                {wch:10}, {wch:12}, {wch:12}, {wch:15}, {wch:15}, {wch:20}  
             ];
             
             const sheetTitle = filterType === 'extra' ? "مبادرات_إضافية" : "تقرير_الخطة";
@@ -1615,7 +1540,6 @@
             const fileName = `تقرير_إنجاز_الكريمي_${sheetTitle}_${dateStr}.xlsx`;
             
             XLSX.writeFile(wb, fileName);
-            
             closeModal('exportModal');
             showToast(`تم تنزيل التقرير بنجاح باسم: ${fileName}`);
         }
@@ -1642,17 +1566,9 @@
             document.getElementById('main-scroll-area').scrollTop = 0;
         }
 
-        function openModal(id) { 
-            document.getElementById(id).classList.add('active'); 
-        }
-        
-        function closeModal(id) { 
-            document.getElementById(id).classList.remove('active'); 
-        }
-        
-        window.onclick = function(event) { 
-            if (event.target.classList.contains('modal')) event.target.classList.remove('active'); 
-        }
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        window.onclick = function(event) { if (event.target.classList.contains('modal')) event.target.classList.remove('active'); }
 
         function showToast(msg) {
             const toast = document.getElementById('toast');
@@ -1665,17 +1581,11 @@
             setTimeout(() => {
                 toast.style.opacity = '0';
                 toast.style.transition = 'opacity 0.6s ease';
-                setTimeout(() => { 
-                    toast.style.display = 'none'; 
-                    toast.style.opacity = '1'; 
-                }, 600);
+                setTimeout(() => { toast.style.display = 'none'; toast.style.opacity = '1'; }, 600);
             }, 4000);
         }
 
-        // Initialize application on startup
-        window.onload = function() {
-            checkAuth();
-        };
+        window.onload = function() { checkAuth(); };
     </script>
 </body>
 </html>
