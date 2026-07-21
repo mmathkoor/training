@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
- <meta charset="UTF-8">
+  <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>التميز في خدمة العملاء - بنك الكريمي الإسلامي | تدريب موظفي الفروع</title>
     
@@ -288,7 +288,11 @@
         .toc-number { background: var(--maroon); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; flex-shrink: 0; }
         .toc-title { color: var(--gray-dark); font-family: 'Cairo', sans-serif; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; text-align: right; }
 
-        /* زر طباعة الفهرس داخل النافذة */
+/* تأثيرات السحب والإفلات للفهرس */
+.toc-item.dragging { opacity: 0.5; transform: scale(0.95); border: 2px dashed var(--gold); }
+.toc-item.drag-over { border-top: 4px solid var(--maroon); padding-top: 20px; }
+
+/* زر طباعة الفهرس داخل النافذة */
         #printTocBtn { display: block; margin: 0 auto 20px auto; background: var(--gray-dark); color: white; padding: 8px 20px; border-radius: 20px; border: none; cursor: pointer; font-family: 'Tajawal'; font-weight: bold; transition: 0.3s; }
         #printTocBtn:hover { background: var(--gold-dark); }
 
@@ -1579,6 +1583,36 @@
 let currentSlide = 0;
 let slides = [];
 let totalSlides = 0;
+let draggedItemIndex = null;
+
+function reorderSlides(fromIndex, toIndex) {
+    if (fromIndex === toIndex) return;
+
+    // جلب جميع الشرائح الموجودة في المتصفح حالياً
+    const allDOMSlides = Array.from(document.querySelectorAll('.slide'));
+    const slideToMove = allDOMSlides[fromIndex];
+    const referenceSlide = allDOMSlides[toIndex];
+    const container = document.getElementById('presentation-container');
+
+    // نقل العنصر في الـ DOM
+    if (fromIndex < toIndex) {
+        container.insertBefore(slideToMove, referenceSlide.nextSibling);
+    } else {
+        container.insertBefore(slideToMove, referenceSlide);
+    }
+
+    // تعديل رقم الشريحة الحالية كي لا يقفز العرض فجأة
+    if (currentSlide === fromIndex) {
+        currentSlide = toIndex;
+    } else if (fromIndex < currentSlide && toIndex >= currentSlide) {
+        currentSlide--;
+    } else if (fromIndex > currentSlide && toIndex <= currentSlide) {
+        currentSlide++;
+    }
+
+    // تحديث كل شيء
+    updateSlides();
+}
 
 function updateSlidesList() {
     // 1. فلترة الشرائح: تجاهل أي شريحة تحتوي على كلاس hidden أو ستايل display:none
@@ -1619,27 +1653,61 @@ function generateTOC() {
     tocList.innerHTML = '';
     
     slides.forEach((slide, index) => {
-        // 2. محاولة إيجاد العنوان:
-        // أ) البحث عن data-title أولاً (الطريقة المضمونة)
         let title = slide.getAttribute('data-title');
         
-        // ب) إن لم يجدها، يبحث عن أي نص عريض أو عنوان داخل الشريحة
         if (!title) {
-            const heading = slide.querySelector('h1, h2, h3');
-            // التعديل هنا: استخدام textContent بدلاً من innerText
-            // لأن innerText يتجاهل النصوص في الشرائح المخفية
+            const heading = slide.querySelector('h1, h2, h3, .font-bold, .font-black');
             title = heading ? heading.textContent.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '').trim() : '';
         }
 
-        // ج) إن كان النص فارغاً (شريحة صور فقط مثلاً)
         if (!title || title === "") {
              title = `شريحة ${index + 1}`;
         }
 
         const li = document.createElement('li');
         li.className = `toc-item ${index === currentSlide ? 'current' : ''}`;
-        li.onclick = () => { goToSlideNum(index); toggleTOC(); };
         li.innerHTML = `<div class="toc-number">${index + 1}</div><div class="toc-title">${title}</div>`;
+        
+        // النقر للذهاب للشريحة
+        li.onclick = (e) => { 
+            // نتأكد أن النقر لم يكن عملية سحب
+            if(!li.classList.contains('dragging')) {
+                goToSlideNum(index); 
+                toggleTOC(); 
+            }
+        };
+
+        // --- إضافة أحداث السحب والإفلات ---
+        li.draggable = true;
+        li.setAttribute('data-index', index);
+
+        li.addEventListener('dragstart', function(e) {
+            draggedItemIndex = index;
+            setTimeout(() => this.classList.add('dragging'), 0);
+            e.dataTransfer.effectAllowed = 'move';
+        });
+
+        li.addEventListener('dragover', function(e) {
+            e.preventDefault(); // ضروري للسماح بالإفلات
+            this.classList.add('drag-over');
+        });
+
+        li.addEventListener('dragleave', function() {
+            this.classList.remove('drag-over');
+        });
+
+        li.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            const targetIndex = parseInt(this.getAttribute('data-index'));
+            reorderSlides(draggedItemIndex, targetIndex);
+        });
+
+        li.addEventListener('dragend', function() {
+            this.classList.remove('dragging');
+        });
+        // ----------------------------------
+
         tocList.appendChild(li);
     });
 }
