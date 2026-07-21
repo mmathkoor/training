@@ -30,7 +30,7 @@
     <!-- ✅ الرابط الجديد اللي يشتغل 100% -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
     <style>
-        /* ===================================================================
+   /* ===================================================================
            VARIABLES - الألوان المعتمدة
            =================================================================== */
         :root {
@@ -124,78 +124,80 @@
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-20px) rotate(2deg); }
         }
-        
         @keyframes float-fast {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-12px); }
         }
-        
         @keyframes pulse-gold {
             0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.6); }
             50% { transform: scale(1.08); box-shadow: 0 0 0 25px rgba(212, 175, 55, 0); }
         }
-        
         @keyframes shine-text {
             0% { background-position: -200% center; }
             100% { background-position: 200% center; }
         }
         
+        /* THE FIX FOR PRINTING: Remove translate and opacity animations that hide content */
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { transform: translateY(50px); }
+            to { transform: translateY(0); }
         }
-        
         @keyframes fadeLeft {
-            from { opacity: 0; transform: translateX(60px); }
-            to { opacity: 1; transform: translateX(0); }
+            from { transform: translateX(60px); }
+            to { transform: translateX(0); }
         }
-        
         @keyframes fadeRight {
-            from { opacity: 0; transform: translateX(-60px); }
-            to { opacity: 1; transform: translateX(0); }
+            from { transform: translateX(-60px); }
+            to { transform: translateX(0); }
         }
-        
         @keyframes scalePop {
-            0% { opacity: 0; transform: scale(0.7); }
+            0% { transform: scale(0.7); }
             70% { transform: scale(1.05); }
-            100% { opacity: 1; transform: scale(1); }
+            100% { transform: scale(1); }
         }
-        
         @keyframes bounceIn {
-            0% { opacity: 0; transform: scale(0.3); }
-            50% { opacity: 1; transform: scale(1.05); }
+            0% { transform: scale(0.3); }
+            50% { transform: scale(1.05); }
             70% { transform: scale(0.95); }
             100% { transform: scale(1); }
         }
-        
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-8px); }
             75% { transform: translateX(8px); }
         }
-        
         @keyframes glowPulse {
             0%, 100% { text-shadow: 0 0 5px rgba(212, 175, 55, 0.3); }
             50% { text-shadow: 0 0 25px rgba(212, 175, 55, 0.8); }
         }
-        
         @keyframes borderGlow {
             0%, 100% { border-color: var(--gold); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
             50% { border-color: var(--gold-light); box-shadow: 0 0 0 8px rgba(212, 175, 55, 0.1); }
         }
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1) translateZ(0); }
+            50% { transform: scale(1.1) translateZ(0); filter: brightness(1.2); }
+        }
+        @keyframes fadeInUp {
+            from { transform: translateY(30px) translateZ(0); }
+            to { transform: translateY(0) translateZ(0); }
+        }
 
-        /* كلاسات الحركات */
+        /* كلاسات الحركات - Removed opacity: 0 from initial states to fix printing */
         .active .float-slow { animation: float-slow 5s ease-in-out infinite; }
         .active .float-fast { animation: float-fast 3s ease-in-out infinite; }
         .active .pulse-gold { animation: pulse-gold 2s ease-in-out infinite; }
-        .active .fade-up { animation: fadeUp 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards; opacity: 0; }
-        .active .fade-left { animation: fadeLeft 0.6s ease forwards; opacity: 0; }
-        .active .fade-right { animation: fadeRight 0.6s ease forwards; opacity: 0; }
-        .active .scale-pop { animation: scalePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; opacity: 0; }
-        .active .bounce-in { animation: bounceIn 0.6s ease forwards; opacity: 0; }
+        .active .fade-up { animation: fadeUp 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards; }
+        .active .fade-left { animation: fadeLeft 0.6s ease forwards; }
+        .active .fade-right { animation: fadeRight 0.6s ease forwards; }
+        .active .scale-pop { animation: scalePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        .active .bounce-in { animation: bounceIn 0.6s ease forwards; }
         .active .shake { animation: shake 0.5s ease-in-out; }
         .active .glow-text { animation: glowPulse 2s ease-in-out infinite; }
         .active .border-glow { animation: borderGlow 2s ease-in-out infinite; }
+        
+        .anim-pulse { animation: pulse-icon 3s ease-in-out infinite; }
+        .fade-in { animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
 
         /* تأخيرات */
         .delay-100 { animation-delay: 0.1s; }
@@ -257,7 +259,7 @@
 
         /* أزرار التحكم */
         .controls-wrapper {
- 			position: fixed; 
+            position: fixed; 
             bottom: 25px; 
             left: 50%; 
             transform: translateX(-50%);
@@ -266,12 +268,11 @@
             box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(212, 175, 55, 0.4);
-            /* التعديل هنا: جعل المؤشر يظهر كأنه قابل للسحب */
             cursor: grab;
-            user-select: none; /* منع تظليل النصوص أثناء السحب */
-            touch-action: none; /* منع السكرول في الشاشات اللمسية أثناء السحب */
+            user-select: none;
+            touch-action: none;
         }
-		  .controls-wrapper.dragging {
+        .controls-wrapper.dragging {
             cursor: grabbing;
             opacity: 0.9;
         }
@@ -282,55 +283,135 @@
             border: none; cursor: pointer; transition: all 0.3s ease;
         }
         .btn-nav:hover { background: linear-gradient(135deg, var(--maroon), var(--maroon-dark)); transform: scale(1.12); }
-		   @keyframes pulse-icon {
-            0%, 100% { transform: scale(1) translateZ(0); }
-            50% { transform: scale(1.1) translateZ(0); filter: brightness(1.2); }
+
+        /* --- زر التصدير والفهرس --- */
+        #printBtn, #toc-btn { position: fixed; top: 25px; z-index: 9999; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: transform 0.3s; border: none; }
+        #printBtn { left: 25px; background: linear-gradient(135deg, var(--maroon), var(--maroon-dark)); color: white; padding: 10px 20px; border-radius: 30px; font-family: 'Cairo', sans-serif; gap: 10px; font-weight: bold; font-size: 16px; border: 2px solid var(--gold); }
+        #printBtn:hover { transform: translateY(-3px) scale(1.05); }
+        #toc-btn { right: 25px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: var(--gray-dark); width: 50px; height: 50px; border-radius: 50%; font-size: 24px; }
+        #toc-btn:hover { transform: scale(1.1) rotate(5deg); }
+
+        /* --- نافذة الفهرس --- */
+        #toc-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(45, 55, 72, 0.95); backdrop-filter: blur(10px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.4s; }
+        #toc-modal.open { opacity: 1; visibility: visible; }
+        #toc-content { background: white; width: 90%; max-width: 800px; max-height: 85vh; border-radius: 30px; padding: 40px; overflow-y: auto; transform: scale(0.9) translateY(30px); transition: all 0.4s; box-shadow: 0 25px 50px rgba(0,0,0,0.25); border: 2px solid var(--gold); position: relative; }
+        #toc-modal.open #toc-content { transform: scale(1) translateY(0); }
+        .toc-close { position: absolute; top: 20px; right: 30px; font-size: 30px; color: var(--gray-mid); cursor: pointer; }
+        .toc-close:hover { color: var(--maroon); }
+        .toc-list { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin-top: 20px; }
+        .toc-item { background: var(--gray-light); padding: 15px 20px; border-radius: 15px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 15px; border-right: 4px solid transparent; }
+        .toc-item:hover { background: white; border-right-color: var(--maroon); transform: translateX(-5px); }
+        .toc-item.current { background: linear-gradient(to left, #fdfbfb, #ebedee); border-right-color: var(--gold); font-weight: bold; }
+        .toc-number { background: var(--maroon); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; flex-shrink: 0; }
+        .toc-title { color: var(--gray-dark); font-family: 'Cairo', sans-serif; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; text-align: right; }
+
+        /* زر طباعة الفهرس داخل النافذة */
+        #printTocBtn { display: block; margin: 0 auto 20px auto; background: var(--gray-dark); color: white; padding: 8px 20px; border-radius: 20px; border: none; cursor: pointer; font-family: 'Tajawal'; font-weight: bold; transition: 0.3s; }
+        #printTocBtn:hover { background: var(--gold-dark); }
+
+        /* ===================================================================
+           THE ULTIMATE PRINT FIX
+           =================================================================== */
+        @media print {
+            /* Reset body and html completely for printing */
+            body, html { 
+                background: white !important; 
+                height: auto !important; 
+                width: 100% !important; 
+                margin: 0 !important; 
+                padding: 0 !important; 
+                overflow: visible !important;
+            }
+            
+            /* Hide UI elements */
+            .controls-wrapper, .progress-bar, #printBtn, #toc-btn, .toc-close, #printTocBtn { 
+                display: none !important; 
+            }
+
+            /* 1. TO PRINT ONLY THE TOC */
+            body.printing-toc #presentation-container { display: none !important; }
+            body.printing-toc #toc-modal { 
+                position: static !important; 
+                opacity: 1 !important; 
+                visibility: visible !important; 
+                background: white !important; 
+                display: block !important; 
+                height: auto !important; 
+                width: 100% !important; 
+                backdrop-filter: none !important;
+            }
+            body.printing-toc #toc-content { 
+                box-shadow: none !important; 
+                border: none !important; 
+                transform: none !important; 
+                max-width: 100% !important; 
+                padding: 20px !important; 
+                overflow: visible !important; 
+            }
+            body.printing-toc .toc-list { display: block !important; }
+            body.printing-toc .toc-item { 
+                page-break-inside: avoid !important; 
+                border: 1px solid #ccc !important; 
+                margin-bottom: 5px !important; 
+                background: white !important; 
+            }
+
+            /* 2. TO PRINT THE SLIDES */
+            body:not(.printing-toc) #toc-modal { display: none !important; }
+            
+            /* Remove the 3D perspective wrapper */
+            body:not(.printing-toc) #presentation-container { 
+                display: block !important; 
+                perspective: none !important; 
+                height: auto !important; 
+                width: 100% !important; 
+                position: static !important;
+            }
+            
+            /* Fix the slides: force them to flow down the page, ignoring absolute positioning */
+            body:not(.printing-toc) .slide { 
+                position: relative !important; /* Overrides absolute */
+                opacity: 1 !important;         /* Force visibility */
+                visibility: visible !important;/* Force visibility */
+                transform: none !important;    /* Kill animations/transforms */
+                page-break-after: always !important; /* Force new page per slide */
+                break-after: page !important;
+                box-shadow: none !important; 
+                width: 100vw !important; 
+                height: 100vh !important; 
+                border-radius: 0 !important; 
+                margin: 0 !important; 
+                padding: 40px !important;
+                display: flex !important; 
+                align-items: center !important; 
+                justify-content: center !important; 
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important; 
+            }
+            
+            /* Completely hide slides meant to be hidden */
+            .slide.hidden, .slide[style*="display: none"] { 
+                display: none !important; 
+                opacity: 0 !important;
+                height: 0 !important;
+                page-break-after: avoid !important;
+            }
+            
+            /* Kill ALL animations aggressively */
+            *, *::before, *::after { 
+                animation: none !important; 
+                transition: none !important; 
+            }
+            
+            /* Fix the graph bars */
+            .stat-bar { height: 100px !important; } 
         }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px) translateZ(0); }
-            to { opacity: 1; transform: translateY(0) translateZ(0); }
-        }
-
-        .anim-pulse {
-            animation: pulse-icon 3s ease-in-out infinite;
-        }
-
-        .fade-in {
-            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            opacity: 0;
-        }
-
-		/* --- زر التصدير والفهرس --- */
-#printBtn, #toc-btn { position: fixed; top: 25px; z-index: 9999; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: transform 0.3s; border: none; }
-#printBtn { left: 25px; background: linear-gradient(135deg, var(--maroon), var(--maroon-dark)); color: white; padding: 10px 20px; border-radius: 30px; font-family: 'Cairo', sans-serif; gap: 10px; font-weight: bold; font-size: 16px; border: 2px solid var(--gold); }
-#printBtn:hover { transform: translateY(-3px) scale(1.05); }
-#toc-btn { right: 25px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: var(--gray-dark); width: 50px; height: 50px; border-radius: 50%; font-size: 24px; }
-#toc-btn:hover { transform: scale(1.1) rotate(5deg); }
-
-/* --- نافذة الفهرس --- */
-#toc-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(45, 55, 72, 0.95); backdrop-filter: blur(10px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.4s; }
-#toc-modal.open { opacity: 1; visibility: visible; }
-#toc-content { background: white; width: 90%; max-width: 800px; max-height: 85vh; border-radius: 30px; padding: 40px; overflow-y: auto; transform: scale(0.9) translateY(30px); transition: all 0.4s; box-shadow: 0 25px 50px rgba(0,0,0,0.25); border: 2px solid var(--gold); }
-#toc-modal.open #toc-content { transform: scale(1) translateY(0); }
-.toc-close { position: absolute; top: 20px; right: 30px; font-size: 30px; color: var(--gray-mid); cursor: pointer; }
-.toc-close:hover { color: var(--maroon); }
-.toc-list { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin-top: 20px; }
-.toc-item { background: var(--gray-light); padding: 15px 20px; border-radius: 15px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 15px; border-right: 4px solid transparent; }
-.toc-item:hover { background: white; border-right-color: var(--maroon); transform: translateX(-5px); }
-.toc-item.current { background: linear-gradient(to left, #fdfbfb, #ebedee); border-right-color: var(--gold); font-weight: bold; }
-.toc-number { background: var(--maroon); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; }
-.toc-title { color: var(--gray-dark); font-family: 'Cairo', sans-serif; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-/* --- كود الطباعة (PDF) --- */
-@page { size: landscape; margin: 0; }
- @media print
     </style>
 </head>
 <body>
-<!-- زر التصدير إلى PDF -->
-<button id="printBtn" onclick="window.print()" title="حفظ كملف PDF">
-    <i class="fas fa-file-pdf"></i> تصدير PDF
+<!-- زر التصدير إلى PDF (للشرائح) -->
+<button id="printBtn" onclick="printPresentation()" title="حفظ كملف PDF">
+    <i class="fas fa-file-pdf"></i> تصدير العرض PDF
 </button>
 
 <!-- زر الفهرس -->
@@ -344,6 +425,12 @@
         <i class="fas fa-times toc-close" onclick="toggleTOC()"></i>
         <h2 class="text-4xl font-black text-[#7a1a2b] mb-2 font-cairo text-center">محتويات العرض</h2>
         <div class="gold-divider"></div>
+        
+        <!-- زر جديد لطباعة الفهرس فقط -->
+        <button id="printTocBtn" onclick="printTOC()">
+            <i class="fas fa-print"></i> طباعة الفهرس
+        </button>
+
         <ul class="toc-list" id="tocList"></ul>
     </div>
 </div>
@@ -351,7 +438,7 @@
 <div class="controls-wrapper" id="draggableControls">
     <button class="btn-nav" onclick="nextSlide()" title="التالي"><i class="fas fa-chevron-right"></i></button>
     <button class="btn-nav" onclick="prevSlide()" title="السابق"><i class="fas fa-chevron-left"></i></button>
-	<div style="display: flex; align-items: center; gap: 12px; background: #f0f0f0; padding: 5px 15px; border-radius: 40px; margin: 0 10px;">
+    <div style="display: flex; align-items: center; gap: 12px; background: #f0f0f0; padding: 5px 15px; border-radius: 40px; margin: 0 10px;">
     <span style="font-size: 16px; font-weight: bold; color: #7a1a2b;" id="slideCounter">1 / 39</span>
     <input type="number" id="gotoSlide" min="1" max="39" value="1" style="width: 60px; padding: 8px; border-radius: 30px; border: 1px solid #d4af37; text-align: center; font-weight: bold;">
     <button onclick="goToSlide()" style="background: #7a1a2b; color: white; border: none; border-radius: 30px; padding: 8px 15px; cursor: pointer; font-weight: bold;">اذهب</button>
@@ -359,6 +446,7 @@
 </div>
 
 <div id="presentation-container">
+
 
     <!-- ================================================================
          الشريحة 1: الغلاف - تصميم مذهل
