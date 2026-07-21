@@ -1,23 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-   <!-- <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>التميز في خدمة العملاء - بنك الكريمي الإسلامي | تدريب موظفي الفروع</title>-->
-    
-    <!-- Tailwind CSS 
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-     -->
-
-    <meta charset="UTF-8">
+ <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>التميز في خدمة العملاء - بنك الكريمي الإسلامي | تدريب موظفي الفروع</title>
     
@@ -27,10 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- ✅ الرابط الجديد اللي يشتغل 100% -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
     <style>
-   /* ===================================================================
+        /* ===================================================================
            VARIABLES - الألوان المعتمدة
            =================================================================== */
         :root {
@@ -446,6 +429,7 @@
 </div>
 
 <div id="presentation-container">
+
 
 
     <!-- ================================================================
@@ -1592,13 +1576,16 @@
 </html>
 
   <script>
-      let currentSlide = 0;
+let currentSlide = 0;
 let slides = [];
 let totalSlides = 0;
 
 function updateSlidesList() {
-    // تجاهل الشرائح المخفية (display: none) أو اللي فيها كلاس hidden
-    slides = Array.from(document.querySelectorAll('.slide')).filter(s => getComputedStyle(s).display !== 'none' && !s.classList.contains('hidden'));
+    // 1. فلترة الشرائح: تجاهل أي شريحة تحتوي على كلاس hidden أو ستايل display:none
+    slides = Array.from(document.querySelectorAll('.slide')).filter(s => {
+        const style = getComputedStyle(s);
+        return style.display !== 'none' && !s.classList.contains('hidden');
+    });
     totalSlides = slides.length;
 }
 
@@ -1663,6 +1650,18 @@ function toggleTOC() {
     modal.classList.toggle('open');
 }
 
+// Print Functions
+function printPresentation() {
+    document.body.classList.remove('printing-toc'); 
+    window.print();
+}
+
+function printTOC() {
+    document.body.classList.add('printing-toc'); 
+    window.print();
+    setTimeout(() => { document.body.classList.remove('printing-toc'); }, 1000); 
+}
+
 function updateSlides() {
     updateSlidesList();
     if(currentSlide >= totalSlides) currentSlide = totalSlides - 1;
@@ -1672,9 +1671,10 @@ function updateSlides() {
         slide.classList.remove('active', 'prev');
         if (idx === currentSlide) {
             slide.classList.add('active');
-            if (slide.querySelector('[style*="height: 0px"]')) {
+            
+            if (slide.querySelector('.stat-bar')) {
                 setTimeout(() => {
-                    const bars = slide.querySelectorAll('[style*="height: 0px"]');
+                    const bars = slide.querySelectorAll('.stat-bar, [style*="height: 0px"]');
                     const heights = [60, 70, 80, 120, 80, 70, 100];
                     bars.forEach((bar, i) => { if (bar) bar.style.height = heights[i] + 'px'; });
                 }, 100);
@@ -1710,17 +1710,19 @@ document.addEventListener('click', (e) => {
     else if (x > window.innerWidth * 0.7) prevSlide();
 });
 
-// Drag and Drop
+// Drag and Drop Menu
 const draggableMenu = document.getElementById('draggableControls');
 let isDragging = false;
 let startX, startY;
 
-draggableMenu.addEventListener('mousedown', dragStart);
-document.addEventListener('mousemove', dragMove);
-document.addEventListener('mouseup', dragEnd);
-draggableMenu.addEventListener('touchstart', dragStart, {passive: false});
-document.addEventListener('touchmove', dragMove, {passive: false});
-document.addEventListener('touchend', dragEnd);
+if(draggableMenu) {
+    draggableMenu.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('mouseup', dragEnd);
+    draggableMenu.addEventListener('touchstart', dragStart, {passive: false});
+    document.addEventListener('touchmove', dragMove, {passive: false});
+    document.addEventListener('touchend', dragEnd);
+}
 
 function dragStart(e) {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
@@ -1744,10 +1746,12 @@ function dragMove(e) {
     draggableMenu.style.top = ((parseInt(draggableMenu.style.top) || 0) + (clientY - startY)) + 'px';
     startX = clientX; startY = clientY;
 }
-function dragEnd() { isDragging = false; draggableMenu.classList.remove('dragging'); }
+function dragEnd() { if(isDragging) { isDragging = false; draggableMenu.classList.remove('dragging'); } }
 
-// تهيئة البداية
+// Initialization
 updateSlides();
+generateTOC();
+
 
 </script>
 	
