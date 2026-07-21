@@ -1817,6 +1817,20 @@ function updateSlides() {
     if(currentSlide < 0) currentSlide = 0;
 
     slides.forEach((slide, idx) => {
+        
+        // ✅ الكود الجديد: تلوين أعلى الشريحة ديناميكياً حسب رقمها (السكشن)
+        let slideColor = '';
+        if (idx < 11) {
+            slideColor = '#7a1a2b'; // كبدي للشرائح من 1 إلى 11
+        } else if (idx < 22) {
+            slideColor = '#d4af37'; // ذهبي للشرائح من 12 إلى 22
+        } else {
+            slideColor = '#4a5568'; // رمادي لباقي الشرائح
+        }
+        // تطبيق اللون كشريط علوي أنيق للشريحة
+        slide.style.borderTop = `15px solid ${slideColor}`;
+
+
         slide.classList.remove('active', 'prev');
         if (idx === currentSlide) {
             slide.classList.add('active');
