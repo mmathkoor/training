@@ -379,6 +379,18 @@
         <ul class="toc-list" id="tocList"></ul>
     </div>
 </div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="controls-wrapper" id="draggableControls">
+    <button class="btn-nav" onclick="nextSlide()" title="التالي"><i class="fas fa-chevron-right"></i></button>
+    <button class="btn-nav" onclick="prevSlide()" title="السابق"><i class="fas fa-chevron-left"></i></button>
+	<div style="display: flex; align-items: center; gap: 12px; background: #f0f0f0; padding: 5px 15px; border-radius: 40px; margin: 0 10px;">
+    <span style="font-size: 16px; font-weight: bold; color: #7a1a2b;" id="slideCounter">1 / 39</span>
+    <input type="number" id="gotoSlide" min="1" max="39" value="1" style="width: 60px; padding: 8px; border-radius: 30px; border: 1px solid #d4af37; text-align: center; font-weight: bold;">
+    <button onclick="goToSlide()" style="background: #7a1a2b; color: white; border: none; border-radius: 30px; padding: 8px 15px; cursor: pointer; font-weight: bold;">اذهب</button>
+</div>
+</div>
+
+<div id="presentation-container">
 
     <!-- ================================================================
          الشريحة 1: الغلاف - تصميم مذهل
