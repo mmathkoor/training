@@ -1,22 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-   <!-- <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>التميز في خدمة العملاء - بنك الكريمي الإسلامي | تدريب موظفي الفروع</title>-->
-    
-    <!-- Tailwind CSS 
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-     -->
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>التميز في خدمة العملاء - بنك الكريمي الإسلامي | تدريب موظفي الفروع</title>
@@ -27,7 +11,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- ✅ الرابط الجديد اللي يشتغل 100% -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
     <style>
         /* ===================================================================
@@ -124,78 +107,80 @@
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-20px) rotate(2deg); }
         }
-        
         @keyframes float-fast {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-12px); }
         }
-        
         @keyframes pulse-gold {
             0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.6); }
             50% { transform: scale(1.08); box-shadow: 0 0 0 25px rgba(212, 175, 55, 0); }
         }
-        
         @keyframes shine-text {
             0% { background-position: -200% center; }
             100% { background-position: 200% center; }
         }
         
+        /* THE FIX FOR PRINTING: Remove translate and opacity animations that hide content */
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { transform: translateY(50px); }
+            to { transform: translateY(0); }
         }
-        
         @keyframes fadeLeft {
-            from { opacity: 0; transform: translateX(60px); }
-            to { opacity: 1; transform: translateX(0); }
+            from { transform: translateX(60px); }
+            to { transform: translateX(0); }
         }
-        
         @keyframes fadeRight {
-            from { opacity: 0; transform: translateX(-60px); }
-            to { opacity: 1; transform: translateX(0); }
+            from { transform: translateX(-60px); }
+            to { transform: translateX(0); }
         }
-        
         @keyframes scalePop {
-            0% { opacity: 0; transform: scale(0.7); }
+            0% { transform: scale(0.7); }
             70% { transform: scale(1.05); }
-            100% { opacity: 1; transform: scale(1); }
+            100% { transform: scale(1); }
         }
-        
         @keyframes bounceIn {
-            0% { opacity: 0; transform: scale(0.3); }
-            50% { opacity: 1; transform: scale(1.05); }
+            0% { transform: scale(0.3); }
+            50% { transform: scale(1.05); }
             70% { transform: scale(0.95); }
             100% { transform: scale(1); }
         }
-        
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-8px); }
             75% { transform: translateX(8px); }
         }
-        
         @keyframes glowPulse {
             0%, 100% { text-shadow: 0 0 5px rgba(212, 175, 55, 0.3); }
             50% { text-shadow: 0 0 25px rgba(212, 175, 55, 0.8); }
         }
-        
         @keyframes borderGlow {
             0%, 100% { border-color: var(--gold); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
             50% { border-color: var(--gold-light); box-shadow: 0 0 0 8px rgba(212, 175, 55, 0.1); }
         }
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1) translateZ(0); }
+            50% { transform: scale(1.1) translateZ(0); filter: brightness(1.2); }
+        }
+        @keyframes fadeInUp {
+            from { transform: translateY(30px) translateZ(0); }
+            to { transform: translateY(0) translateZ(0); }
+        }
 
-        /* كلاسات الحركات */
+        /* كلاسات الحركات - Removed opacity: 0 from initial states to fix printing */
         .active .float-slow { animation: float-slow 5s ease-in-out infinite; }
         .active .float-fast { animation: float-fast 3s ease-in-out infinite; }
         .active .pulse-gold { animation: pulse-gold 2s ease-in-out infinite; }
-        .active .fade-up { animation: fadeUp 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards; opacity: 0; }
-        .active .fade-left { animation: fadeLeft 0.6s ease forwards; opacity: 0; }
-        .active .fade-right { animation: fadeRight 0.6s ease forwards; opacity: 0; }
-        .active .scale-pop { animation: scalePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; opacity: 0; }
-        .active .bounce-in { animation: bounceIn 0.6s ease forwards; opacity: 0; }
+        .active .fade-up { animation: fadeUp 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards; }
+        .active .fade-left { animation: fadeLeft 0.6s ease forwards; }
+        .active .fade-right { animation: fadeRight 0.6s ease forwards; }
+        .active .scale-pop { animation: scalePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        .active .bounce-in { animation: bounceIn 0.6s ease forwards; }
         .active .shake { animation: shake 0.5s ease-in-out; }
         .active .glow-text { animation: glowPulse 2s ease-in-out infinite; }
         .active .border-glow { animation: borderGlow 2s ease-in-out infinite; }
+        
+        .anim-pulse { animation: pulse-icon 3s ease-in-out infinite; }
+        .fade-in { animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
 
         /* تأخيرات */
         .delay-100 { animation-delay: 0.1s; }
@@ -257,7 +242,7 @@
 
         /* أزرار التحكم */
         .controls-wrapper {
- 			position: fixed; 
+            position: fixed; 
             bottom: 25px; 
             left: 50%; 
             transform: translateX(-50%);
@@ -266,12 +251,11 @@
             box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(212, 175, 55, 0.4);
-            /* التعديل هنا: جعل المؤشر يظهر كأنه قابل للسحب */
             cursor: grab;
-            user-select: none; /* منع تظليل النصوص أثناء السحب */
-            touch-action: none; /* منع السكرول في الشاشات اللمسية أثناء السحب */
+            user-select: none;
+            touch-action: none;
         }
-		  .controls-wrapper.dragging {
+        .controls-wrapper.dragging {
             cursor: grabbing;
             opacity: 0.9;
         }
@@ -282,75 +266,129 @@
             border: none; cursor: pointer; transition: all 0.3s ease;
         }
         .btn-nav:hover { background: linear-gradient(135deg, var(--maroon), var(--maroon-dark)); transform: scale(1.12); }
-		   @keyframes pulse-icon {
-            0%, 100% { transform: scale(1) translateZ(0); }
-            50% { transform: scale(1.1) translateZ(0); filter: brightness(1.2); }
+
+        /* --- زر التصدير والفهرس --- */
+        #printBtn, #toc-btn { position: fixed; top: 25px; z-index: 9999; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: transform 0.3s; border: none; }
+        #printBtn { left: 25px; background: linear-gradient(135deg, var(--maroon), var(--maroon-dark)); color: white; padding: 10px 20px; border-radius: 30px; font-family: 'Cairo', sans-serif; gap: 10px; font-weight: bold; font-size: 16px; border: 2px solid var(--gold); }
+        #printBtn:hover { transform: translateY(-3px) scale(1.05); }
+        #toc-btn { right: 25px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: var(--gray-dark); width: 50px; height: 50px; border-radius: 50%; font-size: 24px; }
+        #toc-btn:hover { transform: scale(1.1) rotate(5deg); }
+
+        /* --- نافذة الفهرس --- */
+        #toc-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(45, 55, 72, 0.95); backdrop-filter: blur(10px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.4s; }
+        #toc-modal.open { opacity: 1; visibility: visible; }
+        #toc-content { background: white; width: 90%; max-width: 800px; max-height: 85vh; border-radius: 30px; padding: 40px; overflow-y: auto; transform: scale(0.9) translateY(30px); transition: all 0.4s; box-shadow: 0 25px 50px rgba(0,0,0,0.25); border: 2px solid var(--gold); position: relative; }
+        #toc-modal.open #toc-content { transform: scale(1) translateY(0); }
+        .toc-close { position: absolute; top: 20px; right: 30px; font-size: 30px; color: var(--gray-mid); cursor: pointer; }
+        .toc-close:hover { color: var(--maroon); }
+        .toc-list { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin-top: 20px; }
+        .toc-item { background: var(--gray-light); padding: 15px 20px; border-radius: 15px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 15px; border-right: 4px solid transparent; }
+        .toc-item:hover { background: white; border-right-color: var(--maroon); transform: translateX(-5px); }
+        .toc-item.current { background: linear-gradient(to left, #fdfbfb, #ebedee); border-right-color: var(--gold); font-weight: bold; }
+        .toc-number { background: var(--maroon); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; flex-shrink: 0; }
+        .toc-title { color: var(--gray-dark); font-family: 'Cairo', sans-serif; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; text-align: right; }
+
+        /* زر طباعة الفهرس داخل النافذة */
+        #printTocBtn { display: block; margin: 0 auto 20px auto; background: var(--gray-dark); color: white; padding: 8px 20px; border-radius: 20px; border: none; cursor: pointer; font-family: 'Tajawal'; font-weight: bold; transition: 0.3s; }
+        #printTocBtn:hover { background: var(--gold-dark); }
+
+        /* ===================================================================
+           THE ULTIMATE PRINT FIX
+           =================================================================== */
+        @media print {
+            /* Reset body and html completely for printing */
+            body, html { 
+                background: white !important; 
+                height: auto !important; 
+                width: 100% !important; 
+                margin: 0 !important; 
+                padding: 0 !important; 
+                overflow: visible !important;
+            }
+            
+            /* Hide UI elements */
+            .controls-wrapper, .progress-bar, #printBtn, #toc-btn, .toc-close, #printTocBtn { 
+                display: none !important; 
+            }
+
+            /* 1. TO PRINT ONLY THE TOC */
+            body.printing-toc #presentation-container { display: none !important; }
+            body.printing-toc #toc-modal { 
+                position: static !important; 
+                opacity: 1 !important; 
+                visibility: visible !important; 
+                background: white !important; 
+                display: block !important; 
+                height: auto !important; 
+                width: 100% !important; 
+                backdrop-filter: none !important;
+            }
+            body.printing-toc #toc-content { 
+                box-shadow: none !important; 
+                border: none !important; 
+                transform: none !important; 
+                max-width: 100% !important; 
+                padding: 20px !important; 
+                overflow: visible !important; 
+            }
+            body.printing-toc .toc-list { display: block !important; }
+            body.printing-toc .toc-item { 
+                page-break-inside: avoid !important; 
+                border: 1px solid #ccc !important; 
+                margin-bottom: 5px !important; 
+                background: white !important; 
+            }
+
+            /* 2. TO PRINT THE SLIDES */
+            body:not(.printing-toc) #toc-modal { display: none !important; }
+            
+            /* Remove the 3D perspective wrapper */
+            body:not(.printing-toc) #presentation-container { 
+                display: block !important; 
+                perspective: none !important; 
+                height: auto !important; 
+                width: 100% !important; 
+                position: static !important;
+            }
+            
+            /* Fix the slides: force them to flow down the page, ignoring absolute positioning */
+            body:not(.printing-toc) .slide { 
+                position: relative !important; /* Overrides absolute */
+                opacity: 1 !important;         /* Force visibility */
+                visibility: visible !important;/* Force visibility */
+                transform: none !important;    /* Kill animations/transforms */
+                page-break-after: always !important; /* Force new page per slide */
+                break-after: page !important;
+                box-shadow: none !important; 
+                width: 100vw !important; 
+                height: 100vh !important; 
+                border-radius: 0 !important; 
+                margin: 0 !important; 
+                padding: 40px !important;
+                display: flex !important; 
+                align-items: center !important; 
+                justify-content: center !important; 
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important; 
+            }
+            
+            /* Completely hide slides meant to be hidden */
+            .slide.hidden, .slide[style*="display: none"] { 
+                display: none !important; 
+                opacity: 0 !important;
+                height: 0 !important;
+                page-break-after: avoid !important;
+            }
+            
+            /* Kill ALL animations aggressively */
+            *, *::before, *::after { 
+                animation: none !important; 
+                transition: none !important; 
+            }
+            
+            /* Fix the graph bars */
+            .stat-bar { height: 100px !important; } 
         }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px) translateZ(0); }
-            to { opacity: 1; transform: translateY(0) translateZ(0); }
-        }
-
-        .anim-pulse {
-            animation: pulse-icon 3s ease-in-out infinite;
-        }
-
-        .fade-in {
-            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            opacity: 0;
-        }
-		
-/* --- زر التصدير والفهرس --- */
-#printBtn, #toc-btn { position: fixed; top: 25px; z-index: 9999; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: transform 0.3s; border: none; }
-#printBtn { left: 25px; background: linear-gradient(135deg, var(--maroon), var(--maroon-dark)); color: white; padding: 10px 20px; border-radius: 30px; font-family: 'Cairo', sans-serif; gap: 10px; font-weight: bold; font-size: 16px; border: 2px solid var(--gold); }
-#printBtn:hover { transform: translateY(-3px) scale(1.05); }
-#toc-btn { right: 25px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: var(--gray-dark); width: 50px; height: 50px; border-radius: 50%; font-size: 24px; }
-#toc-btn:hover { transform: scale(1.1) rotate(5deg); }
-
-/* --- نافذة الفهرس --- */
-#toc-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(45, 55, 72, 0.95); backdrop-filter: blur(10px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.4s; }
-#toc-modal.open { opacity: 1; visibility: visible; }
-#toc-content { background: white; width: 90%; max-width: 800px; max-height: 85vh; border-radius: 30px; padding: 40px; overflow-y: auto; transform: scale(0.9) translateY(30px); transition: all 0.4s; box-shadow: 0 25px 50px rgba(0,0,0,0.25); border: 2px solid var(--gold); position: relative; }
-#toc-modal.open #toc-content { transform: scale(1) translateY(0); }
-.toc-close { position: absolute; top: 20px; right: 30px; font-size: 30px; color: var(--gray-mid); cursor: pointer; }
-.toc-close:hover { color: var(--maroon); }
-.toc-list { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin-top: 20px; }
-.toc-item { background: var(--gray-light); padding: 15px 20px; border-radius: 15px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 15px; border-right: 4px solid transparent; }
-.toc-item:hover { background: white; border-right-color: var(--maroon); transform: translateX(-5px); }
-.toc-item.current { background: linear-gradient(to left, #fdfbfb, #ebedee); border-right-color: var(--gold); font-weight: bold; }
-.toc-number { background: var(--maroon); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; flex-shrink: 0; }
-.toc-title { color: var(--gray-dark); font-family: 'Cairo', sans-serif; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; text-align: right; }
-
-/* زر طباعة الفهرس داخل النافذة */
-#printTocBtn { display: block; margin: 0 auto 20px auto; background: var(--gray-dark); color: white; padding: 8px 20px; border-radius: 20px; border: none; cursor: pointer; font-family: 'Tajawal'; font-weight: bold; transition: 0.3s; }
-#printTocBtn:hover { background: var(--gold-dark); }
-
-/* --- كود الطباعة (PDF) --- */
-@page { size: landscape; margin: 0; }
-@media print {
-    body, html { background: white !important; overflow: visible !important; height: auto !important; width: auto !important; margin: 0 !important; padding: 0 !important; }
-    
-    /* إخفاء واجهة التحكم */
-    .controls-wrapper, .progress-bar, #printBtn, #toc-btn, .toc-close, #printTocBtn { display: none !important; }
-    
-    /* منع طباعة الشرائح المخفية (الصفحات الفارغة) */
-    .slide.hidden, .slide[style*="display: none"] { display: none !important; page-break-after: avoid !important; break-after: avoid !important; }
-
-    /* إذا كان الفهرس مفتوحاً، اطبع الفهرس فقط */
-    body.printing-toc #presentation-container { display: none !important; }
-    body.printing-toc #toc-modal { position: static !important; opacity: 1 !important; visibility: visible !important; background: white !important; display: block !important; height: auto !important; width: 100% !important; backdrop-filter: none !important;}
-    body.printing-toc #toc-content { box-shadow: none !important; border: none !important; transform: none !important; max-width: 100% !important; padding: 20px !important; overflow: visible !important; }
-    body.printing-toc .toc-list { display: block !important; }
-    body.printing-toc .toc-item { page-break-inside: avoid !important; border: 1px solid #ccc !important; margin-bottom: 5px !important; background: white !important; }
-
-    /* إذا كان الفهرس مغلقاً، اطبع الشرائح */
-    body:not(.printing-toc) #toc-modal { display: none !important; }
-    body:not(.printing-toc) #presentation-container { display: block !important; perspective: none !important; height: auto !important; width: 100% !important; }
-    body:not(.printing-toc) .slide:not(.hidden):not([style*="display: none"]) { position: relative !important; page-break-after: always !important; break-after: page !important; opacity: 1 !important; visibility: visible !important; transform: none !important; box-shadow: none !important; width: 100vw !important; height: 100vh !important; border-radius: 0 !important; margin: 0 !important; display: flex !important; align-items: center !important; justify-content: center !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    
-    *, *::before, *::after { animation: none !important; transition: none !important; }
-}
     </style>
 </head>
 <body>
@@ -383,7 +421,7 @@
 <div class="controls-wrapper" id="draggableControls">
     <button class="btn-nav" onclick="nextSlide()" title="التالي"><i class="fas fa-chevron-right"></i></button>
     <button class="btn-nav" onclick="prevSlide()" title="السابق"><i class="fas fa-chevron-left"></i></button>
-	<div style="display: flex; align-items: center; gap: 12px; background: #f0f0f0; padding: 5px 15px; border-radius: 40px; margin: 0 10px;">
+    <div style="display: flex; align-items: center; gap: 12px; background: #f0f0f0; padding: 5px 15px; border-radius: 40px; margin: 0 10px;">
     <span style="font-size: 16px; font-weight: bold; color: #7a1a2b;" id="slideCounter">1 / 39</span>
     <input type="number" id="gotoSlide" min="1" max="39" value="1" style="width: 60px; padding: 8px; border-radius: 30px; border: 1px solid #d4af37; text-align: center; font-weight: bold;">
     <button onclick="goToSlide()" style="background: #7a1a2b; color: white; border: none; border-radius: 30px; padding: 8px 15px; cursor: pointer; font-weight: bold;">اذهب</button>
@@ -395,7 +433,7 @@
     <!-- ================================================================
          الشريحة 1: الغلاف - تصميم مذهل
          ================================================================ -->
-    <div class="slide bg-gradient-to-br from-white via-gray-50 to-white">
+    <div class="slide bg-gradient-to-br from-white via-gray-50 to-white" data-title="التميز في خدمة العملاء (الغلاف)">
         <div class="text-center w-full">
             <div class="flex justify-center mb-8 bounce-in">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTxIhDB302tFWezCQwkWsaUd6V0v0dKMpBIA&s" alt="بنك الكريمي الإسلامي" class="h-36 w-auto rounded-2xl shadow-2xl float-slow">
@@ -410,7 +448,7 @@
    <!-- ================================================================
          الشريحة 3: أهداف الورشة
          ================================================================ -->
-    <div class="slide">
+    <div class="slide" data-title="أهداف الورشة">
         <div class="w-full max-w-6xl mx-auto">
             <div class="gold-divider mx-0 mr-auto ml-0 fade-up"></div>
             <h2 class="text-6xl font-black text-[#7a1a2b] mb-10 fade-up delay-100">🎯 أهداف الورشة</h2>
@@ -442,7 +480,7 @@
 <!-- ================================================================
          الشريحة 2: تعريف تجربة العميل + افتتاحية مؤثرة
          ================================================================ -->
-<div class="slide bg-gradient-to-br from-[#7a1a2b] to-[#5c111f] text-white !border-none">
+<div class="slide bg-gradient-to-br from-[#7a1a2b] to-[#5c111f] text-white !border-none" data-title="تعريف تجربة العميل">
     <div class="max-w-5xl mx-auto text-center">
         
         <!-- ✅ تعريف تجربة العميل (بارز في البداية) -->
@@ -474,7 +512,7 @@
     <!-- ================================================================
          الشريحة 4: لماذا تعتبر تجربة العميل مهمة؟
          ================================================================ -->
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
+    <div class="slide bg-gradient-to-br from-gray-50 to-white" data-title="لماذا تعتبر تجربة العميل مهمة؟">
         <div class="max-w-5xl text-center">
             <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
                 <i class="fas fa-question-circle text-6xl text-[#d4af37]"></i>
@@ -492,7 +530,7 @@
     <!-- ================================================================
          الشريحة 5: ماذا يخسر البنك بسبب الخدمة السيئة؟
          ================================================================ -->
-    <div class="slide">
+    <div class="slide" data-title="ماذا يترتب على الخدمة السيئة؟">
         <div class="w-full">
             <h2 class="text-6xl font-black text-[#7a1a2b] text-center mb-10 fade-up">❌ ماذا يترتب على تقديم خدمة سيئة للعميل؟</h2>
             <div class="grid grid-cols-3 gap-6">
@@ -524,7 +562,7 @@
     <!-- ================================================================
          الشريحة 6: ثقافة الخدمة - تصميم دائري جذاب
          ================================================================ -->
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
+    <div class="slide bg-gradient-to-br from-gray-50 to-white" data-title="ثقافة الخدمة">
         <div class="text-center w-full">
             <h2 class="text-6xl font-black text-[#7a1a2b] mb-12 fade-up">ثقافة الخدمة في بنك الكريمي الإسلامي</h2>
             <div class="flex flex-wrap justify-center gap-5">
@@ -543,7 +581,7 @@
     <!-- ================================================================
          الشريحة 7: من هو العميل بالنسبة لنا؟
          ================================================================ -->
-    <div class="slide">
+    <div class="slide" data-title="من هو العميل؟">
         <div class="max-w-5xl text-center">
             <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
                 <i class="fas fa-users text-5xl text-[#d4af37]"></i>
@@ -568,7 +606,7 @@
     <!-- ================================================================
          الشريحة 8: ماذا يتوقع العميل العصري؟
          ================================================================ -->
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
+    <div class="slide bg-gradient-to-br from-gray-50 to-white" data-title="ماذا يتوقع العميل؟">
         <div class="w-full text-center">
             <h2 class="text-6xl font-black text-[#7a1a2b] mb-12 fade-up">ماذا يتوقع العميل منا؟</h2>
             <div class="grid grid-cols-3 gap-6">
@@ -587,7 +625,7 @@
     <!-- ================================================================
          الشريحة 9: قاعدة الثواني السبع الأولى - مع رسم بياني متحرك
          ================================================================ -->
-    <div class="slide">
+    <div class="slide" data-title="قاعدة الثواني السبع الأولى">
         <div class="text-center w-full max-w-6xl mx-auto">
             <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
                 <i class="fas fa-stopwatch text-5xl text-[#d4af37]"></i>
@@ -638,7 +676,7 @@
         </div>
     </div>
 
-	 <div class="slide bg-[#f8fafc]">
+	 <div class="slide bg-[#f8fafc]" data-title="أسرار التأثير في التواصل">
             <div class="text-center w-full max-w-6xl mx-auto">
                 <div class="title-line fade-in"></div>
                 <h2 class="text-5xl font-black text-[#802629] mb-6 fade-in delay-100">أسرار التأثير في التواصل</h2>
@@ -669,7 +707,7 @@
     <!-- ================================================================
          الشريحة 10: لغة الجسد الاحترافية - تصميم منقسم جميل
          ================================================================ -->
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
+    <div class="slide bg-gradient-to-br from-gray-50 to-white" data-title="لغة الجسد الاحترافية">
         <div class="w-full">
             <h2 class="text-6xl font-black text-[#7a1a2b] text-center mb-10 fade-up">لغة الجسد الاحترافية</h2>
             <div class="flex gap-8">
@@ -698,7 +736,7 @@
 	    <!-- ================================================================
          الشريحة 11: مهارات التواصل الاحترافي
          ================================================================ -->
-    <div class="slide">
+    <div class="slide" data-title="مهارات التواصل الاحترافي">
         <div class="max-w-6xl mx-auto text-center">
             <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
                 <i class="fas fa-comments text-5xl text-[#d4af37]"></i>
@@ -731,29 +769,9 @@
     </div>
 
     <!-- ================================================================
-         الشريحة 12: ماذا يريد العميل فعلاً؟
-         ================================================================ 
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
-        <div class="text-center max-w-5xl mx-auto">
-            <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
-                <i class="fas fa-heart text-5xl text-[#d4af37]"></i>
-            </div>
-            <h2 class="text-6xl font-black text-[#7a1a2b] mb-10 fade-up delay-100">ماذا يريد العميل فعلاً؟</h2>
-            <div class="grid grid-cols-3 gap-5 mb-8">
-                <div class="bg-white p-6 rounded-2xl shadow-lg scale-pop delay-200"><i class="fas fa-bolt text-5xl text-[#d4af37] mb-3 block"></i><span class="text-2xl font-bold">السرعة</span></div>
-                <div class="bg-white p-6 rounded-2xl shadow-lg scale-pop delay-300"><i class="fas fa-search text-5xl text-[#d4af37] mb-3 block"></i><span class="text-2xl font-bold">الوضوح</span></div>
-                <div class="bg-white p-6 rounded-2xl shadow-lg scale-pop delay-400"><i class="fas fa-handshake text-5xl text-[#d4af37] mb-3 block"></i><span class="text-2xl font-bold">الاحترام</span></div>
-                <div class="bg-white p-6 rounded-2xl shadow-lg scale-pop delay-500"><i class="fas fa-shield-alt text-5xl text-[#d4af37] mb-3 block"></i><span class="text-2xl font-bold">الشعور بالأمان</span></div>
-                <div class="bg-white p-6 rounded-2xl shadow-lg scale-pop delay-600 col-span-3"><i class="fas fa-check-circle text-5xl text-[#d4af37] mb-3 block"></i><span class="text-2xl font-bold">حل مشكلته بسهولة</span></div>
-            </div>
-            <div class="mt-6 inline-block bg-gradient-to-r from-[#7a1a2b] to-[#9e2d3f] text-white px-10 py-4 rounded-full text-2xl font-bold shadow-xl pulse-gold fade-up">أحياناً يريد العميل الاهتمام أكثر من الحل نفسه</div>
-        </div>
-    </div>-->
-
-    <!-- ================================================================
          الشريحة 13: رحلة العميل داخل الفرع - تصميم مسار تفاعلي
          ================================================================ -->
-    <div class="slide">
+    <div class="slide" data-title="رحلة العميل داخل الفرع">
         <div class="w-full text-center">
             <h2 class="text-6xl font-black text-[#7a1a2b] mb-12 fade-up">رحلة العميل داخل الفرع</h2>
             <div class="flex justify-between items-center gap-3 bg-gradient-to-r from-gray-50 to-white p-8 rounded-3xl shadow-xl">
@@ -786,7 +804,7 @@
         </div>
     </div>
 
-	<div class="slide bg-gradient-to-br from-gray-50 to-white">
+	<div class="slide bg-gradient-to-br from-gray-50 to-white" data-title="رحلة العميل بعد التعامل">
     <div class="w-full max-w-6xl mx-auto text-center">
 
         <!-- عنوان الشريحة -->
@@ -874,18 +892,13 @@
             </div>
         </div>
 
-        <!-- جملة ختامية 
-        <div class="mt-10 fade-in delay-300">
-            <p class="text-xl font-bold gold-text-gradient">✨ الفرق بين المسارين... هو أنت ✨</p>
-        </div>-->
-
     </div>
 </div>
 
     <!-- ================================================================
          الشريحة 14: أبرز التحديات داخل الفروع
          ================================================================ -->
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
+    <div class="slide bg-gradient-to-br from-gray-50 to-white" data-title="أبرز التحديات داخل الفروع">
         <div class="w-full">
             <h2 class="text-6xl font-black text-[#7a1a2b] text-center mb-10 fade-up">⚠️  أبرز التحديات داخل الفروع</h2>
             <div class="grid grid-cols-2 gap-5">
@@ -902,7 +915,7 @@
     <!-- ================================================================
          الشريحة 15: أنماط العملاء - تصميم بطاقات مميزة
          ================================================================ -->
-	<div class="slide active">
+	<div class="slide" data-title="التعامل مع أنماط العملاء">
             <div class="w-full max-w-6xl mx-auto">
                 <div class="title-line fade-in"></div>
                 <h2 class="text-5xl font-black text-center text-[#802629] mb-16 fade-in delay-100">كيفية التعامل مع أنماط العملاء</h2>
@@ -942,39 +955,11 @@
                 </div>
             </div>
         </div>
-    <!-- <div class="slide">
-        <div class="w-full text-center">
-            <h2 class="text-6xl font-black text-[#7a1a2b] mb-12 fade-up">أنماط العملاء</h2>
-            <div class="grid grid-cols-3 gap-6">
-                <div class="bg-gradient-to-br from-red-50 to-white p-6 rounded-2xl shadow-lg hover-card scale-pop delay-100">
-                    <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3"><i class="fas fa-angry text-4xl text-red-600"></i></div>
-                    <p class="font-bold text-2xl">😡 الغاضب</p>
-                </div>
-                <div class="bg-gradient-to-br from-yellow-50 to-white p-6 rounded-2xl shadow-lg hover-card scale-pop delay-200">
-                    <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3"><i class="fas fa-stopwatch text-4xl text-yellow-600"></i></div>
-                    <p class="font-bold text-2xl">⏳ المستعجل</p>
-                </div>
-                <div class="bg-gradient-to-br from-blue-50 to-white p-6 rounded-2xl shadow-lg hover-card scale-pop delay-300">
-                    <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3"><i class="fas fa-question text-4xl text-blue-600"></i></div>
-                    <p class="font-bold text-2xl">❓ كثير الأسئلة</p>
-                </div>
-                <div class="bg-gradient-to-br from-purple-50 to-white p-6 rounded-2xl shadow-lg hover-card scale-pop delay-400">
-                    <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3"><i class="fas fa-crown text-4xl text-purple-600"></i></div>
-                    <p class="font-bold text-2xl">👑 VIP</p>
-                </div>
-                <div class="bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl shadow-lg hover-card scale-pop delay-500 col-span-3">
-                    <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3"><i class="fas fa-pause-circle text-4xl text-gray-600"></i></div>
-                    <p class="font-bold text-2xl">😟 المتردد</p>
-                </div>
-            </div>
-            <p class="mt-8 text-2xl font-bold gold-text-gradient fade-up">لا توجد طريقة واحدة تناسب جميع العملاء</p>
-        </div>
-    </div>-->
 
     <!-- ================================================================
          الشريحة 16: التعامل مع العميل الغاضب - تصميم قوي
          ================================================================ -->
-     <div class="slide bg-gradient-to-br from-gray-900 to-gray-800 text-white !border-none">
+     <div class="slide bg-gradient-to-br from-gray-900 to-gray-800 text-white !border-none" data-title="التعامل مع العميل الغاضب">
         <div class="max-w-5xl mx-auto text-center">
             <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
                 <i class="fas fa-fire text-5xl text-[#d4af37]"></i>
@@ -1013,7 +998,7 @@
     <!-- ================================================================
          الشريحة 17: كيف نحول العميل الغاضب إلى عميل راضي؟
          ================================================================ -->
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
+    <div class="slide bg-gradient-to-br from-gray-50 to-white" data-title="كيف نحول العميل الغاضب لراضي؟">
         <div class="max-w-5xl mx-auto text-center">
             <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
                 <i class="fas fa-handshake text-5xl text-[#d4af37]"></i>
@@ -1035,7 +1020,7 @@
     <!-- ================================================================
          الشريحة 18: أخطاء تدمر تجربة العميل
          ================================================================ -->
-    <div class="slide">
+    <div class="slide" data-title="أخطاء تدمر تجربة العميل">
         <div class="w-full">
             <h2 class="text-6xl font-black text-[#7a1a2b] text-center mb-10 fade-up">❌ أخطاء تدمر تجربة العميل</h2>
             <div class="grid grid-cols-2 gap-5">
@@ -1052,7 +1037,7 @@
     <!-- ================================================================
          الشريحة 19: الخدمة أثناء الضغط
          ================================================================ -->
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
+    <div class="slide bg-gradient-to-br from-gray-50 to-white" data-title="الخدمة أثناء الضغط">
         <div class="max-w-5xl mx-auto text-center">
             <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
                 <i class="fas fa-tachometer-alt text-5xl text-[#d4af37]"></i>
@@ -1069,32 +1054,11 @@
             <p class="mt-8 text-2xl font-bold gold-text-gradient fade-up delay-300">العميل يتذكر طريقة تعاملنا وقت الأزمات</p>
         </div>
     </div>
-
-    <!-- ================================================================
-         الشريحة 20: لحظة الحقيقة - تصميم مؤثر
-         ================================================================ 
-    <div class="slide">
-        <div class="text-center max-w-5xl mx-auto">
-            <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
-                <i class="fas fa-hourglass-start text-5xl text-[#d4af37]"></i>
-            </div>
-            <h2 class="text-6xl font-black text-[#7a1a2b] mb-6 fade-up delay-100">لحظة الحقيقة</h2>
-            <p class="text-2xl text-[#4a5568] mb-8 fade-up delay-200">لحظات صغيرة… لكن أثرها كبير:</p>
-            <div class="grid grid-cols-3 gap-4">
-                <div class="bg-gradient-to-br from-gray-50 to-white p-5 rounded-2xl shadow-md hover-card scale-pop delay-300"><i class="fas fa-hand-peace text-4xl text-[#d4af37] mb-2 block"></i><span class="text-xl font-bold">طريقة الترحيب</span></div>
-                <div class="bg-gradient-to-br from-gray-50 to-white p-5 rounded-2xl shadow-md hover-card scale-pop delay-400"><i class="fas fa-microphone-alt text-4xl text-[#d4af37] mb-2 block"></i><span class="text-xl font-bold">نبرة الصوت</span></div>
-                <div class="bg-gradient-to-br from-gray-50 to-white p-5 rounded-2xl shadow-md hover-card scale-pop delay-500"><i class="fas fa-bolt text-4xl text-[#d4af37] mb-2 block"></i><span class="text-xl font-bold">سرعة الاستجابة</span></div>
-                <div class="bg-gradient-to-br from-gray-50 to-white p-5 rounded-2xl shadow-md hover-card scale-pop delay-600"><i class="fas fa-hand-peace text-4xl text-[#d4af37] mb-2 block"></i><span class="text-xl font-bold">طريقة الاعتذار</span></div>
-                <div class="bg-gradient-to-br from-gray-50 to-white p-5 rounded-2xl shadow-md hover-card scale-pop delay-700 col-span-3"><i class="fas fa-heart text-4xl text-[#d4af37] mb-2 block"></i><span class="text-xl font-bold">الاهتمام أثناء المشكلة</span></div>
-            </div>
-            <p class="mt-8 text-2xl font-bold gold-text-gradient fade-up delay-300">Every Interaction Matters</p>
-        </div>
-    </div>-->
 	
 	    <!-- ================================================================
          الشريحة 21: العميل الداخلي
          ================================================================ -->
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
+    <div class="slide bg-gradient-to-br from-gray-50 to-white" data-title="العميل الداخلي">
         <div class="max-w-5xl mx-auto text-center">
             <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
                 <i class="fas fa-users text-5xl text-[#d4af37]"></i>
@@ -1117,7 +1081,7 @@
     <!-- ================================================================
          الشريحة 22: Role Play - نشاط تفاعلي
          ================================================================ -->
-    <div class="slide bg-gradient-to-br from-gray-900 to-gray-800 text-white !border-none">
+    <div class="slide bg-gradient-to-br from-gray-900 to-gray-800 text-white !border-none" data-title="Role Play (نشاط تفاعلي)">
         <div class="text-center max-w-5xl mx-auto">
             <div class="w-28 h-28 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
                 <i class="fas fa-theater-masks text-6xl text-[#d4af37]"></i>
@@ -1135,7 +1099,7 @@
     <!-- ================================================================
          الشريحة 23: السرية المصرفية
          ================================================================ -->
-   <div class="slide">
+   <div class="slide" data-title="الأمانة والسرية المصرفية">
     <div class="text-center w-full max-w-5xl mx-auto">
         <!-- أيقونة مميزة -->
         <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow fade-in">
@@ -1167,29 +1131,9 @@
 </div>
 
     <!-- ================================================================
-         الشريحة 24: الهندسة الاجتماعية والاحتيال
-         ================================================================
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
-        <div class="text-center max-w-5xl mx-auto">
-            <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
-                <i class="fas fa-mask text-5xl text-[#d4af37]"></i>
-            </div>
-            <h2 class="text-6xl font-black text-[#7a1a2b] mb-8 fade-up delay-100">الهندسة الاجتماعية والاحتيال</h2>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-red-50 p-5 rounded-2xl text-red-700 text-xl font-bold fade-left delay-200"><i class="fas fa-phone-alt ml-2"></i> ⚠ مكالمات وهمية</div>
-                <div class="bg-red-50 p-5 rounded-2xl text-red-700 text-xl font-bold fade-right delay-300"><i class="fas fa-envelope ml-2"></i> ⚠ رسائل احتيالية</div>
-                <div class="bg-red-50 p-5 rounded-2xl text-red-700 text-xl font-bold fade-left delay-400"><i class="fas fa-key ml-2"></i> ⚠ طلب كلمات المرور</div>
-                <div class="bg-red-50 p-5 rounded-2xl text-red-700 text-xl font-bold fade-right delay-500"><i class="fas fa-user-secret ml-2"></i> ⚠ انتحال صفة الإدارة</div>
-                <div class="bg-red-50 p-5 rounded-2xl text-red-700 text-xl font-bold fade-up delay-600 col-span-2"><i class="fas fa-camera ml-2"></i> ⚠ تصوير الشاشات</div>
-            </div>
-            <p class="mt-8 text-2xl font-bold gold-text-gradient fade-up">الوعي الأمني جزء من مسؤوليتنا اليومية</p>
-        </div>
-    </div> -->
-
-    <!-- ================================================================
          الشريحة 25: إدارة وقت الانتظار
          ================================================================ -->
-    <div class="slide">
+    <div class="slide" data-title="إدارة وقت الانتظار">
         <div class="w-full">
             <h2 class="text-6xl font-black text-[#7a1a2b] text-center mb-10 fade-up">⏳ إدارة وقت الانتظار</h2>
             <div class="flex gap-6">
@@ -1218,7 +1162,7 @@
     <!-- ================================================================
          الشريحة 26: التوازن بين الخدمة والامتثال
          ================================================================ -->
-  <div class="slide bg-gradient-to-br from-gray-50 to-white">
+  <div class="slide bg-gradient-to-br from-gray-50 to-white" data-title="التوازن بين الخدمة والامتثال">
     <div class="max-w-5xl mx-auto text-center">
         <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
             <i class="fas fa-balance-scale text-5xl text-[#d4af37]"></i>
@@ -1262,7 +1206,7 @@
     <!-- ================================================================
          الشريحة 27: كيف نشرح متطلبات الامتثال للعميل؟
          ================================================================ -->
-    <div class="slide">
+    <div class="slide" data-title="شرح متطلبات الامتثال">
         <div class="max-w-5xl mx-auto text-center">
             <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
                 <i class="fas fa-chalkboard-teacher text-5xl text-[#d4af37]"></i>
@@ -1281,70 +1225,11 @@
             <p class="mt-8 text-2xl font-bold gold-text-gradient fade-up">طريقة الشرح تصنع الفرق</p>
         </div>
     </div>
-
-    <!-- ================================================================
-         الشريحة 28: التحول الرقمي والخدمة الذكية
-         ================================================================ 
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
-        <div class="text-center max-w-5xl mx-auto">
-            <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
-                <i class="fas fa-cloud-upload-alt text-5xl text-[#d4af37]"></i>
-            </div>
-            <h2 class="text-6xl font-black text-[#7a1a2b] mb-8 fade-up delay-100">التحول الرقمي والخدمة الذكية</h2>
-            <div class="grid grid-cols-2 gap-5">
-                <div class="bg-white p-6 rounded-2xl shadow-md hover-card fade-left delay-200"><i class="fas fa-mobile-alt text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">📱 الخدمات الرقمية تقلل الازدحام</span></div>
-                <div class="bg-white p-6 rounded-2xl shadow-md hover-card fade-right delay-300"><i class="fas fa-bolt text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">⚡ توفر الوقت والجهد</span></div>
-                <div class="bg-white p-6 rounded-2xl shadow-md hover-card fade-left delay-400"><i class="fas fa-globe text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">🌐 تمنح العميل مرونة أكبر</span></div>
-                <div class="bg-white p-6 rounded-2xl shadow-md hover-card fade-right delay-500"><i class="fas fa-user-check text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">🤝 دور الموظف هو التوجيه والدعم</span></div>
-            </div>
-            <p class="mt-8 text-2xl font-bold gold-text-gradient fade-up">التحول الرقمي يعزز تجربة العميل</p>
-        </div>
-    </div>
--->
-    <!-- ================================================================
-         الشريحة 29: دور الموظف في التحول الرقمي
-         ================================================================ 
-    <div class="slide">
-        <div class="max-w-5xl mx-auto text-center">
-            <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
-                <i class="fas fa-user-cog text-5xl text-[#d4af37]"></i>
-            </div>
-            <h2 class="text-6xl font-black text-[#7a1a2b] mb-8 fade-up delay-100">دور الموظف في التحول الرقمي</h2>
-            <div class="grid grid-cols-2 gap-5">
-                <div class="bg-gradient-to-r from-gray-50 to-white p-6 rounded-2xl shadow-md fade-left delay-200"><i class="fas fa-mobile-alt text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">📱 يشرح الخدمات</span></div>
-                <div class="bg-gradient-to-r from-gray-50 to-white p-6 rounded-2xl shadow-md fade-right delay-300"><i class="fas fa-thumbs-up text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">👍 يشجع الخدمات الرقمية</span></div>
-                <div class="bg-gradient-to-r from-gray-50 to-white p-6 rounded-2xl shadow-md fade-left delay-400"><i class="fas fa-hands-helping text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">🤝 يساعد العميل على التغيير</span></div>
-                <div class="bg-gradient-to-r from-gray-50 to-white p-6 rounded-2xl shadow-md fade-right delay-500"><i class="fas fa-lock text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">🔒 يبني ثقة العميل بالخدمات الرقمية</span></div>
-            </div>
-            <p class="mt-8 text-2xl font-bold gold-text-gradient fade-up">الموظف شريك في نجاح التحول الرقمي</p>
-        </div>
-    </div>-->
-
-    <!-- ================================================================
-         الشريحة 30: تجربة العميل الرقمية
-         ================================================================ 
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
-        <div class="text-center max-w-5xl mx-auto">
-            <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
-                <i class="fas fa-laptop-code text-5xl text-[#d4af37]"></i>
-            </div>
-            <h2 class="text-6xl font-black text-[#7a1a2b] mb-8 fade-up delay-100">تجربة العميل الرقمية</h2>
-            <div class="grid grid-cols-3 gap-5">
-                <div class="bg-white p-6 rounded-2xl shadow-lg scale-pop delay-200"><i class="fas fa-mobile-alt text-5xl text-[#d4af37] mb-2 block"></i><span class="text-xl font-bold">📱 تطبيق سهل</span></div>
-                <div class="bg-white p-6 rounded-2xl shadow-lg scale-pop delay-300"><i class="fas fa-bolt text-5xl text-[#d4af37] mb-2 block"></i><span class="text-xl font-bold">⚡ تنفيذ سريع</span></div>
-                <div class="bg-white p-6 rounded-2xl shadow-lg scale-pop delay-400"><i class="fas fa-bell text-5xl text-[#d4af37] mb-2 block"></i><span class="text-xl font-bold">🔔 إشعارات واضحة</span></div>
-                <div class="bg-white p-6 rounded-2xl shadow-lg scale-pop delay-500"><i class="fas fa-shield-alt text-5xl text-[#d4af37] mb-2 block"></i><span class="text-xl font-bold">🛡 أمان عالي</span></div>
-                <div class="bg-white p-6 rounded-2xl shadow-lg scale-pop delay-600 col-span-3"><i class="fas fa-globe text-5xl text-[#d4af37] mb-2 block"></i><span class="text-xl font-bold">🌐 تجربة سلسة</span></div>
-            </div>
-            <p class="mt-8 text-2xl font-bold gold-text-gradient fade-up">التجربة الرقمية أصبحت جزءاً من صورة البنك</p>
-        </div>
-    </div>-->
-	
 	
 	    <!-- ================================================================
          الشريحة 31: البيع الذكي داخل الفروع
          ================================================================ -->
-    <div class="slide">
+    <div class="slide" data-title="البيع الذكي">
         <div class="max-w-5xl mx-auto text-center">
             <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
                 <i class="fas fa-chart-line text-5xl text-[#d4af37]"></i>
@@ -1364,7 +1249,7 @@
     <!-- ================================================================
          الشريحة 32: فرص البيع المتقاطع
          ================================================================ -->
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
+    <div class="slide bg-gradient-to-br from-gray-50 to-white" data-title="فرص البيع المتقاطع">
         <div class="text-center max-w-5xl mx-auto">
             <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
                 <i class="fas fa-random text-5xl text-[#d4af37]"></i>
@@ -1391,28 +1276,9 @@
     </div>
 
     <!-- ================================================================
-         الشريحة 33: الذكاء العاطفي في خدمة العملاء
-         ================================================================ 
-    <div class="slide">
-        <div class="max-w-5xl mx-auto text-center">
-            <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
-                <i class="fas fa-brain text-5xl text-[#d4af37]"></i>
-            </div>
-            <h2 class="text-6xl font-black text-[#7a1a2b] mb-8 fade-up delay-100">الذكاء العاطفي في خدمة العملاء</h2>
-            <div class="grid grid-cols-2 gap-5">
-                <div class="bg-gradient-to-r from-gray-50 to-white p-6 rounded-2xl shadow-md fade-left delay-200"><i class="fas fa-theater-masks text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">🎭 يتحكم بمشاعره</span></div>
-                <div class="bg-gradient-to-r from-gray-50 to-white p-6 rounded-2xl shadow-md fade-right delay-300"><i class="fas fa-heart text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">❤️ يفهم مشاعر العملاء</span></div>
-                <div class="bg-gradient-to-r from-gray-50 to-white p-6 rounded-2xl shadow-md fade-left delay-400"><i class="fas fa-smile text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">😌 يتعامل بهدوء</span></div>
-                <div class="bg-gradient-to-r from-gray-50 to-white p-6 rounded-2xl shadow-md fade-right delay-500"><i class="fas fa-user-tie text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">👔 يحافظ على احترافيته</span></div>
-            </div>
-            <p class="mt-8 text-2xl font-bold gold-text-gradient fade-up">الهدوء مهارة احترافية</p>
-        </div>
-    </div>-->
-
-    <!-- ================================================================
          الشريحة 34: كيف نعتذر بطريقة احترافية؟
          ================================================================ -->
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
+    <div class="slide bg-gradient-to-br from-gray-50 to-white" data-title="كيف نعتذر بطريقة احترافية؟">
         <div class="max-w-5xl mx-auto text-center">
             <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
                 <i class="fas fa-hand-paper text-5xl text-[#d4af37]"></i>
@@ -1439,7 +1305,7 @@
     <!-- ================================================================
          الشريحة 35: مؤشرات الأداء الرئيسية KPI
          ================================================================ -->
-    <div class="slide">
+    <div class="slide" data-title="مؤشرات الأداء الرئيسية KPI">
         <div class="text-center max-w-5xl mx-auto">
             <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
                 <i class="fas fa-chart-bar text-5xl text-[#d4af37]"></i>
@@ -1459,28 +1325,9 @@
     </div>
 
     <!-- ================================================================
-         الشريحة 36: دور الموظف في حماية سمعة البنك
-         ================================================================ 
-    <div class="slide bg-gradient-to-br from-gray-50 to-white">
-        <div class="text-center max-w-5xl mx-auto">
-            <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
-                <i class="fas fa-shield-alt text-5xl text-[#d4af37]"></i>
-            </div>
-            <h2 class="text-6xl font-black text-[#7a1a2b] mb-8 fade-up delay-100">دور الموظف في حماية سمعة البنك</h2>
-            <div class="grid grid-cols-2 gap-5">
-                <div class="bg-white p-6 rounded-2xl shadow-md fade-left delay-200"><i class="fas fa-image text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">صورة البنك</span></div>
-                <div class="bg-white p-6 rounded-2xl shadow-md fade-right delay-300"><i class="fas fa-chart-line text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">مستوى الاحتراف</span></div>
-                <div class="bg-white p-6 rounded-2xl shadow-md fade-left delay-400"><i class="fas fa-star text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">جودة الخدمة</span></div>
-                <div class="bg-white p-6 rounded-2xl shadow-md fade-right delay-500"><i class="fas fa-handshake text-3xl text-[#d4af37] ml-3"></i><span class="text-xl font-bold">ثقة العملاء</span></div>
-            </div>
-            <p class="mt-8 text-2xl font-bold gold-text-gradient fade-up">سمعة البنك تُبنى في الفروع</p>
-        </div>
-    </div>-->
-
-    <!-- ================================================================
          الشريحة 37: ماذا بعد الورشة؟
          ================================================================ -->
-    <div class="slide">
+    <div class="slide" data-title="ماذا بعد الورشة؟">
         <div class="text-center max-w-5xl mx-auto">
             <div class="w-24 h-24 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-6 float-slow">
                 <i class="fas fa-road text-5xl text-[#d4af37]"></i>
@@ -1498,7 +1345,7 @@
     <!-- ================================================================
          الشريحة 38: الرسالة الختامية - تصميم مؤثر
          ================================================================ -->
-    <div class="slide bg-gradient-to-br from-[#7a1a2b] to-[#5c111f] text-white !border-none">
+    <div class="slide bg-gradient-to-br from-[#7a1a2b] to-[#5c111f] text-white !border-none" data-title="الرسالة الختامية">
         <div class="text-center max-w-5xl mx-auto">
             <div class="w-28 h-28 bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-8 float-slow">
                 <i class="fas fa-gem text-6xl text-[#d4af37]"></i>
@@ -1517,7 +1364,7 @@
     <!-- ================================================================
          الشريحة 39: شكراً لكم - الختام
          ================================================================ -->
-    <div class="slide bg-white">
+    <div class="slide bg-white" data-title="شكراً لكم">
         <div class="text-center max-w-4xl mx-auto">
             <div class="w-40 h-40 bg-gradient-to-br from-[#7a1a2b] to-[#9e2d3f] rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl pulse-gold fade-up">
                 <i class="fas fa-handshake text-7xl text-[#d4af37]"></i>
@@ -1579,26 +1426,24 @@ function generateTOC() {
     tocList.innerHTML = '';
     
     slides.forEach((slide, index) => {
-        // 2. محاولة إيجاد العنوان:
-        // أ) البحث عن data-title أولاً (الطريقة المضمونة)
+        // Force the use of data-title attribute to avoid parsing issues
         let title = slide.getAttribute('data-title');
         
-        // ب) إن لم يجدها، يبحث عن أي نص عريض أو عنوان داخل الشريحة
+        // Fallback ONLY if data-title is missing (but I have added it to all slides in this code)
         if (!title) {
-            const heading = slide.querySelector('h1, h2, h3, .font-bold, .font-black');
-            // إزالة الرموز التعبيرية (الإيموجي) من النص إن وجدت ليظهر نظيفاً
-            title = heading ? heading.innerText.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '').trim() : '';
-        }
-
-        // ج) إن كان النص فارغاً (شريحة صور فقط مثلاً)
-        if (!title || title === "") {
-             title = `شريحة ${index + 1}`;
+            const heading = slide.querySelector('h1, h2, h3, h4');
+            if (heading) {
+                // Remove icons/emojis to keep the TOC clean
+                title = heading.innerText.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '').trim();
+            } else {
+                 title = `شريحة ${index + 1}`;
+            }
         }
 
         const li = document.createElement('li');
         li.className = `toc-item ${index === currentSlide ? 'current' : ''}`;
         li.onclick = () => { goToSlideNum(index); toggleTOC(); };
-        li.innerHTML = `<div class="toc-number">${index + 1}</div><div class="toc-title">${title}</div>`;
+        li.innerHTML = `<div class="toc-number">${index + 1}</div><div class="toc-title" title="${title}">${title}</div>`;
         tocList.appendChild(li);
     });
 }
@@ -1609,16 +1454,15 @@ function toggleTOC() {
     modal.classList.toggle('open');
 }
 
-// 3. دوال الطباعة المنفصلة
+// Print Functions
 function printPresentation() {
-    document.body.classList.remove('printing-toc'); // تأكد أننا لا نطبع الفهرس
+    document.body.classList.remove('printing-toc'); 
     window.print();
 }
 
 function printTOC() {
-    document.body.classList.add('printing-toc'); // إضافة كلاس يخبر الـ CSS بطباعة الفهرس فقط
+    document.body.classList.add('printing-toc'); 
     window.print();
-    // إزالة الكلاس بعد إغلاق نافذة الطباعة ليعود العرض طبيعياً
     setTimeout(() => { document.body.classList.remove('printing-toc'); }, 1000); 
 }
 
@@ -1631,10 +1475,10 @@ function updateSlides() {
         slide.classList.remove('active', 'prev');
         if (idx === currentSlide) {
             slide.classList.add('active');
-            // أنيميشن الأعمدة في شريحة معينة
-            if (slide.querySelector('[style*="height: 0px"]')) {
+            
+            if (slide.querySelector('.stat-bar')) {
                 setTimeout(() => {
-                    const bars = slide.querySelectorAll('[style*="height: 0px"]');
+                    const bars = slide.querySelectorAll('.stat-bar, [style*="height: 0px"]');
                     const heights = [60, 70, 80, 120, 80, 70, 100];
                     bars.forEach((bar, i) => { if (bar) bar.style.height = heights[i] + 'px'; });
                 }, 100);
@@ -1670,7 +1514,7 @@ document.addEventListener('click', (e) => {
     else if (x > window.innerWidth * 0.7) prevSlide();
 });
 
-// Drag and Drop (السحب والإفلات لشريط التحكم)
+// Drag and Drop Menu
 const draggableMenu = document.getElementById('draggableControls');
 let isDragging = false;
 let startX, startY;
@@ -1708,11 +1552,10 @@ function dragMove(e) {
 }
 function dragEnd() { if(isDragging) { isDragging = false; draggableMenu.classList.remove('dragging'); } }
 
-// تهيئة البداية
+// Initialization
 updateSlides();
+generateTOC();
 
 </script>
-	
-
 </body>
 </html>
