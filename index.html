@@ -301,7 +301,7 @@
             opacity: 0;
         }
 
-		/* --- زر التصدير والفهرس --- */
+/* --- زر التصدير والفهرس --- */
 #printBtn, #toc-btn { position: fixed; top: 25px; z-index: 9999; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: transform 0.3s; border: none; }
 #printBtn { left: 25px; background: linear-gradient(135deg, var(--maroon), var(--maroon-dark)); color: white; padding: 10px 20px; border-radius: 30px; font-family: 'Cairo', sans-serif; gap: 10px; font-weight: bold; font-size: 16px; border: 2px solid var(--gold); }
 #printBtn:hover { transform: translateY(-3px) scale(1.05); }
@@ -311,7 +311,7 @@
 /* --- نافذة الفهرس --- */
 #toc-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(45, 55, 72, 0.95); backdrop-filter: blur(10px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.4s; }
 #toc-modal.open { opacity: 1; visibility: visible; }
-#toc-content { background: white; width: 90%; max-width: 800px; max-height: 85vh; border-radius: 30px; padding: 40px; overflow-y: auto; transform: scale(0.9) translateY(30px); transition: all 0.4s; box-shadow: 0 25px 50px rgba(0,0,0,0.25); border: 2px solid var(--gold); }
+#toc-content { background: white; width: 90%; max-width: 800px; max-height: 85vh; border-radius: 30px; padding: 40px; overflow-y: auto; transform: scale(0.9) translateY(30px); transition: all 0.4s; box-shadow: 0 25px 50px rgba(0,0,0,0.25); border: 2px solid var(--gold); position: relative; }
 #toc-modal.open #toc-content { transform: scale(1) translateY(0); }
 .toc-close { position: absolute; top: 20px; right: 30px; font-size: 30px; color: var(--gray-mid); cursor: pointer; }
 .toc-close:hover { color: var(--maroon); }
@@ -319,24 +319,44 @@
 .toc-item { background: var(--gray-light); padding: 15px 20px; border-radius: 15px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 15px; border-right: 4px solid transparent; }
 .toc-item:hover { background: white; border-right-color: var(--maroon); transform: translateX(-5px); }
 .toc-item.current { background: linear-gradient(to left, #fdfbfb, #ebedee); border-right-color: var(--gold); font-weight: bold; }
-.toc-number { background: var(--maroon); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; }
-.toc-title { color: var(--gray-dark); font-family: 'Cairo', sans-serif; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.toc-number { background: var(--maroon); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; flex-shrink: 0; }
+.toc-title { color: var(--gray-dark); font-family: 'Cairo', sans-serif; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; text-align: right; }
+
+/* زر طباعة الفهرس داخل النافذة */
+#printTocBtn { display: block; margin: 0 auto 20px auto; background: var(--gray-dark); color: white; padding: 8px 20px; border-radius: 20px; border: none; cursor: pointer; font-family: 'Tajawal'; font-weight: bold; transition: 0.3s; }
+#printTocBtn:hover { background: var(--gold-dark); }
 
 /* --- كود الطباعة (PDF) --- */
 @page { size: landscape; margin: 0; }
 @media print {
     body, html { background: white !important; overflow: visible !important; height: auto !important; width: auto !important; margin: 0 !important; padding: 0 !important; }
-    .controls-wrapper, .progress-bar, #printBtn, #toc-btn, #toc-modal { display: none !important; }
-    #presentation-container { display: block !important; perspective: none !important; height: auto !important; width: 100% !important; }
-    .slide { position: relative !important; page-break-after: always !important; break-after: page !important; opacity: 1 !important; visibility: visible !important; transform: none !important; box-shadow: none !important; width: 100vw !important; height: 100vh !important; border-radius: 0 !important; margin: 0 !important; display: flex !important; align-items: center !important; justify-content: center !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    
+    /* إخفاء واجهة التحكم */
+    .controls-wrapper, .progress-bar, #printBtn, #toc-btn, .toc-close, #printTocBtn { display: none !important; }
+    
+    /* منع طباعة الشرائح المخفية (الصفحات الفارغة) */
+    .slide.hidden, .slide[style*="display: none"] { display: none !important; page-break-after: avoid !important; break-after: avoid !important; }
+
+    /* إذا كان الفهرس مفتوحاً، اطبع الفهرس فقط */
+    body.printing-toc #presentation-container { display: none !important; }
+    body.printing-toc #toc-modal { position: static !important; opacity: 1 !important; visibility: visible !important; background: white !important; display: block !important; height: auto !important; width: 100% !important; backdrop-filter: none !important;}
+    body.printing-toc #toc-content { box-shadow: none !important; border: none !important; transform: none !important; max-width: 100% !important; padding: 20px !important; overflow: visible !important; }
+    body.printing-toc .toc-list { display: block !important; }
+    body.printing-toc .toc-item { page-break-inside: avoid !important; border: 1px solid #ccc !important; margin-bottom: 5px !important; background: white !important; }
+
+    /* إذا كان الفهرس مغلقاً، اطبع الشرائح */
+    body:not(.printing-toc) #toc-modal { display: none !important; }
+    body:not(.printing-toc) #presentation-container { display: block !important; perspective: none !important; height: auto !important; width: 100% !important; }
+    body:not(.printing-toc) .slide:not(.hidden):not([style*="display: none"]) { position: relative !important; page-break-after: always !important; break-after: page !important; opacity: 1 !important; visibility: visible !important; transform: none !important; box-shadow: none !important; width: 100vw !important; height: 100vh !important; border-radius: 0 !important; margin: 0 !important; display: flex !important; align-items: center !important; justify-content: center !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    
     *, *::before, *::after { animation: none !important; transition: none !important; }
 }
     </style>
 </head>
 <body>
-<!-- زر التصدير إلى PDF -->
-<button id="printBtn" onclick="window.print()" title="حفظ كملف PDF">
-    <i class="fas fa-file-pdf"></i> تصدير PDF
+<!-- زر التصدير إلى PDF (للشرائح) -->
+<button id="printBtn" onclick="printPresentation()" title="حفظ كملف PDF">
+    <i class="fas fa-file-pdf"></i> تصدير العرض PDF
 </button>
 
 <!-- زر الفهرس -->
@@ -350,21 +370,15 @@
         <i class="fas fa-times toc-close" onclick="toggleTOC()"></i>
         <h2 class="text-4xl font-black text-[#7a1a2b] mb-2 font-cairo text-center">محتويات العرض</h2>
         <div class="gold-divider"></div>
+        
+        <!-- زر جديد لطباعة الفهرس فقط -->
+        <button id="printTocBtn" onclick="printTOC()">
+            <i class="fas fa-print"></i> طباعة الفهرس
+        </button>
+
         <ul class="toc-list" id="tocList"></ul>
     </div>
 </div>
-<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-<div class="controls-wrapper" id="draggableControls">
-    <button class="btn-nav" onclick="nextSlide()" title="التالي"><i class="fas fa-chevron-right"></i></button>
-    <button class="btn-nav" onclick="prevSlide()" title="السابق"><i class="fas fa-chevron-left"></i></button>
-	<div style="display: flex; align-items: center; gap: 12px; background: #f0f0f0; padding: 5px 15px; border-radius: 40px; margin: 0 10px;">
-    <span style="font-size: 16px; font-weight: bold; color: #7a1a2b;" id="slideCounter">1 / 39</span>
-    <input type="number" id="gotoSlide" min="1" max="39" value="1" style="width: 60px; padding: 8px; border-radius: 30px; border: 1px solid #d4af37; text-align: center; font-weight: bold;">
-    <button onclick="goToSlide()" style="background: #7a1a2b; color: white; border: none; border-radius: 30px; padding: 8px 15px; cursor: pointer; font-weight: bold;">اذهب</button>
-</div>
-</div>
-
-<div id="presentation-container">
 
     <!-- ================================================================
          الشريحة 1: الغلاف - تصميم مذهل
@@ -1510,13 +1524,16 @@
 </html>
 
   <script>
-      let currentSlide = 0;
+let currentSlide = 0;
 let slides = [];
 let totalSlides = 0;
 
 function updateSlidesList() {
-    // تجاهل الشرائح المخفية (display: none) أو اللي فيها كلاس hidden
-    slides = Array.from(document.querySelectorAll('.slide')).filter(s => getComputedStyle(s).display !== 'none' && !s.classList.contains('hidden'));
+    // 1. فلترة الشرائح: تجاهل أي شريحة تحتوي على كلاس hidden أو ستايل display:none
+    slides = Array.from(document.querySelectorAll('.slide')).filter(s => {
+        const style = getComputedStyle(s);
+        return style.display !== 'none' && !s.classList.contains('hidden');
+    });
     totalSlides = slides.length;
 }
 
@@ -1550,10 +1567,20 @@ function generateTOC() {
     tocList.innerHTML = '';
     
     slides.forEach((slide, index) => {
+        // 2. محاولة إيجاد العنوان:
+        // أ) البحث عن data-title أولاً (الطريقة المضمونة)
         let title = slide.getAttribute('data-title');
+        
+        // ب) إن لم يجدها، يبحث عن أي نص عريض أو عنوان داخل الشريحة
         if (!title) {
-            const heading = slide.querySelector('h1, h2, h3');
-            title = heading ? heading.innerText.trim() : `شريحة ${index + 1}`;
+            const heading = slide.querySelector('h1, h2, h3, .font-bold, .font-black');
+            // إزالة الرموز التعبيرية (الإيموجي) من النص إن وجدت ليظهر نظيفاً
+            title = heading ? heading.innerText.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '').trim() : '';
+        }
+
+        // ج) إن كان النص فارغاً (شريحة صور فقط مثلاً)
+        if (!title || title === "") {
+             title = `شريحة ${index + 1}`;
         }
 
         const li = document.createElement('li');
@@ -1570,6 +1597,19 @@ function toggleTOC() {
     modal.classList.toggle('open');
 }
 
+// 3. دوال الطباعة المنفصلة
+function printPresentation() {
+    document.body.classList.remove('printing-toc'); // تأكد أننا لا نطبع الفهرس
+    window.print();
+}
+
+function printTOC() {
+    document.body.classList.add('printing-toc'); // إضافة كلاس يخبر الـ CSS بطباعة الفهرس فقط
+    window.print();
+    // إزالة الكلاس بعد إغلاق نافذة الطباعة ليعود العرض طبيعياً
+    setTimeout(() => { document.body.classList.remove('printing-toc'); }, 1000); 
+}
+
 function updateSlides() {
     updateSlidesList();
     if(currentSlide >= totalSlides) currentSlide = totalSlides - 1;
@@ -1579,6 +1619,7 @@ function updateSlides() {
         slide.classList.remove('active', 'prev');
         if (idx === currentSlide) {
             slide.classList.add('active');
+            // أنيميشن الأعمدة في شريحة معينة
             if (slide.querySelector('[style*="height: 0px"]')) {
                 setTimeout(() => {
                     const bars = slide.querySelectorAll('[style*="height: 0px"]');
@@ -1617,17 +1658,19 @@ document.addEventListener('click', (e) => {
     else if (x > window.innerWidth * 0.7) prevSlide();
 });
 
-// Drag and Drop
+// Drag and Drop (السحب والإفلات لشريط التحكم)
 const draggableMenu = document.getElementById('draggableControls');
 let isDragging = false;
 let startX, startY;
 
-draggableMenu.addEventListener('mousedown', dragStart);
-document.addEventListener('mousemove', dragMove);
-document.addEventListener('mouseup', dragEnd);
-draggableMenu.addEventListener('touchstart', dragStart, {passive: false});
-document.addEventListener('touchmove', dragMove, {passive: false});
-document.addEventListener('touchend', dragEnd);
+if(draggableMenu) {
+    draggableMenu.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('mouseup', dragEnd);
+    draggableMenu.addEventListener('touchstart', dragStart, {passive: false});
+    document.addEventListener('touchmove', dragMove, {passive: false});
+    document.addEventListener('touchend', dragEnd);
+}
 
 function dragStart(e) {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
@@ -1651,7 +1694,7 @@ function dragMove(e) {
     draggableMenu.style.top = ((parseInt(draggableMenu.style.top) || 0) + (clientY - startY)) + 'px';
     startX = clientX; startY = clientY;
 }
-function dragEnd() { isDragging = false; draggableMenu.classList.remove('dragging'); }
+function dragEnd() { if(isDragging) { isDragging = false; draggableMenu.classList.remove('dragging'); } }
 
 // تهيئة البداية
 updateSlides();
