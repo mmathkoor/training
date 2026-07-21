@@ -1607,6 +1607,7 @@ if (firebaseConfigStr) {
     db = getFirestore(app);
     
     // المسار المعتمد لحفظ ترتيب الشرائح العام
+    // CRITICAL FIX: Changed path to strictly adhere to Firestore rules
     orderDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'slideOrder', 'main');
 
     const initialToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
