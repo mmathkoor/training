@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
+   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>التميز في خدمة العملاء - بنك الكريمي الإسلامي | تدريب موظفي الفروع</title>
     
@@ -433,7 +433,6 @@
 </div>
 
 <div id="presentation-container">
-
 
 
     <!-- ================================================================
@@ -1579,43 +1578,85 @@
 </body>
 </html>
 
-  <script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+// إعطاء كل شريحة معرف أصلي للتعرف عليها عند الترتيب
+document.querySelectorAll('.slide').forEach((slide, idx) => {
+    slide.setAttribute('data-original-index', idx.toString());
+});
+
 let currentSlide = 0;
 let slides = [];
 let totalSlides = 0;
 let draggedItemIndex = null;
 
-function reorderSlides(fromIndex, toIndex) {
-    if (fromIndex === toIndex) return;
+// تجهيز قاعدة البيانات السحابية (للحفظ التلقائي)
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+const firebaseConfigStr = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+let db = null;
+let orderDocRef = null;
 
-    // جلب جميع الشرائح الموجودة في المتصفح حالياً
-    const allDOMSlides = Array.from(document.querySelectorAll('.slide'));
-    const slideToMove = allDOMSlides[fromIndex];
-    const referenceSlide = allDOMSlides[toIndex];
+if (firebaseConfigStr) {
+    const firebaseConfig = JSON.parse(firebaseConfigStr);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    db = getFirestore(app);
+    
+    // المسار المعتمد لحفظ ترتيب الشرائح العام
+    orderDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'slideOrder', 'main');
+
+    const initialToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+    
+    let authPromise = initialToken ? signInWithCustomToken(auth, initialToken) : signInAnonymously(auth);
+
+    authPromise.then(() => {
+        // الاستماع للتغييرات في السحابة
+        onSnapshot(orderDocRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.data();
+                if (data && data.order) {
+                    applyOrderFromCloud(data.order);
+                }
+            }
+        }, (error) => {
+            console.error("خطأ في جلب الترتيب من السحابة:", error);
+        });
+    }).catch(e => console.error("خطأ المصادقة:", e));
+}
+
+function applyOrderFromCloud(orderArray) {
     const container = document.getElementById('presentation-container');
+    const allSlides = Array.from(document.querySelectorAll('.slide'));
 
-    // نقل العنصر في الـ DOM
-    if (fromIndex < toIndex) {
-        container.insertBefore(slideToMove, referenceSlide.nextSibling);
-    } else {
-        container.insertBefore(slideToMove, referenceSlide);
-    }
+    const currentOrder = allSlides.map(s => s.getAttribute('data-original-index'));
+    if (JSON.stringify(currentOrder) === JSON.stringify(orderArray)) return; // الترتيب متطابق، لا داعي للتحديث
 
-    // تعديل رقم الشريحة الحالية كي لا يقفز العرض فجأة
-    if (currentSlide === fromIndex) {
-        currentSlide = toIndex;
-    } else if (fromIndex < currentSlide && toIndex >= currentSlide) {
-        currentSlide--;
-    } else if (fromIndex > currentSlide && toIndex <= currentSlide) {
-        currentSlide++;
-    }
+    // إعادة ترتيب العناصر في الـ DOM
+    orderArray.forEach(originalIndex => {
+        const slide = allSlides.find(s => s.getAttribute('data-original-index') === originalIndex);
+        if (slide) {
+            container.appendChild(slide); 
+        }
+    });
 
-    // تحديث كل شيء
     updateSlides();
 }
 
+const saveOrderToCloud = async function() {
+    if (!orderDocRef) return;
+    const currentSlides = document.querySelectorAll('.slide');
+    const newOrder = Array.from(currentSlides).map(s => s.getAttribute('data-original-index'));
+    try {
+        await setDoc(orderDocRef, { order: newOrder });
+    } catch(e) {
+        console.error("خطأ أثناء حفظ الترتيب للسحابة:", e);
+    }
+};
+
 function updateSlidesList() {
-    // 1. فلترة الشرائح: تجاهل أي شريحة تحتوي على كلاس hidden أو ستايل display:none
     slides = Array.from(document.querySelectorAll('.slide')).filter(s => {
         const style = getComputedStyle(s);
         return style.display !== 'none' && !s.classList.contains('hidden');
@@ -1630,7 +1671,7 @@ function updateSlideCounter() {
     document.getElementById('gotoSlide').max = totalSlides;
 }
 
-function goToSlide() {
+window.goToSlide = function() {
     let slideNum = parseInt(document.getElementById('gotoSlide').value);
     if (slideNum >= 1 && slideNum <= totalSlides) {
         currentSlide = slideNum - 1;
@@ -1638,7 +1679,7 @@ function goToSlide() {
     } else {
         alert('رقم الشريحة من 1 إلى ' + totalSlides);
     }
-}
+};
 
 function goToSlideNum(index) {
     if (index >= 0 && index < totalSlides) {
@@ -1646,6 +1687,33 @@ function goToSlideNum(index) {
         updateSlides();
     }
 }
+
+window.reorderSlides = function(fromIndex, toIndex) {
+    if (fromIndex === toIndex) return;
+
+    const allDOMSlides = Array.from(document.querySelectorAll('.slide'));
+    const slideToMove = allDOMSlides[fromIndex];
+    const referenceSlide = allDOMSlides[toIndex];
+    const container = document.getElementById('presentation-container');
+
+    if (fromIndex < toIndex) {
+        container.insertBefore(slideToMove, referenceSlide.nextSibling);
+    } else {
+        container.insertBefore(slideToMove, referenceSlide);
+    }
+
+    // تصحيح رقم الشريحة الحالية كي لا يقفز العرض فجأة
+    if (currentSlide === fromIndex) {
+        currentSlide = toIndex;
+    } else if (fromIndex < currentSlide && toIndex >= currentSlide) {
+        currentSlide--;
+    } else if (fromIndex > currentSlide && toIndex <= currentSlide) {
+        currentSlide++;
+    }
+
+    updateSlides();
+    saveOrderToCloud(); // حفظ الترتيب في السحابة مباشرة
+};
 
 function generateTOC() {
     updateSlidesList();
@@ -1668,16 +1736,14 @@ function generateTOC() {
         li.className = `toc-item ${index === currentSlide ? 'current' : ''}`;
         li.innerHTML = `<div class="toc-number">${index + 1}</div><div class="toc-title">${title}</div>`;
         
-        // النقر للذهاب للشريحة
         li.onclick = (e) => { 
-            // نتأكد أن النقر لم يكن عملية سحب
             if(!li.classList.contains('dragging')) {
                 goToSlideNum(index); 
-                toggleTOC(); 
+                window.toggleTOC(); 
             }
         };
 
-        // --- إضافة أحداث السحب والإفلات ---
+        // أحداث السحب والإفلات
         li.draggable = true;
         li.setAttribute('data-index', index);
 
@@ -1688,7 +1754,7 @@ function generateTOC() {
         });
 
         li.addEventListener('dragover', function(e) {
-            e.preventDefault(); // ضروري للسماح بالإفلات
+            e.preventDefault(); 
             this.classList.add('drag-over');
         });
 
@@ -1700,35 +1766,33 @@ function generateTOC() {
             e.preventDefault();
             this.classList.remove('drag-over');
             const targetIndex = parseInt(this.getAttribute('data-index'));
-            reorderSlides(draggedItemIndex, targetIndex);
+            window.reorderSlides(draggedItemIndex, targetIndex);
         });
 
         li.addEventListener('dragend', function() {
             this.classList.remove('dragging');
         });
-        // ----------------------------------
 
         tocList.appendChild(li);
     });
 }
 
-function toggleTOC() {
+window.toggleTOC = function() {
     const modal = document.getElementById('toc-modal');
     if (!modal.classList.contains('open')) { generateTOC(); }
     modal.classList.toggle('open');
-}
+};
 
-// Print Functions
-function printPresentation() {
+window.printPresentation = function() {
     document.body.classList.remove('printing-toc'); 
     window.print();
-}
+};
 
-function printTOC() {
+window.printTOC = function() {
     document.body.classList.add('printing-toc'); 
     window.print();
     setTimeout(() => { document.body.classList.remove('printing-toc'); }, 1000); 
-}
+};
 
 function updateSlides() {
     updateSlidesList();
@@ -1740,9 +1804,9 @@ function updateSlides() {
         if (idx === currentSlide) {
             slide.classList.add('active');
             
-            if (slide.querySelector('.stat-bar')) {
+            if (slide.querySelector('[style*="height: 0px"]')) {
                 setTimeout(() => {
-                    const bars = slide.querySelectorAll('.stat-bar, [style*="height: 0px"]');
+                    const bars = slide.querySelectorAll('[style*="height: 0px"]');
                     const heights = [60, 70, 80, 120, 80, 70, 100];
                     bars.forEach((bar, i) => { if (bar) bar.style.height = heights[i] + 'px'; });
                 }, 100);
@@ -1766,35 +1830,35 @@ window.prevSlide = () => { if (currentSlide > 0) { currentSlide--; updateSlides(
 
 document.addEventListener('keydown', (e) => {
     if(document.getElementById('toc-modal').classList.contains('open')) return;
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') nextSlide();
-    else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') prevSlide();
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') window.nextSlide();
+    else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') window.prevSlide();
 });
 
 document.addEventListener('click', (e) => {
     if (e.target.closest('.btn-nav') || e.target.closest('button') || e.target.closest('#toc-modal')) return;
     const x = e.clientX;
     if(e.target.closest('#draggableControls')) return; 
-    if (x < window.innerWidth * 0.3) nextSlide();
-    else if (x > window.innerWidth * 0.7) prevSlide();
+    if (x < window.innerWidth * 0.3) window.nextSlide();
+    else if (x > window.innerWidth * 0.7) window.prevSlide();
 });
 
-// Drag and Drop Menu
+// Drag and Drop (السحب والإفلات لشريط التحكم)
 const draggableMenu = document.getElementById('draggableControls');
-let isDragging = false;
+let isDraggingMenu = false;
 let startX, startY;
 
 if(draggableMenu) {
-    draggableMenu.addEventListener('mousedown', dragStart);
-    document.addEventListener('mousemove', dragMove);
-    document.addEventListener('mouseup', dragEnd);
-    draggableMenu.addEventListener('touchstart', dragStart, {passive: false});
-    document.addEventListener('touchmove', dragMove, {passive: false});
-    document.addEventListener('touchend', dragEnd);
+    draggableMenu.addEventListener('mousedown', dragMenuStart);
+    document.addEventListener('mousemove', dragMenuMove);
+    document.addEventListener('mouseup', dragMenuEnd);
+    draggableMenu.addEventListener('touchstart', dragMenuStart, {passive: false});
+    document.addEventListener('touchmove', dragMenuMove, {passive: false});
+    document.addEventListener('touchend', dragMenuEnd);
 }
 
-function dragStart(e) {
+function dragMenuStart(e) {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
-    isDragging = true;
+    isDraggingMenu = true;
     draggableMenu.classList.add('dragging');
     startX = e.clientX || (e.touches && e.touches[0].clientX);
     startY = e.clientY || (e.touches && e.touches[0].clientY);
@@ -1805,8 +1869,8 @@ function dragStart(e) {
     draggableMenu.style.top = rect.top + 'px';
 }
 
-function dragMove(e) {
-    if (!isDragging) return;
+function dragMenuMove(e) {
+    if (!isDraggingMenu) return;
     e.preventDefault();
     let clientX = e.clientX || (e.touches && e.touches[0].clientX);
     let clientY = e.clientY || (e.touches && e.touches[0].clientY);
@@ -1814,15 +1878,10 @@ function dragMove(e) {
     draggableMenu.style.top = ((parseInt(draggableMenu.style.top) || 0) + (clientY - startY)) + 'px';
     startX = clientX; startY = clientY;
 }
-function dragEnd() { if(isDragging) { isDragging = false; draggableMenu.classList.remove('dragging'); } }
+function dragMenuEnd() { if(isDraggingMenu) { isDraggingMenu = false; draggableMenu.classList.remove('dragging'); } }
 
-// Initialization
+// تهيئة البداية
 updateSlides();
-generateTOC();
-
-
-</script>
-	
 
 </body>
 </html>
